@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -116,7 +117,10 @@ namespace PixelPalette.Window
         public MainWindow()
         {
             InitializeComponent();
-            _vm = new MainWindowViewModel();
+            _vm = new MainWindowViewModel
+            {
+                SelectedColorModelTabIndex = PersistedState.Data.SelectedColorModelTabIndex,
+            };
             DataContext = _vm;
 
             // Material Blue – #2196F3
@@ -128,6 +132,16 @@ namespace PixelPalette.Window
             // Lighter / Darker Buttons
             LighterButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
             DarkerButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
+
+            // Color model tabs
+            _vm.PropertyChanged += (o, ev) =>
+            {
+                if (ev.PropertyName == "SelectedColorModelTabIndex")
+                {
+                    PersistedState.Data.SelectedColorModelTabIndex =
+                        ((MainWindowViewModel) o).SelectedColorModelTabIndex;
+                }
+            };
 
             // Hex & RGB Arrow Keys
             HandleKey(Key.Up, new[] {RedHex, Red},
@@ -620,6 +634,11 @@ namespace PixelPalette.Window
         private void MainWindow_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             MainGrid.Focus();
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            PersistedState.Save();
         }
 
         private static bool IsActiveControl(UIElement control)

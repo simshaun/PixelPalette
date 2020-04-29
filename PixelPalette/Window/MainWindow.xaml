@@ -3,14 +3,10 @@
   xmlns:control="clr-namespace:PixelPalette.Control" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:window="clr-namespace:PixelPalette.Window" xmlns:color="clr-namespace:PixelPalette.Color"
-  xmlns:behaviors="clr-namespace:PixelPalette.Window.Behaviors"
-  xmlns:b="http://schemas.microsoft.com/xaml/behaviors" mc:Ignorable="d" Title="PixelPalette"
-  d:DataContext="{d:DesignInstance window:MainWindowViewModel }" KeyDown="Window_KeyDown"
-  MouseDown="MainWindow_OnMouseDown" Width="660" SizeToContent="Height" Background="#FFEFEFF2"
-  SourceInitialized="Window_SourceInitialized" Icon="/Resources/icon.ico">
-  <b:Interaction.Behaviors>
-    <behaviors:LockInitialSize MinHeight="True" MaxHeight="True" MinWidth="True" />
-  </b:Interaction.Behaviors>
+  mc:Ignorable="d" Title="PixelPalette" d:DataContext="{d:DesignInstance window:MainWindowViewModel }"
+  KeyDown="Window_KeyDown" MouseDown="MainWindow_OnMouseDown" Closing="MainWindow_OnClosing" Width="281" Height="Auto"
+  SizeToContent="Height" ResizeMode="NoResize" Background="#FFEFEFF2" SourceInitialized="Window_SourceInitialized"
+  Icon="/Resources/icon.ico">
   <Window.Resources>
     <Style x:Key="GradientSlider" TargetType="{x:Type control:GradientSlider}"
       BasedOn="{StaticResource {x:Type control:GradientSlider}}">
@@ -50,33 +46,30 @@
       </StackPanel.Resources>
 
       <!-- Color Preview -->
-      <GroupBox Header="Preview" Margin="0">
-        <StackPanel>
-          <Rectangle Height="60" Fill="{Binding HexText, Converter={StaticResource ColorToBrushConverter}}" />
+      <StackPanel Margin="0,0,0,10">
+        <Rectangle Height="120" Fill="{Binding HexText, Converter={StaticResource ColorToBrushConverter}}" />
 
-          <!-- Actions -->
-          <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,5,0,0">
-            <StackPanel.Resources>
-              <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Margin" Value="2.5,0,2.5,0" />
-              </Style>
-            </StackPanel.Resources>
-            <Button Content="Eyedropper (F3)" Name="EyedropperButton" />
-            <Button Content="Lighter" Name="LighterButton" />
-            <Button Content="Darker" Name="DarkerButton" />
-          </StackPanel>
+        <!-- Actions -->
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,5,0,0">
+          <StackPanel.Resources>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+              <Setter Property="Margin" Value="2.5,0,2.5,0" />
+            </Style>
+          </StackPanel.Resources>
+          <Button Content="Eyedropper (F3)" Name="EyedropperButton" />
+          <Button Content="Lighter" Name="LighterButton" />
+          <Button Content="Darker" Name="DarkerButton" />
         </StackPanel>
-      </GroupBox>
+      </StackPanel>
 
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
+      <TabControl Name="ColorModelTabs" SelectedIndex="{Binding SelectedColorModelTabIndex}">
+        <TabControl.Resources>
+          <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="20,20,20,20" />
+          </Style>
+        </TabControl.Resources>
         <!-- RGB -->
-        <GroupBox Header="RGB">
+        <TabItem Header="RGB">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -121,10 +114,10 @@
                 Text="{Binding Blue}" />
             </Grid>
           </StackPanel>
-        </GroupBox>
+        </TabItem>
 
         <!-- Hex -->
-        <GroupBox Grid.Column="1" Header="Hex">
+        <TabItem Header="Hex">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -170,10 +163,10 @@
             </Grid>
             <Label Content="Tip: Hit Enter after you edit" Style="{StaticResource TipLabel}" />
           </StackPanel>
-        </GroupBox>
+        </TabItem>
 
         <!-- CMYK -->
-        <GroupBox Grid.Column="2" Header="CMYK">
+        <TabItem Header="CMYK">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -234,18 +227,10 @@
                 Text="{Binding CmykKey}" />
             </Grid>
           </StackPanel>
-        </GroupBox>
-      </Grid>
-
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        </TabItem>
 
         <!-- HSL -->
-        <GroupBox Header="HSL">
+        <TabItem Header="HSL">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -294,10 +279,10 @@
             </Grid>
             <Label Content="Tip: Hit Enter after you edit" Style="{StaticResource TipLabel}" />
           </StackPanel>
-        </GroupBox>
+        </TabItem>
 
         <!-- HSV -->
-        <GroupBox Grid.Column="1" Header="HSV/HSB">
+        <TabItem Header="HSV/HSB">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -346,10 +331,10 @@
             </Grid>
             <Label Content="Tip: Hit Enter after you edit" Style="{StaticResource TipLabel}" />
           </StackPanel>
-        </GroupBox>
+        </TabItem>
 
         <!-- Lab -->
-        <GroupBox Grid.Column="2" Header="CIELAB (D65/2°)">
+        <TabItem Header="CIELAB (D65/2°)">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -398,8 +383,8 @@
             </Grid>
             <Label Content="Tip: Hit Enter after you edit" Style="{StaticResource TipLabel}" />
           </StackPanel>
-        </GroupBox>
-      </Grid>
+        </TabItem>
+      </TabControl>
     </StackPanel>
   </Grid>
 </Window>

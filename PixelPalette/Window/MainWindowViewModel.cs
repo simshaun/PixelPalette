@@ -10,6 +10,14 @@ namespace PixelPalette.Window
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private int _selectedColorModelTabIndex;
+
+        public int SelectedColorModelTabIndex
+        {
+            get => _selectedColorModelTabIndex;
+            set => SetField(ref _selectedColorModelTabIndex, value);
+        }
+
         private Rgb _rgb = Rgb.Empty;
         private Hsl _hsl = Hsl.Empty;
         private Hsv _hsv = Hsv.Empty;
