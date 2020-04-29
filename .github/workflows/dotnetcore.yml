@@ -1,0 +1,103 @@
+name: .NET Core
+
+# Trigger on any push with a git tag
+# To create a git tag, run the following commands on the branch you wish to release:
+#   git tag 1.0.0.0
+#   git push origin --tags
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    env:
+      Portable_Archive: PixelPalette_Portable.zip
+      Project_Directory: PixelPalette
+      Installer_Directory: PixelPalette.Installer
+      Installer_Filename: PixelPalette.Installer.msi
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Add dotnet to PATH
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.201
+
+      # The installer utilizes WiX 3.x, which is not compatible with the dotnet CLI.
+      # It uses the older NuGet packages.config file and is built directly with MSBuild.
+      # Therefore, we need both MSBuild and NuGet.
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
+
+      - name: Add nuget to PATH
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+
+      # Fetch deps
+      - name: Restore deps
+        run: dotnet restore
+
+      # Builds the main App & Test projects.
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      # The installer must be built separately because it is not supported by the dotnet CLI.
+      - name: Get installer deps
+        run: nuget restore $env:Installer_Directory -PackagesDirectory packages
+
+      - name: Build installer
+        run: MSBuild $env:Installer_Directory -p:Configuration=Release
+
+      # Archive the App build
+      - name: Create App archive
+        run: Compress-Archive -Path $env:Project_Directory\bin\Release\* -DestinationPath $env:Project_Directory\bin\$env:Portable_Archive
+
+      # Get the name of the tag that was pushed
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        shell: bash
+
+      # Create the release:  https://github.com/actions/create-release
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions; you do not need to create your own token
+        with:
+          tag_name: build-release.${{ github.ref }}
+          release_name: ${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
+
+      # Upload release asset:   https://github.com/actions/upload-release-asset
+      - name: Upload portable ZIP
+        id: upload-release-asset-1
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.Project_Directory }}\bin\${{ env.Portable_Archive }}
+          asset_name: ${{ env.Portable_Archive }}
+          asset_content_type: application/zip
+
+      - name: Upload installer MSI
+        id: upload-release-asset-2
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.Installer_Directory }}\bin\Release\${{ env.Installer_Filename }}
+          asset_name: ${{ env.Installer_Filename }}
+          asset_content_type: application/zip

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="PixelPalette" Language="1033" Version="1.0.0.0" Manufacturer="simshaun" UpgradeCode="1aa252b8-6987-4242-bd0d-58a81cf132ed">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of PixelPalette is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="PixelPalette" Level="1">
+      <ComponentGroupRef Id="HeatGenerated" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+
+    <Icon Id="APP_ICON" SourceFile="icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="APP_ICON" />
+
+    <!-- This requires WixUIExtension.dll to be added as a reference in the project. -->
+    <UIRef Id="WixUI_InstallDir" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <!-- WixUI displays a EULA screen. Show a simple EULA. -->
+    <WixVariable Id="WixUILicenseRtf" Value="eula.rtf" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="PixelPalette" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="APP_STARTMENU_FOLDER" Name="PixelPalette"/>
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="APP_STARTMENU_FOLDER">
+      <Component Id="ApplicationShortcut">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+          Name="PixelPalette"
+          Icon="APP_ICON"
+          Description="Simple color picker and manipulation tool"
+          Target="[INSTALLFOLDER]PixelPalette.exe"
+          WorkingDirectory="INSTALLFOLDER"/>
+        <RemoveFolder Id="CleanUpShortCut" Directory="APP_STARTMENU_FOLDER" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\simshaun\PixelPalette" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Product>
+</Wix>

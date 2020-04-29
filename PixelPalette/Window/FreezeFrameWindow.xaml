@@ -1,0 +1,10 @@
+﻿<Window x:Class="PixelPalette.Window.FreezeFrameWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" Title="FreezeFrameWindow"
+  Height="450" Width="800" ResizeMode="NoResize" WindowStyle="None" Topmost="True" ShowInTaskbar="False"
+  Background="Transparent" AllowsTransparency="True" KeyDown="Window_KeyDown" Closing="Window_Closing"
+  MouseDown="Window_MouseDown">
+  <Image Name="FrozenImage" Stretch="UniformToFill" Width="{Binding ElementName=Window, Path=ActualWidth}"
+    Height="{Binding ElementName=Window, Path=ActualHeight}" />
+</Window>
