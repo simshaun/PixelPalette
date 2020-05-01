@@ -27,6 +27,9 @@
     <Compile Include="HeatGeneratedFileList.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="eula.rtf" />
+    <Content Include="exclude.xsl" />
+    <Content Include="IS_INSTALLATION.do-not-delete" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +37,9 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Product_en-us.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
@@ -59,6 +65,7 @@
     <DefineConstants>HarvestPath=$(ReleasePath)</DefineConstants>
   </PropertyGroup>
   <Target Name="BeforeBuild">
-    <HeatDirectory Directory="$(ReleasePath)" PreprocessorVariable="var.HarvestPath" OutputFile="HeatGeneratedFileList.wxs" ComponentGroupName="HeatGenerated" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" />
+    <HeatDirectory Directory="$(ReleasePath)" PreprocessorVariable="var.HarvestPath" OutputFile="HeatGeneratedFileList.wxs" ComponentGroupName="HeatGenerated_comp" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" Transforms="exclude.xsl">
+    </HeatDirectory>
   </Target>
 </Project>

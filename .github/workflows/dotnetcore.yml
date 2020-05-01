@@ -98,6 +98,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.Installer_Directory }}\bin\Release\${{ env.Installer_Filename }}
+          asset_path: ${{ env.Installer_Directory }}\bin\Release\en-us\${{ env.Installer_Filename }}
           asset_name: ${{ env.Installer_Filename }}
           asset_content_type: application/zip
