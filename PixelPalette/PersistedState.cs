@@ -21,7 +21,7 @@ namespace PixelPalette
         static PersistedState()
         {
             Data = new PersistedData();
-            Serializer = new System.Xml.Serialization.XmlSerializer(Data.GetType());
+            Serializer = new XmlSerializer(Data.GetType());
             Read();
         }
 
@@ -78,7 +78,7 @@ namespace PixelPalette
 
         private static bool CanWriteToExeFolder()
         {
-            return !File.Exists(Path.Join(ExeFolder(), "IS_INSTALL.do-not-delete"));
+            return !File.Exists(Path.Join(ExeFolder(), "IS_INSTALLATION.do-not-delete"));
         }
 
         private static string ExeFolder()
