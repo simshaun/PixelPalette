@@ -5,7 +5,7 @@
   xmlns:window="clr-namespace:PixelPalette.Window" xmlns:color="clr-namespace:PixelPalette.Color" mc:Ignorable="d"
   Title="PixelPalette" d:DataContext="{d:DesignInstance window:MainWindowViewModel }" KeyDown="Window_KeyDown"
   MouseDown="MainWindow_OnMouseDown" Closing="MainWindow_OnClosing" Width="281" Height="Auto" SizeToContent="Height"
-  ResizeMode="NoResize" Background="#FFEFEFF2" SourceInitialized="Window_SourceInitialized" Icon="/Resources/icon.ico">
+  ResizeMode="CanMinimize" Background="#FFEFEFF2" SourceInitialized="Window_SourceInitialized" Icon="/Resources/icon.ico">
   <Window.Resources>
     <Style x:Key="GradientSlider" TargetType="{x:Type control:GradientSlider}"
       BasedOn="{StaticResource {x:Type control:GradientSlider}}">
