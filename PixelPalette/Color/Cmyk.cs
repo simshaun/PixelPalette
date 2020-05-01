@@ -51,7 +51,7 @@ namespace PixelPalette.Color
         public static Cmyk? FromString(string theString)
         {
             var regex = new Regex(
-                @"cmyk\(\s*(?<c>\d+)\s*,\s*(?<m>\d+)%?\s*,\s*(?<y>\d+)%?\s*,\s*(?<k>\d+)%?\s*\)",
+                @"cmyk\(\s*(?<c>\d+(?:\.\d+)?)\s*,\s*(?<m>\d+(?:\.\d+)?)%?\s*,\s*(?<y>\d+(?:\.\d+)?)%?\s*,\s*(?<k>\d+(?:\.\d+)?)%?\s*\)",
                 RegexOptions.IgnoreCase
             );
             var match = regex.Match(theString);

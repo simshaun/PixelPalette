@@ -12,13 +12,14 @@ namespace PixelPalette.Tests.Color
         [DataRow("hsv(200, 90%, 30%)", 200, 90, 30)]
         [DataRow("hsv(200, 75 , 45)", 200, 75, 45)]
         [DataRow("hsv(255, 100 , 30 )", 255, 100, 30)]
+        [DataRow("hsv(100.5, 90.4, 80.3)", 100.5, 90.4, 80.3)]
         [DataRow("hsv(255a, 100, 30)", 0, 0, 0, true)]
         [DataRow("hsv(,,)", 0, 0, 0, true)]
         public void FromString_ShouldReturnObject(
             string theString,
-            int expectedHue,
-            int expectedSaturation,
-            int expectedValue,
+            double expectedHue,
+            double expectedSaturation,
+            double expectedValue,
             bool expectedNull = false
         )
         {

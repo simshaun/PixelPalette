@@ -57,7 +57,7 @@ namespace PixelPalette.Color
 
         public static Hsv? FromString(string theString)
         {
-            var regex = new Regex(@"hsv\(\s*(?<hue>\d+)\s*,\s*(?<sat>\d+)%?\s*,\s*(?<val>\d+)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(@"hsv\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<val>\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {

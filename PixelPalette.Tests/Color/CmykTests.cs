@@ -10,14 +10,15 @@ namespace PixelPalette.Tests.Color
         [DataTestMethod]
         [DataRow("cmyk(50,40,30,10)", 50, 40, 30, 10)]
         [DataRow("cmyk(50, 40, 30, 10)", 50, 40, 30, 10)]
+        [DataRow("cmyk(50.4, 40.3, 30.2, 10.1)", 50.4, 40.3, 30.2, 10.1)]
         [DataRow("cmyk(50a, 40, 30, 10)", 0, 0, 0, 0, true)]
         [DataRow("cmyk(a,b,c,d)", 0, 0, 0, 0, true)]
         public void FromString_ShouldReturnObject(
             string theString,
-            int expectedC,
-            int expectedM,
-            int expectedY,
-            int expectedK,
+            double expectedC,
+            double expectedM,
+            double expectedY,
+            double expectedK,
             bool expectedNull = false
         )
         {

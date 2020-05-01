@@ -45,7 +45,7 @@ namespace PixelPalette.Color
 
         public static Lab? FromString(string theString)
         {
-            var regex = new Regex(@"lab\(\s*(?<L>\d+)\s*,\s*(?<A>-?\d+)%?\s*,\s*(?<B>-?\d+)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(@"lab\(\s*(?<L>\d+(?:\.\d+)?)\s*,\s*(?<A>-?\d+(?:\.\d+)?)%?\s*,\s*(?<B>-?\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {

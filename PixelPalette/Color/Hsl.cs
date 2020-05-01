@@ -54,7 +54,7 @@ namespace PixelPalette.Color
 
         public static Hsl? FromString(string theString)
         {
-            var regex = new Regex(@"hsl\(\s*(?<hue>\d+)\s*,\s*(?<sat>\d+)%?\s*,\s*(?<lum>\d+)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(@"hsl\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<lum>\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {

@@ -10,13 +10,14 @@ namespace PixelPalette.Tests.Color
         [DataTestMethod]
         [DataRow("lab(100, -80, 10)", 100, -80, 10)]
         [DataRow("lab(100, 20, 50)", 100, 20, 50)]
+        [DataRow("lab(12.5, 96.6, -55.23)", 12.5, 96.6, -55.23)]
         [DataRow("lab(100a, 20, 50)", 0, 0, 0, true)]
         [DataRow("lab(,,)", 0, 0, 0, true)]
         public void FromString_ShouldReturnObject(
             string theString,
-            int expectedL,
-            int expectedA,
-            int expectedB,
+            double expectedL,
+            double expectedA,
+            double expectedB,
             bool expectedNull = false
         )
         {
