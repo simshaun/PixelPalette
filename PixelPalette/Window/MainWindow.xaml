@@ -2,11 +2,10 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:conv="clr-namespace:PixelPalette.ValueConverters"
   xmlns:control="clr-namespace:PixelPalette.Control" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:window="clr-namespace:PixelPalette.Window" xmlns:color="clr-namespace:PixelPalette.Color"
-  mc:Ignorable="d" Title="PixelPalette" d:DataContext="{d:DesignInstance window:MainWindowViewModel }"
-  KeyDown="Window_KeyDown" MouseDown="MainWindow_OnMouseDown" Closing="MainWindow_OnClosing" Width="281" Height="Auto"
-  SizeToContent="Height" ResizeMode="NoResize" Background="#FFEFEFF2" SourceInitialized="Window_SourceInitialized"
-  Icon="/Resources/icon.ico">
+  xmlns:window="clr-namespace:PixelPalette.Window" xmlns:color="clr-namespace:PixelPalette.Color" mc:Ignorable="d"
+  Title="PixelPalette" d:DataContext="{d:DesignInstance window:MainWindowViewModel }" KeyDown="Window_KeyDown"
+  MouseDown="MainWindow_OnMouseDown" Closing="MainWindow_OnClosing" Width="281" Height="Auto" SizeToContent="Height"
+  ResizeMode="NoResize" Background="#FFEFEFF2" SourceInitialized="Window_SourceInitialized" Icon="/Resources/icon.ico">
   <Window.Resources>
     <Style x:Key="GradientSlider" TargetType="{x:Type control:GradientSlider}"
       BasedOn="{StaticResource {x:Type control:GradientSlider}}">
@@ -62,14 +61,15 @@
         </StackPanel>
       </StackPanel>
 
-      <TabControl Name="ColorModelTabs" SelectedIndex="{Binding SelectedColorModelTabIndex}">
+      <TabControl Name="ColorModelTabs" SelectedItem="{Binding ActiveColorModelTabItem}">
         <TabControl.Resources>
           <Style TargetType="StackPanel">
             <Setter Property="Margin" Value="20,20,20,20" />
           </Style>
         </TabControl.Resources>
+
         <!-- RGB -->
-        <TabItem Header="RGB">
+        <TabItem Header="RGB" Name="RgbTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -117,7 +117,7 @@
         </TabItem>
 
         <!-- Hex -->
-        <TabItem Header="Hex">
+        <TabItem Header="Hex" Name="HexTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -166,7 +166,7 @@
         </TabItem>
 
         <!-- CMYK -->
-        <TabItem Header="CMYK">
+        <TabItem Header="CMYK" Name="CmykTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -230,7 +230,7 @@
         </TabItem>
 
         <!-- HSL -->
-        <TabItem Header="HSL">
+        <TabItem Header="HSL" Name="HslTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -282,7 +282,7 @@
         </TabItem>
 
         <!-- HSV -->
-        <TabItem Header="HSV/HSB">
+        <TabItem Header="HSV/HSB" Name="HsvTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">
@@ -334,7 +334,7 @@
         </TabItem>
 
         <!-- Lab -->
-        <TabItem Header="CIELAB (D65/2°)">
+        <TabItem Header="CIELAB (D65/2°)" Name="LabTab">
           <StackPanel HorizontalAlignment="Stretch">
             <StackPanel.Resources>
               <Style TargetType="{x:Type Grid}">

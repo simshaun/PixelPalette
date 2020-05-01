@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -117,14 +118,15 @@ namespace PixelPalette.Window
         public MainWindow()
         {
             InitializeComponent();
-            _vm = new MainWindowViewModel
-            {
-                SelectedColorModelTabIndex = PersistedState.Data.SelectedColorModelTabIndex,
-            };
+            _vm = new MainWindowViewModel();
+            _vm.LoadFromPersistedData(PersistedState.Data, ColorModelTabs);
             DataContext = _vm;
 
-            // Material Blue – #2196F3
-            _vm.RefreshFromRgb(new Rgb(33, 150, 243));
+            if (_vm.Rgb == Rgb.Empty)
+            {
+                // Material Blue – #2196F3
+                _vm.RefreshFromRgb(new Rgb(33, 150, 243));
+            }
 
             // Eyedropper
             EyedropperButton.Click += (o, ev) => { StartEyedropper(); };
@@ -136,10 +138,9 @@ namespace PixelPalette.Window
             // Color model tabs
             _vm.PropertyChanged += (o, ev) =>
             {
-                if (ev.PropertyName == "SelectedColorModelTabIndex")
+                if (ev.PropertyName == "ActiveColorModelTabItem")
                 {
-                    PersistedState.Data.SelectedColorModelTabIndex =
-                        ((MainWindowViewModel) o).SelectedColorModelTabIndex;
+                    _vm.SaveToPersistedData(PersistedState.Data);
                 }
             };
 

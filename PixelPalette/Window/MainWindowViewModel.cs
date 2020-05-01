@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using PixelPalette.Annotations;
 using PixelPalette.Color;
@@ -10,12 +12,85 @@ namespace PixelPalette.Window
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private int _selectedColorModelTabIndex;
+        private TabItem _activeColorModelTabItem;
 
-        public int SelectedColorModelTabIndex
+        public TabItem ActiveColorModelTabItem
         {
-            get => _selectedColorModelTabIndex;
-            set => SetField(ref _selectedColorModelTabIndex, value);
+            get => _activeColorModelTabItem;
+            set => SetField(ref _activeColorModelTabItem, value);
+        }
+
+        public void LoadFromPersistedData(PersistedData data, TabControl colorModelTabs)
+        {
+            ActiveColorModelTabItem = colorModelTabs.Items.OfType<TabItem>()
+                .SingleOrDefault(t => t.Name == (data.ActiveColorModelTab ?? "RgbTab"));
+
+            switch (data.ActiveColorModelTab)
+            {
+                case "RgbTab":
+                    var rgb = Rgb.FromString(data.ActiveColorValue);
+                    if (rgb.HasValue)
+                    {
+                        RefreshFromRgb(rgb.Value);
+                    }
+
+                    break;
+                case "HexTab":
+                    var hex = Hex.FromString(data.ActiveColorValue);
+                    if (hex.HasValue)
+                    {
+                        RefreshFromHex(hex.Value);
+                    }
+
+                    break;
+                case "CmykTab":
+                    var cmyk = Cmyk.FromString(data.ActiveColorValue);
+                    if (cmyk.HasValue)
+                    {
+                        RefreshFromCmyk(cmyk.Value);
+                    }
+
+                    break;
+                case "HslTab":
+                    var hsl = Hsl.FromString(data.ActiveColorValue);
+                    if (hsl.HasValue)
+                    {
+                        RefreshFromHsl(hsl.Value);
+                    }
+
+                    break;
+                case "HsvTab":
+                    var hsv = Hsv.FromString(data.ActiveColorValue);
+                    if (hsv.HasValue)
+                    {
+                        RefreshFromHsv(hsv.Value);
+                    }
+
+                    break;
+                case "LabTab":
+                    var lab = Lab.FromString(data.ActiveColorValue);
+                    if (lab.HasValue)
+                    {
+                        RefreshFromLab(lab.Value);
+                    }
+
+                    break;
+            }
+        }
+
+        public void SaveToPersistedData(PersistedData data)
+        {
+            data.ActiveColorModelTab = _activeColorModelTabItem.Name;
+            data.ActiveColorValue = data.ActiveColorModelTab switch
+            {
+                "RgbTab" => Rgb.ToString(),
+                "HexTab" => Hex.ToString(),
+                "CmykTab" => Cmyk.ToString(),
+                "HslTab" => Hsl.ToString(),
+                "HsvTab" => Hsv.ToString(),
+                "LabTab" => Lab.ToString(),
+                _ => data.ActiveColorValue
+            };
         }
 
         private Rgb _rgb = Rgb.Empty;
@@ -77,6 +152,8 @@ namespace PixelPalette.Window
         private LinearGradientBrush _labLGradientFill;
         private LinearGradientBrush _labAGradientFill;
         private LinearGradientBrush _labBGradientFill;
+
+        #region Getters/setters
 
         public Rgb Rgb
         {
@@ -391,9 +468,14 @@ namespace PixelPalette.Window
             set => SetField(ref _labBGradientFill, value);
         }
 
+        #endregion
+
         public void RefreshFromRgb(Rgb rgb)
         {
             if (_rgb != Rgb.Empty && rgb == Rgb) return;
+
+            PersistedState.Data.ActiveColorModelTab = "RgbTab";
+            PersistedState.Data.ActiveColorValue = rgb.ToString();
 
             var hsl = rgb.ToHsl();
             var hsv = hsl.ToHsv(); // Less work than RGB to HSV
@@ -415,6 +497,9 @@ namespace PixelPalette.Window
         {
             if (_hex != Hex.Empty && hex == Hex) return;
 
+            PersistedState.Data.ActiveColorModelTab = "HexTab";
+            PersistedState.Data.ActiveColorValue = hex.ToString();
+
             var rgb = hex.ToRgb();
             var hsl = rgb.ToHsl();
             var hsv = hsl.ToHsv(); // Less work than RGB to HSV
@@ -434,6 +519,9 @@ namespace PixelPalette.Window
         public void RefreshFromHsl(Hsl hsl)
         {
             if (_hsl != Hsl.Empty && hsl == Hsl) return;
+
+            PersistedState.Data.ActiveColorModelTab = "HslTab";
+            PersistedState.Data.ActiveColorValue = hsl.ToString();
 
             var rgb = hsl.ToRgb();
             var hsv = hsl.ToHsv(); // Less work than RGB to HSV
@@ -455,6 +543,9 @@ namespace PixelPalette.Window
         {
             if (_hsv != Hsv.Empty && hsv == Hsv) return;
 
+            PersistedState.Data.ActiveColorModelTab = "HsvTab";
+            PersistedState.Data.ActiveColorValue = hsv.ToString();
+
             var rgb = hsv.ToRgb();
             var hsl = hsv.ToHsl(); // Less work than RGB to HSL
             var hex = rgb.ToHex();
@@ -475,6 +566,9 @@ namespace PixelPalette.Window
         {
             if (_cmyk != Cmyk.Empty && cmyk == Cmyk) return;
 
+            PersistedState.Data.ActiveColorModelTab = "CmykTab";
+            PersistedState.Data.ActiveColorValue = cmyk.ToString();
+
             var rgb = cmyk.ToRgb();
             var hsl = rgb.ToHsl();
             var hsv = rgb.ToHsv();
@@ -494,6 +588,9 @@ namespace PixelPalette.Window
         public void RefreshFromLab(Lab lab)
         {
             if (_lab != Lab.Empty && lab == Lab) return;
+
+            PersistedState.Data.ActiveColorModelTab = "LabTab";
+            PersistedState.Data.ActiveColorValue = lab.ToString();
 
             var rgb = lab.ToRgb();
             var hsl = rgb.ToHsl();

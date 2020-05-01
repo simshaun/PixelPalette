@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
@@ -7,8 +8,9 @@ namespace PixelPalette
 {
     public class PersistedData
     {
-        [XmlElement("SelectedColorModelTabIndex")]
-        public int SelectedColorModelTabIndex { get; set; } = 0;
+        [XmlElement("ActiveColorModelTab")] public string ActiveColorModelTab { get; set; } = null;
+
+        [XmlElement("ActiveColorValue")] public string ActiveColorValue { get; set; } = null;
     }
 
     public static class PersistedState
@@ -25,12 +27,13 @@ namespace PixelPalette
 
         public static void Read()
         {
-            if (!File.Exists(SettingFilePath()))
+            var settingFilePath = SettingFilePath();
+            if (!File.Exists(settingFilePath))
             {
                 return;
             }
 
-            var sr = new StringReader(File.ReadAllText(SettingFilePath()));
+            var sr = new StringReader(File.ReadAllText(settingFilePath));
             Data = (PersistedData) Serializer.Deserialize(sr);
         }
 
@@ -42,12 +45,45 @@ namespace PixelPalette
                 Formatting = Formatting.Indented
             };
             Serializer.Serialize(xw, Data);
-            File.WriteAllText(SettingFilePath(), sw.ToString());
+            try
+            {
+                var path = SettingFilePath();
+                new FileInfo(path).Directory?.Create();
+                File.WriteAllText(SettingFilePath(), sw.ToString());
+            }
+            catch (Exception)
+            {
+                // Oh well
+            }
         }
 
         private static string SettingFilePath()
         {
-            return Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.xml");
+            string path;
+            if (CanWriteToExeFolder())
+            {
+                path = Path.Join(ExeFolder(), "settings.xml");
+            }
+            else
+            {
+                var folderPath = Path.Join(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "PixelPalette"
+                );
+                path = Path.Join(folderPath, "settings.xml");
+            }
+
+            return path;
+        }
+
+        private static bool CanWriteToExeFolder()
+        {
+            return !File.Exists(Path.Join(ExeFolder(), "IS_INSTALL.do-not-delete"));
+        }
+
+        private static string ExeFolder()
+        {
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }
     }
 }
