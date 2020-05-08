@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -569,6 +568,15 @@ namespace PixelPalette.Window
                 Debug.WriteLine($"b*: {value}");
                 _vm.RefreshFromLab(_vm.Lab.WithB(value));
             });
+
+            // Hack to bring window to front on start. (I had instances where I would open the tool
+            // only for it to come up behind my current window.)
+            if (!IsVisible) Show();
+            WindowState = WindowState.Normal;
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
         }
 
         private void StartEyedropper()
