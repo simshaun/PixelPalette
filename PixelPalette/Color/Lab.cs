@@ -8,6 +8,9 @@ namespace PixelPalette.Color
     {
         public static readonly Lab Empty = new Lab();
 
+        private const string StringPattern =
+            @"^lab\(\s*(?<L>\d+(?:\.\d+)?)\s*,\s*(?<A>-?\d+(?:\.\d+)?)%?\s*,\s*(?<B>-?\d+(?:\.\d+)?)%?\s*\)$";
+
         public static readonly double MinL = 0;
         public static readonly double MaxL = 100;
         public static readonly double MinA = -128;
@@ -43,21 +46,31 @@ namespace PixelPalette.Color
             B = ClampedB(b);
         }
 
+        public static bool IsValidL(double value)
+        {
+            return value >= MinL && value <= MaxL;
+        }
+
+        public static bool IsValidA(double value)
+        {
+            return value >= MinA && value <= MaxA;
+        }
+
+        public static bool IsValidB(double value)
+        {
+            return value >= MinB && value <= MaxB;
+        }
+
         public static Lab? FromString(string theString)
         {
-            var regex = new Regex(@"lab\(\s*(?<L>\d+(?:\.\d+)?)\s*,\s*(?<A>-?\d+(?:\.\d+)?)%?\s*,\s*(?<B>-?\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(StringPattern, RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
-            if (match.Success)
-            {
-                return new Lab(
-                    double.Parse(match.Groups["L"].Value),
-                    double.Parse(match.Groups["A"].Value),
-                    double.Parse(match.Groups["B"].Value)
-                );
-            }
-
-            return null;
-
+            if (!match.Success) return null;
+            var l = double.Parse(match.Groups["L"].Value);
+            var a = double.Parse(match.Groups["A"].Value);
+            var b = double.Parse(match.Groups["B"].Value);
+            if (!IsValidL(l) || !IsValidA(a) || !IsValidB(b)) return null;
+            return new Lab(l, a, b);
         }
 
         /// <summary>
@@ -101,7 +114,7 @@ namespace PixelPalette.Color
 
         private static double Round(double v)
         {
-            return Math.Round(v, 2, MidpointRounding.ToPositiveInfinity);
+            return Math.Round(v, 2, MidpointRounding.AwayFromZero);
         }
 
         public override string ToString()

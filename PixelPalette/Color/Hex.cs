@@ -47,14 +47,29 @@ namespace PixelPalette.Color
             return new Hex(r, Green, Blue);
         }
 
+        public Hex WithRed(string r)
+        {
+            return new Hex(ClampedComponent(r), Green, Blue);
+        }
+
         public Hex WithGreen(int g)
         {
             return new Hex(Red, g, Blue);
         }
 
+        public Hex WithGreen(string g)
+        {
+            return new Hex(Red, ClampedComponent(g), Blue);
+        }
+
         public Hex WithBlue(int b)
         {
             return new Hex(Red, Green, b);
+        }
+
+        public Hex WithBlue(string b)
+        {
+            return new Hex(Red, Green, ClampedComponent(b));
         }
 
         public Hex(string hex)

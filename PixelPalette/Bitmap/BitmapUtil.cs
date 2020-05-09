@@ -22,8 +22,7 @@ namespace PixelPalette.Bitmap
         )
         {
             // A couple things are hardcoded to expect 4 bytes per pixel.
-            if (source.Format != PixelFormats.Bgra32)
-                throw new Exception("Unexpected Bitmap format.");
+            if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
 
             var bytesPerPixel = source.Format.BitsPerPixel / 8;
 
@@ -94,8 +93,7 @@ namespace PixelPalette.Bitmap
 
         public static Rgb PixelToRgb(BitmapSource source, int x, int y)
         {
-            if (source.Format != PixelFormats.Bgra32)
-                throw new Exception("Unexpected Bitmap format.");
+            if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
 
             var bytesPerPixel = source.Format.BitsPerPixel / 8;
             var bytes = new byte[bytesPerPixel];
@@ -107,8 +105,7 @@ namespace PixelPalette.Bitmap
 
         public static Rgb AverageColor(BitmapSource source)
         {
-            if (source.Format != PixelFormats.Bgra32)
-                throw new Exception("Unexpected Bitmap format.");
+            if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
 
             var width = source.PixelWidth;
             var height = source.PixelHeight;

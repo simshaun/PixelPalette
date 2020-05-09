@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -13,6 +15,7 @@ namespace PixelPalette.Window
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private TabItem _activeColorModelTabItem;
+        public bool IsUserUpdate = true;
 
         public TabItem ActiveColorModelTabItem
         {
@@ -22,58 +25,36 @@ namespace PixelPalette.Window
 
         public void LoadFromPersistedData(PersistedData data, TabControl colorModelTabs)
         {
-            ActiveColorModelTabItem = colorModelTabs.Items.OfType<TabItem>()
-                .SingleOrDefault(t => t.Name == (data.ActiveColorModelTab ?? "RgbTab"));
+            ActiveColorModelTabItem = colorModelTabs
+                                      .Items
+                                      .OfType<TabItem>()
+                                      .SingleOrDefault(t => t.Name == (data.ActiveColorModelTab ?? "RgbTab"));
 
             switch (data.ActiveColorModelTab)
             {
                 case "RgbTab":
                     var rgb = Rgb.FromString(data.ActiveColorValue);
-                    if (rgb.HasValue)
-                    {
-                        RefreshFromRgb(rgb.Value);
-                    }
-
+                    if (rgb.HasValue) RefreshFromRgb(rgb.Value);
                     break;
                 case "HexTab":
                     var hex = Hex.FromString(data.ActiveColorValue);
-                    if (hex.HasValue)
-                    {
-                        RefreshFromHex(hex.Value);
-                    }
-
+                    if (hex.HasValue) RefreshFromHex(hex.Value);
                     break;
                 case "CmykTab":
                     var cmyk = Cmyk.FromString(data.ActiveColorValue);
-                    if (cmyk.HasValue)
-                    {
-                        RefreshFromCmyk(cmyk.Value);
-                    }
-
+                    if (cmyk.HasValue) RefreshFromCmyk(cmyk.Value);
                     break;
                 case "HslTab":
                     var hsl = Hsl.FromString(data.ActiveColorValue);
-                    if (hsl.HasValue)
-                    {
-                        RefreshFromHsl(hsl.Value);
-                    }
-
+                    if (hsl.HasValue) RefreshFromHsl(hsl.Value);
                     break;
                 case "HsvTab":
                     var hsv = Hsv.FromString(data.ActiveColorValue);
-                    if (hsv.HasValue)
-                    {
-                        RefreshFromHsv(hsv.Value);
-                    }
-
+                    if (hsv.HasValue) RefreshFromHsv(hsv.Value);
                     break;
                 case "LabTab":
                     var lab = Lab.FromString(data.ActiveColorValue);
-                    if (lab.HasValue)
-                    {
-                        RefreshFromLab(lab.Value);
-                    }
-
+                    if (lab.HasValue) RefreshFromLab(lab.Value);
                     break;
             }
         }
@@ -100,37 +81,50 @@ namespace PixelPalette.Window
         private Cmyk _cmyk = Cmyk.Empty;
         private Lab _lab = Lab.Empty;
 
+        private Brush _colorPreviewBrush;
+
         private string _hexText;
         private string _hexRed;
         private string _hexGreen;
         private string _hexBlue;
 
         private string _rgbText;
-        private int _red;
-        private int _green;
-        private int _blue;
+        private string _rgbScaledText;
+        private string _rgbRed;
+        private string _rgbGreen;
+        private string _rgbBlue;
+        private string _rgbScaledRed;
+        private string _rgbScaledGreen;
+        private string _rgbScaledBlue;
 
         private string _hslText;
-        private double _hslHue;
-        private double _hslSaturation;
-        private double _hslLuminance;
-        private double _hslRoundedHue;
-        private double _hslRoundedSaturation;
-        private double _hslRoundedLuminance;
+        private string _hslScaledText;
+        private string _hslHue;
+        private string _hslSaturation;
+        private string _hslLuminance;
+        private string _hslScaledHue;
+        private string _hslScaledSaturation;
+        private string _hslScaledLuminance;
 
         private string _hsvText;
-        private double _hsvHue;
-        private double _hsvSaturation;
-        private double _hsvValue;
-        private double _hsvRoundedHue;
-        private double _hsvRoundedSaturation;
-        private double _hsvRoundedValue;
+        private string _hsvScaledText;
+        private string _hsvHue;
+        private string _hsvSaturation;
+        private string _hsvValue;
+        private string _hsvScaledHue;
+        private string _hsvScaledSaturation;
+        private string _hsvScaledValue;
 
         private string _cmykText;
-        private double _cmykCyan;
-        private double _cmykMagenta;
-        private double _cmykYellow;
-        private double _cmykKey;
+        private string _cmykScaledText;
+        private string _cmykCyan;
+        private string _cmykMagenta;
+        private string _cmykYellow;
+        private string _cmykKey;
+        private string _cmykScaledCyan;
+        private string _cmykScaledMagenta;
+        private string _cmykScaledYellow;
+        private string _cmykScaledKey;
 
         private string _labText;
         private double _labL;
@@ -153,7 +147,7 @@ namespace PixelPalette.Window
         private LinearGradientBrush _labAGradientFill;
         private LinearGradientBrush _labBGradientFill;
 
-        #region Getters/setters
+#region Getters/setters
 
         public Rgb Rgb
         {
@@ -191,6 +185,12 @@ namespace PixelPalette.Window
             set => SetField(ref _lab, value);
         }
 
+        public Brush ColorPreviewBrush
+        {
+            get => _colorPreviewBrush;
+            set => SetField(ref _colorPreviewBrush, value);
+        }
+
         public string HexText
         {
             get => _hexText;
@@ -215,29 +215,52 @@ namespace PixelPalette.Window
             set => SetField(ref _hexBlue, value);
         }
 
-
         public string RgbText
         {
             get => _rgbText;
             set => SetField(ref _rgbText, value);
         }
 
-        public int Red
+        public string RgbScaledText
         {
-            get => _red;
-            set => SetField(ref _red, value);
+            get => _rgbScaledText;
+            set => SetField(ref _rgbScaledText, value);
         }
 
-        public int Green
+        public string RgbRed
         {
-            get => _green;
-            set => SetField(ref _green, value);
+            get => _rgbRed;
+            set => SetField(ref _rgbRed, value);
         }
 
-        public int Blue
+        public string RgbGreen
         {
-            get => _blue;
-            set => SetField(ref _blue, value);
+            get => _rgbGreen;
+            set => SetField(ref _rgbGreen, value);
+        }
+
+        public string RgbBlue
+        {
+            get => _rgbBlue;
+            set => SetField(ref _rgbBlue, value);
+        }
+
+        public string RgbScaledRed
+        {
+            get => _rgbScaledRed;
+            set => SetField(ref _rgbScaledRed, value);
+        }
+
+        public string RgbScaledGreen
+        {
+            get => _rgbScaledGreen;
+            set => SetField(ref _rgbScaledGreen, value);
+        }
+
+        public string RgbScaledBlue
+        {
+            get => _rgbScaledBlue;
+            set => SetField(ref _rgbScaledBlue, value);
         }
 
         public string HslText
@@ -246,40 +269,46 @@ namespace PixelPalette.Window
             set => SetField(ref _hslText, value);
         }
 
-        public double HslHue
+        public string HslScaledText
+        {
+            get => _hslScaledText;
+            set => SetField(ref _hslScaledText, value);
+        }
+
+        public string HslHue
         {
             get => _hslHue;
             set => SetField(ref _hslHue, value);
         }
 
-        public double HslSaturation
+        public string HslSaturation
         {
             get => _hslSaturation;
             set => SetField(ref _hslSaturation, value);
         }
 
-        public double HslLuminance
+        public string HslLuminance
         {
             get => _hslLuminance;
             set => SetField(ref _hslLuminance, value);
         }
 
-        public double HslRoundedHue
+        public string HslScaledHue
         {
-            get => _hslRoundedHue;
-            set => SetField(ref _hslRoundedHue, value);
+            get => _hslScaledHue;
+            set => SetField(ref _hslScaledHue, value);
         }
 
-        public double HslRoundedSaturation
+        public string HslScaledSaturation
         {
-            get => _hslRoundedSaturation;
-            set => SetField(ref _hslRoundedSaturation, value);
+            get => _hslScaledSaturation;
+            set => SetField(ref _hslScaledSaturation, value);
         }
 
-        public double HslRoundedLuminance
+        public string HslScaledLuminance
         {
-            get => _hslRoundedLuminance;
-            set => SetField(ref _hslRoundedLuminance, value);
+            get => _hslScaledLuminance;
+            set => SetField(ref _hslScaledLuminance, value);
         }
 
         public string HsvText
@@ -288,40 +317,46 @@ namespace PixelPalette.Window
             set => SetField(ref _hsvText, value);
         }
 
-        public double HsvHue
+        public string HsvScaledText
+        {
+            get => _hsvScaledText;
+            set => SetField(ref _hsvScaledText, value);
+        }
+
+        public string HsvHue
         {
             get => _hsvHue;
             set => SetField(ref _hsvHue, value);
         }
 
-        public double HsvSaturation
+        public string HsvSaturation
         {
             get => _hsvSaturation;
             set => SetField(ref _hsvSaturation, value);
         }
 
-        public double HsvValue
+        public string HsvValue
         {
             get => _hsvValue;
             set => SetField(ref _hsvValue, value);
         }
 
-        public double HsvRoundedHue
+        public string HsvScaledHue
         {
-            get => _hsvRoundedHue;
-            set => SetField(ref _hsvRoundedHue, value);
+            get => _hsvScaledHue;
+            set => SetField(ref _hsvScaledHue, value);
         }
 
-        public double HsvRoundedSaturation
+        public string HsvScaledSaturation
         {
-            get => _hsvRoundedSaturation;
-            set => SetField(ref _hsvRoundedSaturation, value);
+            get => _hsvScaledSaturation;
+            set => SetField(ref _hsvScaledSaturation, value);
         }
 
-        public double HsvRoundedValue
+        public string HsvScaledValue
         {
-            get => _hsvRoundedValue;
-            set => SetField(ref _hsvRoundedValue, value);
+            get => _hsvScaledValue;
+            set => SetField(ref _hsvScaledValue, value);
         }
 
         public string CmykText
@@ -330,28 +365,58 @@ namespace PixelPalette.Window
             set => SetField(ref _cmykText, value);
         }
 
-        public double CmykCyan
+        public string CmykScaledText
+        {
+            get => _cmykScaledText;
+            set => SetField(ref _cmykScaledText, value);
+        }
+
+        public string CmykCyan
         {
             get => _cmykCyan;
             set => SetField(ref _cmykCyan, value);
         }
 
-        public double CmykMagenta
+        public string CmykMagenta
         {
             get => _cmykMagenta;
             set => SetField(ref _cmykMagenta, value);
         }
 
-        public double CmykYellow
+        public string CmykYellow
         {
             get => _cmykYellow;
             set => SetField(ref _cmykYellow, value);
         }
 
-        public double CmykKey
+        public string CmykKey
         {
             get => _cmykKey;
             set => SetField(ref _cmykKey, value);
+        }
+
+        public string CmykScaledCyan
+        {
+            get => _cmykScaledCyan;
+            set => SetField(ref _cmykScaledCyan, value);
+        }
+
+        public string CmykScaledMagenta
+        {
+            get => _cmykScaledMagenta;
+            set => SetField(ref _cmykScaledMagenta, value);
+        }
+
+        public string CmykScaledYellow
+        {
+            get => _cmykScaledYellow;
+            set => SetField(ref _cmykScaledYellow, value);
+        }
+
+        public string CmykScaledKey
+        {
+            get => _cmykScaledKey;
+            set => SetField(ref _cmykScaledKey, value);
         }
 
         public string LabText
@@ -468,7 +533,7 @@ namespace PixelPalette.Window
             set => SetField(ref _labBGradientFill, value);
         }
 
-        #endregion
+#endregion
 
         public void RefreshFromRgb(Rgb rgb)
         {
@@ -610,48 +675,64 @@ namespace PixelPalette.Window
 
         private void RefreshValues()
         {
+            IsUserUpdate = false;
+
+            ColorPreviewBrush = new SolidColorBrush(_rgb.ToMediaColor());
+
             HexText = _hex.ToString();
             HexRed = _hex.RedPart;
             HexGreen = _hex.GreenPart;
             HexBlue = _hex.BluePart;
 
             RgbText = _rgb.ToString();
-            Red = _rgb.Red;
-            Green = _rgb.Green;
-            Blue = _rgb.Blue;
+            RgbScaledText = _rgb.ToScaledString();
+            RgbRed = _rgb.RoundedRed.ToString(CultureInfo.InvariantCulture);
+            RgbGreen = _rgb.RoundedGreen.ToString(CultureInfo.InvariantCulture);
+            RgbBlue = _rgb.RoundedBlue.ToString(CultureInfo.InvariantCulture);
+            RgbScaledRed = _rgb.ScaledRed.ToString();
+            RgbScaledGreen = _rgb.ScaledGreen.ToString();
+            RgbScaledBlue = _rgb.ScaledBlue.ToString();
 
             HslText = _hsl.ToString();
-            HslHue = (int) _hsl.Hue;
-            HslSaturation = _hsl.Saturation;
-            HslLuminance = _hsl.Luminance;
-            HslRoundedHue = _hsl.RoundedHue;
-            HslRoundedSaturation = _hsl.RoundedSaturation;
-            HslRoundedLuminance = _hsl.RoundedLuminance;
+            HslScaledText = _hsl.ToScaledString();
+            HslHue = _hsl.RoundedHue.ToString(CultureInfo.InvariantCulture);
+            HslSaturation = _hsl.RoundedSaturation.ToString(CultureInfo.InvariantCulture);
+            HslLuminance = _hsl.RoundedLuminance.ToString(CultureInfo.InvariantCulture);
+            HslScaledHue = _hsl.RoundedScaledHue.ToString(CultureInfo.InvariantCulture);
+            HslScaledSaturation = _hsl.RoundedScaledSaturation.ToString(CultureInfo.InvariantCulture);
+            HslScaledLuminance = _hsl.RoundedScaledLuminance.ToString(CultureInfo.InvariantCulture);
 
             HsvText = _hsv.ToString();
-            HsvHue = (int) _hsv.Hue;
-            HsvSaturation = _hsv.Saturation;
-            HsvValue = _hsv.Value;
-            HsvRoundedHue = _hsv.RoundedHue;
-            HsvRoundedSaturation = _hsv.RoundedSaturation;
-            HsvRoundedValue = _hsv.RoundedValue;
+            HsvScaledText = _hsv.ToScaledString();
+            HsvHue = _hsv.RoundedHue.ToString(CultureInfo.InvariantCulture);
+            HsvSaturation = _hsv.RoundedSaturation.ToString(CultureInfo.InvariantCulture);
+            HsvValue = _hsv.RoundedValue.ToString(CultureInfo.InvariantCulture);
+            HsvScaledHue = _hsv.RoundedScaledHue.ToString(CultureInfo.InvariantCulture);
+            HsvScaledSaturation = _hsv.RoundedScaledSaturation.ToString(CultureInfo.InvariantCulture);
+            HsvScaledValue = _hsv.RoundedScaledValue.ToString(CultureInfo.InvariantCulture);
 
             CmykText = _cmyk.ToString();
-            CmykCyan = _cmyk.RoundedCyan;
-            CmykMagenta = _cmyk.RoundedMagenta;
-            CmykYellow = _cmyk.RoundedYellow;
-            CmykKey = _cmyk.RoundedKey;
+            CmykScaledText = _cmyk.ToScaledString();
+            CmykCyan = _cmyk.RoundedCyan.ToString(CultureInfo.InvariantCulture);
+            CmykMagenta = _cmyk.RoundedMagenta.ToString(CultureInfo.InvariantCulture);
+            CmykYellow = _cmyk.RoundedYellow.ToString(CultureInfo.InvariantCulture);
+            CmykKey = _cmyk.RoundedKey.ToString(CultureInfo.InvariantCulture);
+            CmykScaledCyan = _cmyk.RoundedScaledCyan.ToString(CultureInfo.InvariantCulture);
+            CmykScaledMagenta = _cmyk.RoundedScaledMagenta.ToString(CultureInfo.InvariantCulture);
+            CmykScaledYellow = _cmyk.RoundedScaledYellow.ToString(CultureInfo.InvariantCulture);
+            CmykScaledKey = _cmyk.RoundedScaledKey.ToString(CultureInfo.InvariantCulture);
 
             LabText = _lab.ToString();
             LabL = _lab.RoundedL;
             LabA = _lab.RoundedA;
             LabB = _lab.RoundedB;
 
-            static LinearGradientBrush NewBrush() => new LinearGradientBrush
-            {
-                StartPoint = new Point(0, .5),
-                EndPoint = new Point(1, .5)
-            };
+            static LinearGradientBrush NewBrush() =>
+                new LinearGradientBrush
+                {
+                    StartPoint = new Point(0, .5),
+                    EndPoint = new Point(1, .5)
+                };
 
             var redGradientFill = NewBrush();
             var greenGradientFill = NewBrush();
@@ -669,77 +750,52 @@ namespace PixelPalette.Window
             var labAGradientFill = NewBrush();
             var labBGradientFill = NewBrush();
 
-            redGradientFill.GradientStops.Add(new GradientStop(_rgb.WithRed(0).ToMediaColor(), 0.0));
-            redGradientFill.GradientStops.Add(new GradientStop(_rgb.WithRed(255).ToMediaColor(), 1.0));
+            redGradientFill.GradientStops.Add(new GradientStop(_rgb.WithRed(0.0).ToMediaColor(), 0.0));
+            redGradientFill.GradientStops.Add(new GradientStop(_rgb.WithRed(1.0).ToMediaColor(), 1.0));
+            greenGradientFill.GradientStops.Add(new GradientStop(_rgb.WithGreen(0.0).ToMediaColor(), 0.0));
+            greenGradientFill.GradientStops.Add(new GradientStop(_rgb.WithGreen(1.0).ToMediaColor(), 1.0));
+            blueGradientFill.GradientStops.Add(new GradientStop(_rgb.WithBlue(0.0).ToMediaColor(), 0.0));
+            blueGradientFill.GradientStops.Add(new GradientStop(_rgb.WithBlue(1.0).ToMediaColor(), 1.0));
 
-            greenGradientFill.GradientStops.Add(new GradientStop(_rgb.WithGreen(0).ToMediaColor(), 0.0));
-            greenGradientFill.GradientStops.Add(new GradientStop(_rgb.WithGreen(255).ToMediaColor(), 1.0));
-
-            blueGradientFill.GradientStops.Add(new GradientStop(_rgb.WithBlue(0).ToMediaColor(), 0.0));
-            blueGradientFill.GradientStops.Add(new GradientStop(_rgb.WithBlue(255).ToMediaColor(), 1.0));
-
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(0, 100, 50).ToMediaColor(), 0.0));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(60, 100, 50).ToMediaColor(), 0.16));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(120, 100, 50).ToMediaColor(), 0.33));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(180, 100, 50).ToMediaColor(), 0.5));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(240, 100, 50).ToMediaColor(), 0.66));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(300, 100, 50).ToMediaColor(), 0.83));
-            hueGradientFill.GradientStops.Add(new GradientStop(new Hsl(360, 100, 50).ToMediaColor(), 1.0));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(0, 100, 50).ToMediaColor(), 0.0));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(60, 100, 50).ToMediaColor(), 0.16));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(120, 100, 50).ToMediaColor(), 0.33));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(180, 100, 50).ToMediaColor(), 0.5));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(240, 100, 50).ToMediaColor(), 0.66));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(300, 100, 50).ToMediaColor(), 0.83));
+            hueGradientFill.GradientStops.Add(new GradientStop(Hsl.FromScaledValues(360, 100, 50).ToMediaColor(), 1.0));
 
             // HSL gradients
-            hslSaturationGradientFill.GradientStops.Add(
-                new GradientStop(_hsl.WithSaturation(Hsl.MinSaturation).ToMediaColor(), 0.0));
-            hslSaturationGradientFill.GradientStops.Add(
-                new GradientStop(_hsl.WithSaturation(Hsl.MaxSaturation).ToMediaColor(), 1.0));
+            hslSaturationGradientFill.GradientStops.Add(new GradientStop(_hsl.WithSaturation(0.0).ToMediaColor(), 0.0));
+            hslSaturationGradientFill.GradientStops.Add(new GradientStop(_hsl.WithSaturation(1.0).ToMediaColor(), 1.0));
 
-            hslLuminanceGradientFill.GradientStops.Add(
-                new GradientStop(_hsl.WithLuminance(Hsl.MinLuminance).ToMediaColor(), 0.0));
-            hslLuminanceGradientFill.GradientStops.Add(
-                new GradientStop(_hsl.WithLuminance(Hsl.MaxLuminance / 2).ToMediaColor(), 0.5)); // Gives color
-            hslLuminanceGradientFill.GradientStops.Add(
-                new GradientStop(_hsl.WithLuminance(Hsl.MaxLuminance).ToMediaColor(), 1.0));
+            hslLuminanceGradientFill.GradientStops.Add(new GradientStop(_hsl.WithLuminance(0.0).ToMediaColor(), 0.0));
+            hslLuminanceGradientFill.GradientStops.Add(new GradientStop(_hsl.WithLuminance(0.5).ToMediaColor(), 0.5)); // Gives color
+            hslLuminanceGradientFill.GradientStops.Add(new GradientStop(_hsl.WithLuminance(1.0).ToMediaColor(), 1.0));
 
             // HSV gradients
-            hsvSaturationGradientFill.GradientStops.Add(
-                new GradientStop(_hsv.WithSaturation(Hsv.MinSaturation).ToMediaColor(), 0.0));
-            hsvSaturationGradientFill.GradientStops.Add(
-                new GradientStop(_hsv.WithSaturation(Hsv.MaxSaturation).ToMediaColor(), 1.0));
+            hsvSaturationGradientFill.GradientStops.Add(new GradientStop(_hsv.WithSaturation(0.0).ToMediaColor(), 0.0));
+            hsvSaturationGradientFill.GradientStops.Add(new GradientStop(_hsv.WithSaturation(1.0).ToMediaColor(), 1.0));
 
-            hsvValueGradientFill.GradientStops.Add(
-                new GradientStop(_hsv.WithValue(Hsv.MinValue).ToMediaColor(), 0.0));
-            hsvValueGradientFill.GradientStops.Add(
-                new GradientStop(_hsv.WithValue(Hsv.MaxValue / 2).ToMediaColor(), 0.5)); // Gives color
-            hsvValueGradientFill.GradientStops.Add(
-                new GradientStop(_hsv.WithValue(Hsv.MaxValue).ToMediaColor(), 1.0));
+            hsvValueGradientFill.GradientStops.Add(new GradientStop(_hsv.WithValue(0.0).ToMediaColor(), 0.0));
+            hsvValueGradientFill.GradientStops.Add(new GradientStop(_hsv.WithValue(0.5).ToMediaColor(), 0.5)); // Gives color
+            hsvValueGradientFill.GradientStops.Add(new GradientStop(_hsv.WithValue(1.0).ToMediaColor(), 1.0));
 
             // CMYK gradients
-            cmykCyanGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithCyan(Cmyk.MinComponentValue).ToRgb().ToMediaColor(), 0.0));
-            cmykCyanGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithCyan(Cmyk.MaxComponentValue).ToRgb().ToMediaColor(), 1.0));
-
-            cmykMagentaGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithMagenta(Cmyk.MinComponentValue).ToRgb().ToMediaColor(), 0.0));
-            cmykMagentaGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithMagenta(Cmyk.MaxComponentValue).ToRgb().ToMediaColor(), 1.0));
-
-            cmykYellowGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithYellow(Cmyk.MinComponentValue).ToRgb().ToMediaColor(), 0.0));
-            cmykYellowGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithYellow(Cmyk.MaxComponentValue).ToRgb().ToMediaColor(), 1.0));
-
-            cmykKeyGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithKey(Cmyk.MinComponentValue).ToRgb().ToMediaColor(), 0.0));
-            cmykKeyGradientFill.GradientStops.Add(
-                new GradientStop(_cmyk.WithKey(Cmyk.MaxComponentValue).ToRgb().ToMediaColor(), 1.0));
+            cmykCyanGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithCyan(0.0).ToRgb().ToMediaColor(), 0.0));
+            cmykCyanGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithCyan(1.0).ToRgb().ToMediaColor(), 1.0));
+            cmykMagentaGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithMagenta(0.0).ToRgb().ToMediaColor(), 0.0));
+            cmykMagentaGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithMagenta(1.0).ToRgb().ToMediaColor(), 1.0));
+            cmykYellowGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithYellow(0.0).ToRgb().ToMediaColor(), 0.0));
+            cmykYellowGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithYellow(1.0).ToRgb().ToMediaColor(), 1.0));
+            cmykKeyGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithKey(0.0).ToRgb().ToMediaColor(), 0.0));
+            cmykKeyGradientFill.GradientStops.Add(new GradientStop(_cmyk.WithKey(1.0).ToRgb().ToMediaColor(), 1.0));
 
             // LAB gradients
             labLGradientFill.GradientStops.Add(new GradientStop(_lab.WithL(Lab.MinL).ToRgb().ToMediaColor(), 0.0));
             labLGradientFill.GradientStops.Add(new GradientStop(_lab.WithL(Lab.MaxL).ToRgb().ToMediaColor(), 1.0));
-
             labAGradientFill.GradientStops.Add(new GradientStop(_lab.WithA(Lab.MinA).ToRgb().ToMediaColor(), 0.0));
             labAGradientFill.GradientStops.Add(new GradientStop(_lab.WithA(Lab.MaxA).ToRgb().ToMediaColor(), 1.0));
-
             labBGradientFill.GradientStops.Add(new GradientStop(_lab.WithB(Lab.MinB).ToRgb().ToMediaColor(), 0.0));
             labBGradientFill.GradientStops.Add(new GradientStop(_lab.WithB(Lab.MaxB).ToRgb().ToMediaColor(), 1.0));
 
@@ -758,6 +814,8 @@ namespace PixelPalette.Window
             LabLGradientFill = labLGradientFill;
             LabAGradientFill = labAGradientFill;
             LabBGradientFill = labBGradientFill;
+
+            IsUserUpdate = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -766,6 +824,11 @@ namespace PixelPalette.Window
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            if (IsUserUpdate)
+            {
+                PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
@@ -775,5 +838,7 @@ namespace PixelPalette.Window
             OnPropertyChanged(propertyName);
             return true;
         }
+
+        public event EventHandler<PropertyChangedEventArgs> PropertyChangedByUser;
     }
 }

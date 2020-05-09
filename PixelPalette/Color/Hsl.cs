@@ -8,42 +8,71 @@ namespace PixelPalette.Color
     {
         public static readonly Hsl Empty = new Hsl();
 
-        public static readonly double MinHue = 0;
-        public static readonly double MaxHue = 360;
-        public static readonly double MinSaturation = 0;
-        public static readonly double MaxSaturation = 100;
-        public static readonly double MinLuminance = 0;
-        public static readonly double MaxLuminance = 100;
+        private const string StringPattern =
+            @"^hsl\(\s*(?<hue>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<sat>0|1(?:\.0)?|0\.\d+)\s*,\s*(?<lum>0|1(?:\.0)?|0\.\d+)\s*\)$";
+
+        private const string ScaledStringPattern =
+            @"^hsl\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<lum>\d+(?:\.\d+)?)%?\s*\)$";
 
         /// <summary>
-        /// Hue on a scale of 0-360
+        /// Hue on a scale of 0-1
         /// </summary>
         public double Hue { get; }
 
         /// <summary>
-        /// Saturation on a scale of 0-100
+        /// Saturation on a scale of 0-1
         /// </summary>
         public double Saturation { get; }
 
         /// <summary>
-        /// Luminance on a scale of 0-100
+        /// Luminance on a scale of 0-1
         /// </summary>
         public double Luminance { get; }
 
         /// <summary>
-        /// Rounded Hue
+        /// Hue on a scale of 0-360
+        /// </summary>
+        public double ScaledHue => Hue * 360.0;
+
+        /// <summary>
+        /// Saturation on a scale of 0-100
+        /// </summary>
+        public double ScaledSaturation => Saturation * 100.0;
+
+        /// <summary>
+        /// Luminance on a scale of 0-100
+        /// </summary>
+        public double ScaledLuminance => Luminance * 100.0;
+
+        /// <summary>
+        /// Hue on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedHue => Round(Hue);
 
         /// <summary>
-        /// Saturation on a scale of 0-100, rounded to 2 decimal places
+        /// Saturation on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedSaturation => Round(Saturation);
 
         /// <summary>
-        /// Luminance on a scale of 0-100, rounded to 2 decimal places
+        /// Luminance on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedLuminance => Round(Luminance);
+
+        /// <summary>
+        /// Hue on a scale of 0-360, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledHue => Round(ScaledHue, 2);
+
+        /// <summary>
+        /// Saturation on a scale of 0-100, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledSaturation => Round(ScaledSaturation, 2);
+
+        /// <summary>
+        /// Luminance on a scale of 0-100, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledLuminance => Round(ScaledLuminance, 2);
 
         public Hsl(double h, double s, double l)
         {
@@ -52,9 +81,47 @@ namespace PixelPalette.Color
             Luminance = ClampedLuminance(l);
         }
 
+        public static Hsl FromScaledValues(double h, double s, double l)
+        {
+            return new Hsl(
+                ClampedScaledHue(h) / 360.0,
+                ClampedScaledSaturation(s) / 100.0,
+                ClampedScaledLuminance(l) / 100.0);
+        }
+
+        public static bool IsValidHue(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidSaturation(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidLuminance(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidScaledHue(double value)
+        {
+            return value >= 0.0 && value <= 360.0;
+        }
+
+        public static bool IsValidScaledSaturation(double value)
+        {
+            return value >= 0.0 && value <= 100.0;
+        }
+
+        public static bool IsValidScaledLuminance(double value)
+        {
+            return value >= 0.0 && value <= 100.0;
+        }
+
         public static Hsl? FromString(string theString)
         {
-            var regex = new Regex(@"hsl\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<lum>\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(StringPattern, RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {
@@ -66,22 +133,48 @@ namespace PixelPalette.Color
             }
 
             return null;
+        }
 
+        public static Hsl? FromScaledString(string theString)
+        {
+            var regex = new Regex(ScaledStringPattern, RegexOptions.IgnoreCase);
+            var match = regex.Match(theString);
+            if (!match.Success) return null;
+            var h = double.Parse(match.Groups["hue"].Value);
+            var s = double.Parse(match.Groups["sat"].Value);
+            var l = double.Parse(match.Groups["lum"].Value);
+            if (!IsValidScaledHue(h) || !IsValidScaledSaturation(s) || !IsValidScaledLuminance(l)) return null;
+            return FromScaledValues(h, s, l);
         }
 
         public static double ClampedHue(double h)
         {
-            return h > MaxHue ? MaxHue : h < MinHue ? MinHue : h;
+            return h > 1.0 ? 1.0 : h < 0.0 ? 0.0 : h;
         }
 
         public static double ClampedSaturation(double s)
         {
-            return s > MaxSaturation ? MaxSaturation : s < MinSaturation ? MinSaturation : s;
+            return s > 1.0 ? 1.0 : s < 0.0 ? 0.0 : s;
         }
 
         public static double ClampedLuminance(double l)
         {
-            return l > MaxLuminance ? MaxLuminance : l < MinLuminance ? MinLuminance : l;
+            return l > 1.0 ? 1.0 : l < 0.0 ? 0.0 : l;
+        }
+
+        public static double ClampedScaledHue(double h)
+        {
+            return h > 360.0 ? 360.0 : h < 0.0 ? 0.0 : h;
+        }
+
+        public static double ClampedScaledSaturation(double s)
+        {
+            return s > 100.0 ? 100.0 : s < 0.0 ? 0.0 : s;
+        }
+
+        public static double ClampedScaledLuminance(double l)
+        {
+            return l > 100.0 ? 100.0 : l < 0.0 ? 0.0 : l;
         }
 
         public Hsl WithHue(double h)
@@ -99,9 +192,34 @@ namespace PixelPalette.Color
             return new Hsl(Hue, Saturation, l);
         }
 
-        private static double Round(double d)
+        public Hsl WithScaledHue(double h)
         {
-            return Math.Round(d, 2, MidpointRounding.AwayFromZero);
+            return new Hsl(h / 360.0, Saturation, Luminance);
+        }
+
+        public Hsl WithScaledSaturation(double s)
+        {
+            return new Hsl(Hue, s / 100.0, Luminance);
+        }
+
+        public Hsl WithScaledLuminance(double l)
+        {
+            return new Hsl(Hue, Saturation, l / 100.0);
+        }
+
+        private static double Round(double d, int precision = 3)
+        {
+            return Math.Round(d, precision, MidpointRounding.AwayFromZero);
+        }
+
+        public override string ToString()
+        {
+            return $"hsl({RoundedHue}, {RoundedSaturation}, {RoundedLuminance})";
+        }
+
+        public string ToScaledString()
+        {
+            return $"hsl({RoundedScaledHue}, {RoundedScaledSaturation}%, {RoundedScaledLuminance}%)";
         }
 
         /// <summary>
@@ -109,7 +227,7 @@ namespace PixelPalette.Color
         /// </summary>
         public Hsl Lighter(int amount = 10)
         {
-            return new Hsl(Hue, Saturation, Round(Luminance + amount));
+            return new Hsl(Hue, Saturation, Round(Luminance + amount / 100.0));
         }
 
         /// <summary>
@@ -117,12 +235,7 @@ namespace PixelPalette.Color
         /// </summary>
         public Hsl Darker(int amount = 10)
         {
-            return new Hsl(Hue, Saturation, Round(Luminance - amount));
-        }
-
-        public override string ToString()
-        {
-            return $"hsl({RoundedHue}, {RoundedSaturation}%, {RoundedLuminance}%)";
+            return new Hsl(Hue, Saturation, Round(Luminance - amount / 100.0));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -130,9 +243,9 @@ namespace PixelPalette.Color
         {
             // Formula from https://www.rapidtables.com/convert/color/hsl-to-rgb.html
 
-            var hue = Hue;
-            var sat = Saturation / 100;
-            var lum = Luminance / 100;
+            var hue = ScaledHue;
+            var sat = Saturation;
+            var lum = Luminance;
 
             // 360deg is actually 0deg (Red)
             if (hue >= 360)
@@ -196,9 +309,9 @@ namespace PixelPalette.Color
         {
             // Formula from https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_HSV
 
-            var hue = Hue;
-            var sat1 = Saturation / 100;
-            var lum1 = Luminance / 100;
+            var hue = ScaledHue;
+            var sat1 = Saturation;
+            var lum1 = Luminance;
 
             var val = lum1 + sat1 * Math.Min(lum1, 1 - lum1);
             var sat = 0.0;
@@ -207,13 +320,12 @@ namespace PixelPalette.Color
                 sat = 2 * (1 - (lum1 / val));
             }
 
-            return new Hsv(hue, sat * 100, val * 100);
+            return new Hsv(hue / 360.0, sat, val);
         }
 
         public System.Windows.Media.Color ToMediaColor()
         {
-            var rgb = ToRgb();
-            return System.Windows.Media.Color.FromRgb((byte) rgb.Red, (byte) rgb.Green, (byte) rgb.Blue);
+            return ToRgb().ToMediaColor();
         }
 
         public bool Equals(Hsl other)

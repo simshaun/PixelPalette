@@ -11,42 +11,71 @@ namespace PixelPalette.Color
     {
         public static readonly Hsv Empty = new Hsv();
 
-        public static readonly double MinHue = 0;
-        public static readonly double MaxHue = 360;
-        public static readonly double MinSaturation = 0;
-        public static readonly double MaxSaturation = 100;
-        public static readonly double MinValue = 0;
-        public static readonly double MaxValue = 100;
+        private const string StringPattern =
+            @"^hsv\(\s*(?<hue>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<sat>0|1(?:\.0)|0\.\d+)\s*,\s*(?<val>0|1(?:\.0)|0\.\d+)\s*\)$";
+
+        private const string ScaledStringPattern =
+            @"^hsv\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<val>\d+(?:\.\d+)?)%?\s*\)$";
 
         /// <summary>
-        /// Hue on a scale of 0-360
+        /// Hue on a scale of 0-1
         /// </summary>
         public double Hue { get; }
 
         /// <summary>
-        /// Saturation on a scale of 0-100
+        /// Saturation on a scale of 0-1
         /// </summary>
         public double Saturation { get; }
 
         /// <summary>
-        /// Value on a scale of 0-100
+        /// Value on a scale of 0-1
         /// </summary>
         public double Value { get; }
 
         /// <summary>
-        /// Hue, rounded to 2 decimal places
+        /// Hue on a scale of 0-360
+        /// </summary>
+        public double ScaledHue => Hue * 360.0;
+
+        /// <summary>
+        /// Saturation on a scale of 0-100
+        /// </summary>
+        public double ScaledSaturation => Saturation * 100.0;
+
+        /// <summary>
+        /// Value on a scale of 0-100
+        /// </summary>
+        public double ScaledValue => Value * 100.0;
+
+        /// <summary>
+        /// Hue on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedHue => Round(Hue);
 
         /// <summary>
-        /// Saturation on a scale of 0-100, rounded to 2 decimal places
+        /// Saturation on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedSaturation => Round(Saturation);
 
         /// <summary>
-        /// Value on a scale of 0-100, rounded to 2 decimal places
+        /// Value on a scale of 0-1, rounded to 3 decimal places
         /// </summary>
         public double RoundedValue => Round(Value);
+
+        /// <summary>
+        /// Hue on a scale of 0-360, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledHue => Round(ScaledHue, 2);
+
+        /// <summary>
+        /// Saturation on a scale of 0-100, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledSaturation => Round(ScaledSaturation, 2);
+
+        /// <summary>
+        /// Value on a scale of 0-100, rounded to 2 decimal places
+        /// </summary>
+        public double RoundedScaledValue => Round(ScaledValue, 2);
 
         public Hsv(double h, double s, double v)
         {
@@ -55,9 +84,47 @@ namespace PixelPalette.Color
             Value = ClampedValue(v);
         }
 
+        public static Hsv FromScaledValues(double h, double s, double v)
+        {
+            return new Hsv(
+                ClampedScaledHue(h) / 360.0,
+                ClampedScaledSaturation(s) / 100.0,
+                ClampedScaledValue(v) / 100.0);
+        }
+
+        public static bool IsValidHue(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidSaturation(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidValue(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidScaledHue(double value)
+        {
+            return value >= 0.0 && value <= 360.0;
+        }
+
+        public static bool IsValidScaledSaturation(double value)
+        {
+            return value >= 0.0 && value <= 100.0;
+        }
+
+        public static bool IsValidScaledValue(double value)
+        {
+            return value >= 0.0 && value <= 100.0;
+        }
+
         public static Hsv? FromString(string theString)
         {
-            var regex = new Regex(@"hsv\(\s*(?<hue>\d+(?:\.\d+)?)\s*,\s*(?<sat>\d+(?:\.\d+)?)%?\s*,\s*(?<val>\d+(?:\.\d+)?)%?\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(StringPattern, RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {
@@ -69,22 +136,48 @@ namespace PixelPalette.Color
             }
 
             return null;
+        }
 
+        public static Hsv? FromScaledString(string theString)
+        {
+            var regex = new Regex(ScaledStringPattern, RegexOptions.IgnoreCase);
+            var match = regex.Match(theString);
+            if (!match.Success) return null;
+            var h = double.Parse(match.Groups["hue"].Value);
+            var s = double.Parse(match.Groups["sat"].Value);
+            var v = double.Parse(match.Groups["val"].Value);
+            if (!IsValidScaledHue(h) || !IsValidScaledSaturation(s) || !IsValidScaledValue(v)) return null;
+            return FromScaledValues(h, s, v);
         }
 
         public static double ClampedHue(double h)
         {
-            return h > MaxHue ? MaxHue : h < MinHue ? MinHue : h;
+            return h > 1.0 ? 1.0 : h < 0.0 ? 0.0 : h;
         }
 
         public static double ClampedSaturation(double s)
         {
-            return s > MaxSaturation ? MaxSaturation : s < MinSaturation ? MinSaturation : s;
+            return s > 1.0 ? 1.0 : s < 0.0 ? 0.0 : s;
         }
 
         public static double ClampedValue(double v)
         {
-            return v > MaxValue ? MaxValue : v < MinValue ? MinValue : v;
+            return v > 1.0 ? 1.0 : v < 0.0 ? 0.0 : v;
+        }
+
+        public static double ClampedScaledHue(double h)
+        {
+            return h > 360.0 ? 360.0 : h < 0.0 ? 0.0 : h;
+        }
+
+        public static double ClampedScaledSaturation(double s)
+        {
+            return s > 100.0 ? 100.0 : s < 0.0 ? 0.0 : s;
+        }
+
+        public static double ClampedScaledValue(double v)
+        {
+            return v > 100.0 ? 100.0 : v < 0.0 ? 0.0 : v;
         }
 
         public Hsv WithHue(double h)
@@ -102,14 +195,34 @@ namespace PixelPalette.Color
             return new Hsv(Hue, Saturation, v);
         }
 
-        private static double Round(double d)
+        public Hsv WithScaledHue(double h)
         {
-            return Math.Round(d, 2, MidpointRounding.AwayFromZero);
+            return new Hsv(h / 360.0, Saturation, Value);
+        }
+
+        public Hsv WithScaledSaturation(double s)
+        {
+            return new Hsv(Hue, s / 100.0, Value);
+        }
+
+        public Hsv WithScaledValue(double v)
+        {
+            return new Hsv(Hue, Saturation, v / 100.0);
+        }
+
+        private static double Round(double d, int precision = 3)
+        {
+            return Math.Round(d, precision, MidpointRounding.AwayFromZero);
         }
 
         public override string ToString()
         {
-            return $"hsv({RoundedHue}, {RoundedSaturation}%, {RoundedValue}%)";
+            return $"hsv({RoundedHue}, {RoundedSaturation}, {RoundedValue})";
+        }
+
+        public string ToScaledString()
+        {
+            return $"hsv({RoundedScaledHue}, {RoundedScaledSaturation}%, {RoundedScaledValue}%)";
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -117,9 +230,9 @@ namespace PixelPalette.Color
         {
             // Formula from https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 
-            var hue = Hue;
-            var sat = Saturation / 100;
-            var val = Value / 100;
+            var hue = ScaledHue;
+            var sat = Saturation;
+            var val = Value;
 
             // 360deg is actually 0deg (Red)
             if (hue >= 360)
@@ -183,9 +296,9 @@ namespace PixelPalette.Color
         {
             // Formula from https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_HSL
 
-            var hue = Hue;
-            var val1 = Value / 100;
-            var sat1 = Saturation / 100;
+            var hue = ScaledHue;
+            var sat1 = Saturation;
+            var val1 = Value;
 
             var val = val1 * (1 - (sat1 / 2));
             var sat = 0.0;
@@ -194,13 +307,12 @@ namespace PixelPalette.Color
                 sat = (val1 - val) / Math.Min(val, 1 - val);
             }
 
-            return new Hsl(hue, sat * 100, val * 100);
+            return new Hsl(hue / 360.0, sat, val);
         }
 
         public System.Windows.Media.Color ToMediaColor()
         {
-            var rgb = ToRgb();
-            return System.Windows.Media.Color.FromRgb((byte) rgb.Red, (byte) rgb.Green, (byte) rgb.Blue);
+            return ToRgb().ToMediaColor();
         }
 
         public bool Equals(Hsv other)

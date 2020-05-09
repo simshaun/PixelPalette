@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -43,11 +42,7 @@ namespace PixelPalette.Window
         }
 
         // Shortcut method
-        private static void HandleMouseWheel(
-            IEnumerable<IInputElement> controls,
-            [CanBeNull] Action upAction,
-            [CanBeNull] Action downAction
-        )
+        private static void HandleMouseWheel(IEnumerable<IInputElement> controls, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
         {
             foreach (var control in controls)
             {
@@ -65,52 +60,62 @@ namespace PixelPalette.Window
             }
         }
 
-        // Shortcut method
-        private static void HandleMouseWheel(
-            IInputElement control,
-            [CanBeNull] Action upAction,
-            [CanBeNull] Action downAction
-        )
+        private static void HandleMouseWheel(IInputElement control, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
         {
             HandleMouseWheel(new[] {control}, upAction, downAction);
         }
 
         // Shortcut method
+        private static void HandleInput(IEnumerable<TextBox> controls, Action<string, TextBox> action)
+        {
+            foreach (var control in controls)
+            {
+                control.TextChanged += (o, ev) =>
+                {
+                    if (!IsActiveControl(control)) return;
+                    action(control.Text, control);
+                };
+            }
+        }
+
         private static void HandleInput(TextBox control, Action<string, TextBox> action)
         {
-            control.TextChanged += (o, ev) =>
-            {
-                if (!IsActiveControl(control)) return;
-                var text = control.Text;
-                action(text, control);
-            };
+            HandleInput(new[] {control}, action);
         }
 
         // Shortcut method
+        private static void HandleInputEnterOrFocusLost(IEnumerable<TextBox> controls, Action<string, TextBox> action)
+        {
+            foreach (var control in controls)
+            {
+                void HandleIt()
+                {
+                    var text = control.Text;
+                    action(text, control);
+                }
+
+                control.KeyDown += (o, ev) =>
+                {
+                    if (ev.Key != Key.Enter) return;
+                    HandleIt();
+                };
+
+                control.LostFocus += (o, ev) => { HandleIt(); };
+            }
+        }
+
         private static void HandleInputEnterOrFocusLost(TextBox control, Action<string, TextBox> action)
         {
-            void HandleIt()
-            {
-                var text = control.Text;
-                action(text, control);
-            }
-
-            control.KeyDown += (o, ev) =>
-            {
-                if (ev.Key != Key.Enter) return;
-                HandleIt();
-            };
-
-            control.LostFocus += (o, ev) => { HandleIt(); };
+            HandleInputEnterOrFocusLost(new[] {control}, action);
         }
 
         // Shortcut method
-        private static void HandleSliderChange(Slider control, Action<double, Slider> action)
+        private static void HandleSliderChange(Slider control, Action<double> action)
         {
             control.ValueChanged += (o, ev) =>
             {
                 if (!IsActiveControl(control)) return;
-                action(ev.NewValue, control);
+                action(ev.NewValue);
             };
         }
 
@@ -143,431 +148,514 @@ namespace PixelPalette.Window
                 }
             };
 
-            // Hex & RGB Arrow Keys
-            HandleKey(Key.Up, new[] {RedHex, Red},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red + 1)); });
-            HandleKey(Key.Up, new[] {GreenHex, Green},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green + 1)); });
-            HandleKey(Key.Up, new[] {BlueHex, Blue},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue + 1)); });
+            //
+            // RGB fields
+            //
 
-            HandleKey(Key.Down, new[] {RedHex, Red},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red - 1)); });
-            HandleKey(Key.Down, new[] {GreenHex, Green},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green - 1)); });
-            HandleKey(Key.Down, new[] {BlueHex, Blue},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue - 1)); });
+            HandleKey(Key.Up, RgbRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red + 0.01)); });
+            HandleKey(Key.Up, RgbGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green + 0.01)); });
+            HandleKey(Key.Up, RgbBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue + 0.01)); });
+            HandleKey(Key.Up, RgbScaledRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); });
+            HandleKey(Key.Up, RgbScaledGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); });
+            HandleKey(Key.Up, RgbScaledBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); });
 
-            // HSL Arrow Keys
-            HandleKey(Key.Up, HslHue,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue + 1)); });
-            HandleKey(Key.Up, HslSaturation,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation + 1)); });
-            HandleKey(Key.Up, HslLuminance,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance + 1)); });
+            HandleKey(Key.Down, RgbRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red - 0.01)); });
+            HandleKey(Key.Down, RgbGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green - 0.01)); });
+            HandleKey(Key.Down, RgbBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue - 0.01)); });
+            HandleKey(Key.Down, RgbScaledRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); });
+            HandleKey(Key.Down, RgbScaledGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); });
+            HandleKey(Key.Down, RgbScaledBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); });
 
-            HandleKey(Key.Down, HslHue,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue - 1)); });
-            HandleKey(Key.Down, HslSaturation,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation - 1)); });
-            HandleKey(Key.Down, HslLuminance,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance - 1)); });
+            HandleMouseWheel(
+                RgbRed,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red + 0.01)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red - 0.01)); }
+            );
+            HandleMouseWheel(
+                RgbGreen,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green + 0.01)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green - 0.01)); }
+            );
+            HandleMouseWheel(
+                RgbBlue,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue + 0.01)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue - 0.01)); }
+            );
 
-            // HSV Arrow Keys
-            HandleKey(Key.Up, HsvHue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue + 1)); });
-            HandleKey(Key.Up, HsvSaturation,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation + 1)); });
-            HandleKey(Key.Up, HsvValue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value + 1)); });
+            HandleMouseWheel(
+                RgbScaledRed,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); }
+            );
+            HandleMouseWheel(
+                RgbScaledGreen,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); }
+            );
+            HandleMouseWheel(
+                RgbScaledBlue,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); }
+            );
 
-            HandleKey(Key.Down, HsvHue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue - 1)); });
-            HandleKey(Key.Down, HsvSaturation,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation - 1)); });
-            HandleKey(Key.Down, HsvValue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value - 1)); });
+            HandleSliderChange(RgbRedSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(value)); });
+            HandleSliderChange(RgbGreenSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(value)); });
+            HandleSliderChange(RgbBlueSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(value)); });
 
-            // CMYK Arrow Keys
-            HandleKey(Key.Up, CmykCyan,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan + 1)); });
-            HandleKey(Key.Up, CmykMagenta,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta + 1)); });
-            HandleKey(Key.Up, CmykYellow,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow + 1)); });
-            HandleKey(Key.Up, CmykKey,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key + 1)); });
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                int intVal;
+                bool isInt;
+                bool isDouble;
+                double doubleVal;
+                Rgb? nullableRgb;
 
-            HandleKey(Key.Down, CmykCyan,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan - 1)); });
-            HandleKey(Key.Down, CmykMagenta,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta - 1)); });
-            HandleKey(Key.Down, CmykYellow,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow - 1)); });
-            HandleKey(Key.Down, CmykKey,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key - 1)); });
+                switch (ev.PropertyName)
+                {
+                    case "RgbText":
+                        nullableRgb = Rgb.FromString(_vm.RgbText);
+                        if (nullableRgb.HasValue) _vm.RefreshFromRgb(nullableRgb.Value);
+                        break;
+                    case "RgbScaledText":
+                        nullableRgb = Rgb.FromScaledString(_vm.RgbScaledText);
+                        if (nullableRgb.HasValue) _vm.RefreshFromRgb(nullableRgb.Value);
+                        break;
+                    case "RgbScaledRed":
+                        isInt = int.TryParse(_vm.RgbScaledRed, out intVal);
+                        if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithRed(intVal));
+                        break;
+                    case "RgbScaledGreen":
+                        isInt = int.TryParse(_vm.RgbScaledGreen, out intVal);
+                        if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithGreen(intVal));
+                        break;
+                    case "RgbScaledBlue":
+                        isInt = int.TryParse(_vm.RgbScaledBlue, out intVal);
+                        if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithBlue(intVal));
+                        break;
+                    case "RgbRed":
+                        isDouble = double.TryParse(_vm.RgbRed, out doubleVal);
+                        if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithRed(doubleVal));
+                        break;
+                    case "RgbGreen":
+                        isDouble = double.TryParse(_vm.RgbGreen, out doubleVal);
+                        if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithGreen(doubleVal));
+                        break;
+                    case "RgbBlue":
+                        isDouble = double.TryParse(_vm.RgbBlue, out doubleVal);
+                        if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromRgb(_vm.Rgb.WithBlue(doubleVal));
+                        break;
+                }
+            };
 
-            // LAB Arrow Keys
-            HandleKey(Key.Up, LabL,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L + 1)); });
-            HandleKey(Key.Up, LabA,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A + 1)); });
-            HandleKey(Key.Up, LabB,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B + 1)); });
+            //
+            // HEX fields
+            //
 
-            HandleKey(Key.Down, LabL,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L - 1)); });
-            HandleKey(Key.Down, LabA,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A - 1)); });
-            HandleKey(Key.Down, LabB,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B - 1)); });
+            HandleKey(Key.Up, HexRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); });
+            HandleKey(Key.Up, HexGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); });
+            HandleKey(Key.Up, HexBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); });
 
-            // Hex & RGB Mousewheel
-            HandleMouseWheel(new[] {RedHex, Red},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red - 1)); });
-            HandleMouseWheel(new[] {GreenHex, Green},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green - 1)); });
-            HandleMouseWheel(new[] {BlueHex, Blue},
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.Blue - 1)); });
+            HandleKey(Key.Down, HexRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); });
+            HandleKey(Key.Down, HexGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); });
+            HandleKey(Key.Down, HexBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); });
 
-            // HSL Mousewheel
-            HandleMouseWheel(HslHue,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue + 1)); },
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue - 1)); });
-            HandleMouseWheel(HslSaturation,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation + 1)); },
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation - 1)); });
-            HandleMouseWheel(HslLuminance,
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance + 1)); },
-                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance - 1)); });
+            HandleMouseWheel(
+                HexRed,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); }
+            );
+            HandleMouseWheel(
+                HexGreen,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); }
+            );
+            HandleMouseWheel(
+                HexBlue,
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); },
+                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); }
+            );
 
-            // HSV Mousewheel
-            HandleMouseWheel(HsvHue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue + 1)); },
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue - 1)); });
-            HandleMouseWheel(HsvSaturation,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation + 1)); },
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation - 1)); });
-            HandleMouseWheel(HsvValue,
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value + 1)); },
-                () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value - 1)); });
+            HandleSliderChange(HexRedSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(value)); });
+            HandleSliderChange(HexGreenSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(value)); });
+            HandleSliderChange(HexBlueSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(value)); });
 
-            // CMYK Mousewheel
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                switch (ev.PropertyName)
+                {
+                    case "HexText":
+                        var nullableHex = Hex.FromString(_vm.HexText);
+                        if (nullableHex.HasValue) _vm.RefreshFromHex(nullableHex.Value);
+                        break;
+                    case "HexRed":
+                        // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
+                        if (!Hex.IsValidHexPart(_vm.HexRed) || _vm.HexRed.Length != 2) return;
+                        _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.HexRed));
+                        break;
+                    case "HexGreen":
+                        // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
+                        if (!Hex.IsValidHexPart(_vm.HexGreen) || _vm.HexGreen.Length != 2) return;
+                        _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.HexGreen));
+                        break;
+                    case "HexBlue":
+                        // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
+                        if (!Hex.IsValidHexPart(_vm.HexBlue) || _vm.HexBlue.Length != 2) return;
+                        _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.HexBlue));
+                        break;
+                }
+            };
+
+            //
+            // HSL fields
+            //
+
+            HandleKey(Key.Up, HslHue, () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue + 0.01)); });
+            HandleKey(Key.Up, HslSaturation, () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation + 0.01)); });
+            HandleKey(Key.Up, HslLuminance, () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance + 0.01)); });
+            HandleKey(Key.Up, HslScaledHue, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(_vm.Hsl.ScaledHue + 1)); });
+            HandleKey(Key.Up, HslScaledSaturation, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(_vm.Hsl.ScaledSaturation + 1)); });
+            HandleKey(Key.Up, HslScaledLuminance, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(_vm.Hsl.ScaledLuminance + 1)); });
+
+            HandleKey(Key.Down, HslHue, () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue - 0.01)); });
+            HandleKey(Key.Down, HslSaturation, () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation - 0.01)); });
+            HandleKey(Key.Down, HslLuminance, () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance - 0.01)); });
+            HandleKey(Key.Down, HslScaledHue, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(_vm.Hsl.ScaledHue - 1)); });
+            HandleKey(Key.Down, HslScaledSaturation, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(_vm.Hsl.ScaledSaturation - 1)); });
+            HandleKey(Key.Down, HslScaledLuminance, () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(_vm.Hsl.ScaledLuminance - 1)); });
+
+            HandleMouseWheel(
+                HslHue,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue + 0.01)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue - 0.01)); }
+            );
+            HandleMouseWheel(
+                HslSaturation,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation + 0.01)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation - 0.01)); }
+            );
+            HandleMouseWheel(
+                HslLuminance,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance + 0.01)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(_vm.Hsl.Luminance - 0.01)); }
+            );
+            HandleMouseWheel(
+                HslScaledHue,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(_vm.Hsl.ScaledHue + 1)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(_vm.Hsl.ScaledHue - 1)); }
+            );
+            HandleMouseWheel(
+                HslScaledSaturation,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(_vm.Hsl.ScaledSaturation + 1)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(_vm.Hsl.ScaledSaturation - 1)); }
+            );
+            HandleMouseWheel(
+                HslScaledLuminance,
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(_vm.Hsl.ScaledLuminance + 1)); },
+                () => { _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(_vm.Hsl.ScaledLuminance - 1)); }
+            );
+
+            HandleSliderChange(HslHueSlider, value => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(value)); });
+            HandleSliderChange(HslSaturationSlider, value => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(value)); });
+            HandleSliderChange(HslLuminanceSlider, value => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(value)); });
+
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                bool isDouble;
+                double doubleVal;
+                Hsl? nullableHsl;
+
+                switch (ev.PropertyName)
+                {
+                    case "HslText":
+                        nullableHsl = Hsl.FromString(_vm.HslText);
+                        if (nullableHsl.HasValue) _vm.RefreshFromHsl(nullableHsl.Value);
+                        break;
+                    case "HslScaledText":
+                        nullableHsl = Hsl.FromScaledString(_vm.HslScaledText);
+                        if (nullableHsl.HasValue) _vm.RefreshFromHsl(nullableHsl.Value);
+                        break;
+                    case "HslHue":
+                        isDouble = double.TryParse(_vm.HslHue, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidHue(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithHue(doubleVal));
+                        break;
+                    case "HslSaturation":
+                        isDouble = double.TryParse(_vm.HslSaturation, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidSaturation(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(doubleVal));
+                        break;
+                    case "HslValue":
+                        isDouble = double.TryParse(_vm.HslLuminance, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidLuminance(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(doubleVal));
+                        break;
+                    case "HslScaledHue":
+                        isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidScaledHue(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(doubleVal));
+                        break;
+                    case "HslScaledSaturation":
+                        isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidScaledSaturation(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(doubleVal));
+                        break;
+                    case "HslScaledValue":
+                        isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
+                        if (!isDouble || !Hsl.IsValidScaledLuminance(doubleVal)) return;
+                        _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(doubleVal));
+                        break;
+                }
+            };
+
+            //
+            // HSV fields
+            //
+
+            HandleKey(Key.Up, HsvHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue + 0.01)); });
+            HandleKey(Key.Up, HsvSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation + 0.01)); });
+            HandleKey(Key.Up, HsvValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value + 0.01)); });
+            HandleKey(Key.Up, HsvScaledHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(_vm.Hsv.ScaledHue + 1)); });
+            HandleKey(Key.Up, HsvScaledSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(_vm.Hsv.ScaledSaturation + 1)); });
+            HandleKey(Key.Up, HsvScaledValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(_vm.Hsv.ScaledValue + 1)); });
+
+            HandleKey(Key.Down, HsvHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue - 0.01)); });
+            HandleKey(Key.Down, HsvSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation - 0.01)); });
+            HandleKey(Key.Down, HsvValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value - 0.01)); });
+            HandleKey(Key.Down, HsvScaledHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(_vm.Hsv.ScaledHue - 1)); });
+            HandleKey(Key.Down, HsvScaledSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(_vm.Hsv.ScaledSaturation - 1)); });
+            HandleKey(Key.Down, HsvScaledValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(_vm.Hsv.ScaledValue - 1)); });
+
+            HandleMouseWheel(HsvHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue + 0.01)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue - 0.01)); });
+            HandleMouseWheel(HsvSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation + 0.01)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation - 0.01)); });
+            HandleMouseWheel(HsvValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value + 0.01)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(_vm.Hsv.Value - 0.01)); });
+            HandleMouseWheel(HsvScaledHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(_vm.Hsv.ScaledHue + 1)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(_vm.Hsv.ScaledHue - 1)); });
+            HandleMouseWheel(HsvScaledSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(_vm.Hsv.ScaledSaturation + 1)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(_vm.Hsv.ScaledSaturation - 1)); });
+            HandleMouseWheel(HsvScaledValue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(_vm.Hsv.ScaledValue + 1)); },
+                             () => { _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(_vm.Hsv.ScaledValue - 1)); });
+
+            HandleSliderChange(HsvHueSlider, value => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(value)); });
+            HandleSliderChange(HsvSaturationSlider, value => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(value)); });
+            HandleSliderChange(HsvValueSlider, value => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(value)); });
+
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                bool isDouble;
+                double doubleVal;
+                Hsv? nullableHsv;
+
+                switch (ev.PropertyName)
+                {
+                    case "HsvText":
+                        nullableHsv = Hsv.FromString(_vm.HsvText);
+                        if (nullableHsv.HasValue) _vm.RefreshFromHsv(nullableHsv.Value);
+                        break;
+                    case "HsvScaledText":
+                        nullableHsv = Hsv.FromScaledString(_vm.HsvScaledText);
+                        if (nullableHsv.HasValue) _vm.RefreshFromHsv(nullableHsv.Value);
+                        break;
+                    case "HsvHue":
+                        isDouble = double.TryParse(_vm.HsvHue, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidHue(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithHue(doubleVal));
+                        break;
+                    case "HsvSaturation":
+                        isDouble = double.TryParse(_vm.HsvSaturation, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidSaturation(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(doubleVal));
+                        break;
+                    case "HsvValue":
+                        isDouble = double.TryParse(_vm.HsvValue, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidValue(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithValue(doubleVal));
+                        break;
+                    case "HsvScaledHue":
+                        isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidScaledHue(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(doubleVal));
+                        break;
+                    case "HsvScaledSaturation":
+                        isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidScaledSaturation(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(doubleVal));
+                        break;
+                    case "HsvScaledValue":
+                        isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
+                        if (!isDouble || !Hsv.IsValidScaledValue(doubleVal)) return;
+                        _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(doubleVal));
+                        break;
+                }
+            };
+
+            //
+            // CMYK fields
+            //
+
+            HandleKey(Key.Up, CmykCyan, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan + 0.01)); });
+            HandleKey(Key.Up, CmykMagenta, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta + 0.01)); });
+            HandleKey(Key.Up, CmykYellow, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow + 0.01)); });
+            HandleKey(Key.Up, CmykKey, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key + 0.01)); });
+            HandleKey(Key.Up, CmykScaledCyan, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(_vm.Cmyk.ScaledCyan + 1)); });
+            HandleKey(Key.Up, CmykScaledMagenta, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(_vm.Cmyk.ScaledMagenta + 1)); });
+            HandleKey(Key.Up, CmykScaledYellow, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(_vm.Cmyk.ScaledYellow + 1)); });
+            HandleKey(Key.Up, CmykScaledKey, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(_vm.Cmyk.ScaledKey + 1)); });
+
+            HandleKey(Key.Down, CmykCyan, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan - 0.01)); });
+            HandleKey(Key.Down, CmykMagenta, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta - 0.01)); });
+            HandleKey(Key.Down, CmykYellow, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow - 0.01)); });
+            HandleKey(Key.Down, CmykKey, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key - 0.01)); });
+            HandleKey(Key.Down, CmykScaledCyan, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(_vm.Cmyk.ScaledCyan - 1)); });
+            HandleKey(Key.Down, CmykScaledMagenta, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(_vm.Cmyk.ScaledMagenta - 1)); });
+            HandleKey(Key.Down, CmykScaledYellow, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(_vm.Cmyk.ScaledYellow - 1)); });
+            HandleKey(Key.Down, CmykScaledKey, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(_vm.Cmyk.ScaledKey - 1)); });
+
             HandleMouseWheel(CmykCyan,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan + 1)); },
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan - 1)); });
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan + 0.01)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan - 0.01)); });
             HandleMouseWheel(CmykMagenta,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta + 1)); },
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta - 1)); });
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta + 0.01)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta - 0.01)); });
             HandleMouseWheel(CmykYellow,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow + 1)); },
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow - 1)); });
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow + 0.01)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(_vm.Cmyk.Yellow - 0.01)); });
             HandleMouseWheel(CmykKey,
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key + 1)); },
-                () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key - 1)); });
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key + 0.01)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(_vm.Cmyk.Key - 0.01)); });
+            HandleMouseWheel(CmykScaledCyan,
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(_vm.Cmyk.ScaledCyan + 1)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(_vm.Cmyk.ScaledCyan - 1)); });
+            HandleMouseWheel(CmykScaledMagenta,
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(_vm.Cmyk.ScaledMagenta + 1)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(_vm.Cmyk.ScaledMagenta - 1)); });
+            HandleMouseWheel(CmykScaledYellow,
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(_vm.Cmyk.ScaledYellow + 1)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(_vm.Cmyk.ScaledYellow - 1)); });
+            HandleMouseWheel(CmykScaledKey,
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(_vm.Cmyk.ScaledKey + 1)); },
+                             () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(_vm.Cmyk.ScaledKey - 1)); });
 
-            // LAB Mousewheel
+            HandleSliderChange(CmykCyanSlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(value)); });
+            HandleSliderChange(CmykMagentaSlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(value)); });
+            HandleSliderChange(CmykYellowSlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(value)); });
+            HandleSliderChange(CmykKeySlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(value)); });
+
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                bool isDouble;
+                double doubleVal;
+                Cmyk? nullableCmyk;
+
+                switch (ev.PropertyName)
+                {
+                    case "CmykText":
+                        nullableCmyk = Cmyk.FromString(_vm.CmykText);
+                        if (nullableCmyk.HasValue) _vm.RefreshFromCmyk(nullableCmyk.Value);
+                        break;
+                    case "CmykScaledText":
+                        nullableCmyk = Cmyk.FromScaledString(_vm.CmykScaledText);
+                        if (nullableCmyk.HasValue) _vm.RefreshFromCmyk(nullableCmyk.Value);
+                        break;
+                    case "CmykCyan":
+                        isDouble = double.TryParse(_vm.CmykCyan, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(doubleVal));
+                        break;
+                    case "CmykMagenta":
+                        isDouble = double.TryParse(_vm.CmykMagenta, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(doubleVal));
+                        break;
+                    case "CmykYellow":
+                        isDouble = double.TryParse(_vm.CmykYellow, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(doubleVal));
+                        break;
+                    case "CmykKey":
+                        isDouble = double.TryParse(_vm.CmykKey, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(doubleVal));
+                        break;
+                    case "CmykScaledCyan":
+                        isDouble = double.TryParse(_vm.CmykScaledCyan, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(doubleVal));
+                        break;
+                    case "CmykScaledMagenta":
+                        isDouble = double.TryParse(_vm.CmykScaledMagenta, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(doubleVal));
+                        break;
+                    case "CmykScaledYellow":
+                        isDouble = double.TryParse(_vm.CmykScaledYellow, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(doubleVal));
+                        break;
+                    case "CmykScaledKey":
+                        isDouble = double.TryParse(_vm.CmykScaledKey, out doubleVal);
+                        if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
+                        _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(doubleVal));
+                        break;
+                }
+            };
+
+            //
+            // LAB fields
+            //
+
+            HandleKey(Key.Up, LabL, () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L + 1)); });
+            HandleKey(Key.Up, LabA, () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A + 1)); });
+            HandleKey(Key.Up, LabB, () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B + 1)); });
+
+            HandleKey(Key.Down, LabL, () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L - 1)); });
+            HandleKey(Key.Down, LabA, () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A - 1)); });
+            HandleKey(Key.Down, LabB, () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B - 1)); });
+
             HandleMouseWheel(LabL,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L + 1)); },
-                () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L - 1)); });
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L + 1)); },
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L - 1)); });
             HandleMouseWheel(LabA,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A + 1)); },
-                () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A - 1)); });
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A + 1)); },
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A - 1)); });
             HandleMouseWheel(LabB,
-                () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B + 1)); },
-                () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B - 1)); });
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B + 1)); },
+                             () => { _vm.RefreshFromLab(_vm.Lab.WithB(_vm.Lab.B - 1)); });
 
-            // HEX manual input
-            HandleInputEnterOrFocusLost(HexText,
-                (text, control) =>
+            HandleSliderChange(LabLSlider, value => { _vm.RefreshFromLab(_vm.Lab.WithL(value)); });
+            HandleSliderChange(LabASlider, value => { _vm.RefreshFromLab(_vm.Lab.WithA(value)); });
+            HandleSliderChange(LabBSlider, value => { _vm.RefreshFromLab(_vm.Lab.WithB(value)); });
+
+            _vm.PropertyChangedByUser += (o, ev) =>
+            {
+                switch (ev.PropertyName)
                 {
-                    var nullable = Hex.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromHex(nullable.Value);
-                });
-            HandleInputEnterOrFocusLost(RedHex,
-                (text, control) => { _vm.RefreshFromHex(_vm.Hex.WithRed(Hex.ClampedComponent(text))); });
-            HandleInputEnterOrFocusLost(GreenHex,
-                (text, control) => { _vm.RefreshFromHex(_vm.Hex.WithGreen(Hex.ClampedComponent(text))); });
-            HandleInputEnterOrFocusLost(BlueHex,
-                (text, control) => { _vm.RefreshFromHex(_vm.Hex.WithBlue(Hex.ClampedComponent(text))); });
-
-            // RGB manual input
-            HandleInputEnterOrFocusLost(RgbText,
-                (text, control) =>
-                {
-                    var nullable = Rgb.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromRgb(nullable.Value);
-                });
-            HandleInput(Red, (text, control) =>
-            {
-                var isInt = int.TryParse(text, out var value);
-                if (!isInt) return;
-                var clamped = Rgb.ClampedComponent(value);
-                _vm.RefreshFromRgb(_vm.Rgb.WithRed(clamped));
-                control.Text = clamped.ToString();
-            });
-            HandleInput(Green, (text, control) =>
-            {
-                var isInt = int.TryParse(text, out var value);
-                if (!isInt) return;
-                var clamped = Rgb.ClampedComponent(value);
-                _vm.RefreshFromRgb(_vm.Rgb.WithGreen(clamped));
-                control.Text = clamped.ToString();
-            });
-            HandleInput(Blue, (text, control) =>
-            {
-                var isInt = int.TryParse(text, out var value);
-                if (!isInt) return;
-                var clamped = Rgb.ClampedComponent(value);
-                _vm.RefreshFromRgb(_vm.Rgb.WithBlue(clamped));
-                control.Text = clamped.ToString();
-            });
-
-            // HSL manual input
-            HandleInputEnterOrFocusLost(HslText,
-                (text, control) =>
-                {
-                    var nullable = Hsl.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromHsl(nullable.Value);
-                });
-            HandleInputEnterOrFocusLost(HslHue, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsl.ClampedHue(value);
-                _vm.RefreshFromHsl(_vm.Hsl.WithHue(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(HslSaturation, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsl.ClampedSaturation(value);
-                _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(HslLuminance, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsl.ClampedLuminance(value);
-                _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-
-            // HSV manual input
-            HandleInputEnterOrFocusLost(HsvText,
-                (text, control) =>
-                {
-                    var nullable = Hsv.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromHsv(nullable.Value);
-                });
-            HandleInputEnterOrFocusLost(HsvHue, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsv.ClampedHue(value);
-                _vm.RefreshFromHsv(_vm.Hsv.WithHue(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(HsvSaturation, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsv.ClampedSaturation(value);
-                _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(HsvValue, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Hsv.ClampedValue(value);
-                _vm.RefreshFromHsv(_vm.Hsv.WithValue(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-
-            // CMYK manual input
-            HandleInputEnterOrFocusLost(CmykText,
-                (text, control) =>
-                {
-                    var nullable = Cmyk.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromCmyk(nullable.Value);
-                });
-            HandleInput(CmykCyan, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Cmyk.ClampedComponent(value);
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInput(CmykMagenta, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Cmyk.ClampedComponent(value);
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInput(CmykYellow, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Cmyk.ClampedComponent(value);
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInput(CmykKey, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Cmyk.ClampedComponent(value);
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-
-            // CIELAB manual input
-            HandleInputEnterOrFocusLost(LabText,
-                (text, control) =>
-                {
-                    var nullable = Lab.FromString(text);
-                    if (nullable.HasValue) _vm.RefreshFromLab(nullable.Value);
-                });
-            HandleInputEnterOrFocusLost(LabL, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Lab.ClampedL(value);
-                _vm.RefreshFromLab(_vm.Lab.WithL(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(LabA, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Lab.ClampedA(value);
-                _vm.RefreshFromLab(_vm.Lab.WithA(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-            HandleInputEnterOrFocusLost(LabB, (text, control) =>
-            {
-                var isDouble = double.TryParse(text, out var value);
-                if (!isDouble) return;
-                var clamped = Lab.ClampedB(value);
-                _vm.RefreshFromLab(_vm.Lab.WithB(clamped));
-                control.Text = clamped.ToString(CultureInfo.InvariantCulture);
-            });
-
-            // HEX slider change
-            HandleSliderChange(RedHexSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"R: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithRed((int) value));
-            });
-            HandleSliderChange(GreenHexSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"G: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithGreen((int) value));
-            });
-            HandleSliderChange(BlueHexSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"B: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithBlue((int) value));
-            });
-
-            // RGB slider change
-            HandleSliderChange(RedSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"R: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithRed((int) value));
-            });
-            HandleSliderChange(GreenSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"G: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithGreen((int) value));
-            });
-            HandleSliderChange(BlueSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"B: {value}");
-                _vm.RefreshFromRgb(_vm.Rgb.WithBlue((int) value));
-            });
-
-            // HSL slider change
-            HandleSliderChange(HslHueSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"H: {value}");
-                _vm.RefreshFromHsl(_vm.Hsl.WithHue(value));
-            });
-            HandleSliderChange(HslSaturationSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"S: {value}");
-                _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(value));
-            });
-            HandleSliderChange(HslLuminanceSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"L: {value}");
-                _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(value));
-            });
-
-            // HSV slider change
-            HandleSliderChange(HsvHueSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"H: {value}");
-                _vm.RefreshFromHsv(_vm.Hsv.WithHue(value));
-            });
-            HandleSliderChange(HsvSaturationSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"S: {value}");
-                _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(value));
-            });
-            HandleSliderChange(HsvValueSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"V: {value}");
-                _vm.RefreshFromHsv(_vm.Hsv.WithValue(value));
-            });
-
-            // CMYK slider change
-            HandleSliderChange(CmykCyanSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"C: {value}");
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan((int) value));
-            });
-            HandleSliderChange(CmykMagentaSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"M: {value}");
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta((int) value));
-            });
-            HandleSliderChange(CmykYellowSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"Y: {value}");
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow((int) value));
-            });
-            HandleSliderChange(CmykKeySlider, (value, slider) =>
-            {
-                Debug.WriteLine($"K: {value}");
-                _vm.RefreshFromCmyk(_vm.Cmyk.WithKey((int) value));
-            });
-
-            // Lab slider change
-            HandleSliderChange(LabLSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"L*: {value}");
-                _vm.RefreshFromLab(_vm.Lab.WithL(value));
-            });
-            HandleSliderChange(LabASlider, (value, slider) =>
-            {
-                Debug.WriteLine($"a*: {value}");
-                _vm.RefreshFromLab(_vm.Lab.WithA(value));
-            });
-            HandleSliderChange(LabBSlider, (value, slider) =>
-            {
-                Debug.WriteLine($"b*: {value}");
-                _vm.RefreshFromLab(_vm.Lab.WithB(value));
-            });
+                    case "LabText":
+                        var nullableLab = Lab.FromString(_vm.LabText);
+                        if (nullableLab.HasValue) _vm.RefreshFromLab(nullableLab.Value);
+                        break;
+                    case "LabL":
+                        if (!Lab.IsValidL(_vm.LabL)) return;
+                        _vm.RefreshFromLab(_vm.Lab.WithL(_vm.LabL));
+                        break;
+                    case "LabA":
+                        if (!Lab.IsValidA(_vm.LabA)) return;
+                        _vm.RefreshFromLab(_vm.Lab.WithA(_vm.LabA));
+                        break;
+                    case "LabB":
+                        if (!Lab.IsValidB(_vm.LabB)) return;
+                        _vm.RefreshFromLab(_vm.Lab.WithB(_vm.LabB));
+                        break;
+                }
+            };
 
             // Hack to bring window to front on start. (I had instances where I would open the tool
             // only for it to come up behind my current window.)
@@ -655,7 +743,7 @@ namespace PixelPalette.Window
             return control.IsMouseOver || control.IsFocused || control.IsKeyboardFocusWithin;
         }
 
-        #region Disable Maximize window
+#region Disable Maximize window
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
@@ -676,6 +764,6 @@ namespace PixelPalette.Window
             SetWindowLong(hWnd, GWL_STYLE, value & ~WS_MAXIMIZE_BOX);
         }
 
-        #endregion
+#endregion
     }
 }

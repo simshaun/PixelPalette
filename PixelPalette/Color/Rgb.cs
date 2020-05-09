@@ -10,9 +10,6 @@ namespace PixelPalette.Color
     {
         public static readonly Rgb Empty = new Rgb();
 
-        public static readonly int MinComponentValue = 0;
-        public static readonly int MaxComponentValue = 255;
-
         // sRGB to CIE-XYZ matrix (D65) – http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
         // Long values pulled from Bruce's color calculator JS
         private static readonly DenseMatrix RgbMatrix = DenseMatrix.OfArray(new[,]
@@ -22,11 +19,56 @@ namespace PixelPalette.Color
             {0.0193338955823293, 0.11919202588130297, 0.9503040785363679}
         });
 
-        public int Red { get; }
+        private const string StringPattern =
+            @"^rgb\(\s*(?<red>0|1|0?\.\d+)\s*,\s*(?<green>0|1|0\.\d+)\s*,\s*(?<blue>0|1|0\.\d+)\s*\)$";
 
-        public int Green { get; }
+        private const string ScaledStringPattern =
+            @"^rgb\(\s*(?<red>\d{1,3})\s*,\s*(?<green>\d{1,3})\s*,\s*(?<blue>\d{1,3})\s*\)$";
 
-        public int Blue { get; }
+        /// <summary>
+        /// Red on a scale of 0-1
+        /// </summary>
+        public double Red { get; }
+
+        /// <summary>
+        /// Green on a scale of 0-1
+        /// </summary>
+        public double Green { get; }
+
+        /// <summary>
+        /// Blue on a scale of 0-1
+        /// </summary>
+        public double Blue { get; }
+
+        /// <summary>
+        /// Red on a scale of 0-255
+        /// </summary>
+        public int ScaledRed => (int) Round(Red * 255, 0);
+
+        /// <summary>
+        /// Green on a scale of 0-255
+        /// </summary>
+        public int ScaledGreen => (int) Round(Green * 255, 0);
+
+        /// <summary>
+        /// Blue on a scale of 0-255
+        /// </summary>
+        public int ScaledBlue => (int) Round(Blue * 255, 0);
+
+        /// <summary>
+        /// Red on a scale of 0-1, rounded to 3 decimal places
+        /// </summary>
+        public double RoundedRed => Round(Red);
+
+        /// <summary>
+        /// Green on a scale of 0-1, rounded to 3 decimal places
+        /// </summary>
+        public double RoundedGreen => Round(Green);
+
+        /// <summary>
+        /// Blue on a scale of 0-1, rounded to 3 decimal places
+        /// </summary>
+        public double RoundedBlue => Round(Blue);
 
         /// <summary>
         /// Calculated perceived brightness. Value is 0 (black) – 255 (white)
@@ -46,53 +88,133 @@ namespace PixelPalette.Color
             return Brightness < 130 ? new Rgb(255, 255, 255) : new Rgb(0, 0, 0);
         }
 
-        public Rgb(int r, int g, int b)
+        public Rgb(double r, double g, double b)
         {
             Red = ClampedComponent(r);
             Green = ClampedComponent(g);
             Blue = ClampedComponent(b);
         }
 
+        public Rgb(int r, int g, int b)
+        {
+            Red = ClampedComponent(r) / 255.0;
+            Green = ClampedComponent(g) / 255.0;
+            Blue = ClampedComponent(b) / 255.0;
+        }
+
+        public static bool IsValidString(string theString)
+        {
+            return Regex.IsMatch(theString, StringPattern);
+        }
+
+        public static bool IsValidScaledString(string theString)
+        {
+            return Regex.IsMatch(theString, ScaledStringPattern);
+        }
+
+        public static bool IsValidComponent(string theString)
+        {
+            return Regex.IsMatch(theString, @"^0$|^1(\.0)?$|^0?\.\d+$");
+        }
+
+        public static bool IsValidComponent(double value)
+        {
+            return value >= 0.0 && value <= 1.0;
+        }
+
+        public static bool IsValidScaledComponent(string theString)
+        {
+            var isInt = int.TryParse(theString, out var value);
+            if (!isInt) return false;
+            return value >= 0 && value <= 255;
+        }
+
+        public static bool IsValidScaledComponent(int value)
+        {
+            return value >= 0 && value <= 255;
+        }
+
         public static Rgb? FromString(string theString)
         {
-            var regex = new Regex(@"rgb\(\s*(?<red>\d+)\s*,\s*(?<green>\d+)\s*,\s*(?<blue>\d+)\s*\)", RegexOptions.IgnoreCase);
+            var regex = new Regex(StringPattern, RegexOptions.IgnoreCase);
             var match = regex.Match(theString);
             if (match.Success)
             {
                 return new Rgb(
-                    int.Parse(match.Groups["red"].Value), 
-                    int.Parse(match.Groups["green"].Value), 
-                    int.Parse(match.Groups["blue"].Value)
+                    double.Parse(match.Groups["red"].Value),
+                    double.Parse(match.Groups["green"].Value),
+                    double.Parse(match.Groups["blue"].Value)
                 );
             }
 
             return null;
+        }
 
+        public static Rgb? FromScaledString(string theString)
+        {
+            var regex = new Regex(ScaledStringPattern, RegexOptions.IgnoreCase);
+            var match = regex.Match(theString);
+            if (!match.Success) return null;
+            var r = int.Parse(match.Groups["red"].Value);
+            var g = int.Parse(match.Groups["green"].Value);
+            var b = int.Parse(match.Groups["blue"].Value);
+            if (!IsValidScaledComponent(r) || !IsValidScaledComponent(g) || !IsValidScaledComponent(b)) return null;
+            return new Rgb(r, g, b);
+        }
+
+        public static double ClampedComponent(double c)
+        {
+            return c > 1.0 ? 1.0 : c < 0.0 ? 0.0 : c;
         }
 
         public static int ClampedComponent(int c)
         {
-            return c > MaxComponentValue ? MaxComponentValue : c < MinComponentValue ? MinComponentValue : c;
+            return c > 255 ? 255 : c < 0 ? 0 : c;
         }
 
-        public Rgb WithRed(int r)
+        public Rgb WithRed(double r)
         {
             return new Rgb(r, Green, Blue);
         }
 
-        public Rgb WithGreen(int g)
+        public Rgb WithGreen(double g)
         {
             return new Rgb(Red, g, Blue);
         }
 
-        public Rgb WithBlue(int b)
+        public Rgb WithBlue(double b)
         {
             return new Rgb(Red, Green, b);
         }
 
+        public Rgb WithRed(int r)
+        {
+            return new Rgb(r / 255.0, Green, Blue);
+        }
+
+        public Rgb WithGreen(int g)
+        {
+            return new Rgb(Red, g / 255.0, Blue);
+        }
+
+        public Rgb WithBlue(int b)
+        {
+            return new Rgb(Red, Green, b / 255.0);
+        }
+
+        private static double Round(double d, int precision = 3)
+        {
+            return Math.Round(d, precision, MidpointRounding.AwayFromZero);
+        }
+
         public override string ToString()
         {
-            return $"rgb({Red}, {Green}, {Blue})";
+            return $"rgb({RoundedRed}, {RoundedGreen}, {RoundedBlue})";
+        }
+
+        public string ToScaledString()
+        {
+            return $"rgb({ScaledRed}, {ScaledGreen}, {ScaledBlue})";
         }
 
         public bool Equals(Rgb other)
@@ -122,16 +244,16 @@ namespace PixelPalette.Color
 
         public Hex ToHex()
         {
-            return new Hex($"#{Red:x2}{Green:x2}{Blue:x2}".ToUpper());
+            return new Hex($"#{ScaledRed:x2}{ScaledGreen:x2}{ScaledBlue:x2}".ToUpper());
         }
 
         public Hsl ToHsl()
         {
             // Formula from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
 
-            var r = Red / 255.0;
-            var g = Green / 255.0;
-            var b = Blue / 255.0;
+            var r = Red;
+            var g = Green;
+            var b = Blue;
             var max = Math.Max(r, Math.Max(g, b));
             var min = Math.Min(r, Math.Min(g, b));
             var delta = max - min;
@@ -167,16 +289,16 @@ namespace PixelPalette.Color
                 s = delta / (1 - Math.Abs(2 * l - 1));
             }
 
-            return new Hsl(h, s * 100, l * 100);
+            return new Hsl(h / 360.0, s, l);
         }
 
         public Hsv ToHsv()
         {
             // Formula from https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 
-            var r = Red / 255.0;
-            var g = Green / 255.0;
-            var b = Blue / 255.0;
+            var r = Red;
+            var g = Green;
+            var b = Blue;
             var max = Math.Max(r, Math.Max(g, b));
             var min = Math.Min(r, Math.Min(g, b));
             var delta = max - min;
@@ -212,7 +334,7 @@ namespace PixelPalette.Color
             // Value
             var v = max;
 
-            return new Hsv(h, s * 100, v * 100);
+            return new Hsv(h / 360.0, s, v);
         }
 
         /// <summary>
@@ -223,9 +345,9 @@ namespace PixelPalette.Color
         {
             // Formula from https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
 
-            var r1 = Red / 255.0;
-            var g1 = Green / 255.0;
-            var b1 = Blue / 255.0;
+            var r1 = Red;
+            var g1 = Green;
+            var b1 = Blue;
 
             var key = 1 - Math.Max(r1, Math.Max(g1, b1));
 
@@ -256,9 +378,9 @@ namespace PixelPalette.Color
         {
             // Formula from http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
 
-            var r1 = Red / 255.0;
-            var g1 = Green / 255.0;
-            var b1 = Blue / 255.0;
+            var r1 = Red;
+            var g1 = Green;
+            var b1 = Blue;
 
             static double InverseCompand(double companded)
             {
@@ -290,7 +412,7 @@ namespace PixelPalette.Color
 
         public System.Windows.Media.Color ToMediaColor()
         {
-            return System.Windows.Media.Color.FromRgb((byte) Red, (byte) Green, (byte) Blue);
+            return System.Windows.Media.Color.FromRgb((byte) ScaledRed, (byte) ScaledGreen, (byte) ScaledBlue);
         }
     }
 }

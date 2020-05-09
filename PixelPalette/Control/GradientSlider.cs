@@ -20,17 +20,19 @@ namespace PixelPalette.Control
     {
         static GradientSlider()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(GradientSlider),
-                new FrameworkPropertyMetadata(typeof(GradientSlider)));
+            DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(GradientSlider),
+                new FrameworkPropertyMetadata(typeof(GradientSlider))
+            );
         }
 
         public GradientSlider()
         {
-            Minimum = 0;
-            Maximum = 255;
-            LargeChange = 50;
-            SmallChange = 1;
-            TickFrequency = 1;
+            Minimum = 0.0;
+            Maximum = 1.0;
+            LargeChange = 0.05;
+            SmallChange = 0.01;
+            TickFrequency = 0.001;
             IsSnapToTickEnabled = true;
 
             // Speed up the arrow keys if Shift is held down:
