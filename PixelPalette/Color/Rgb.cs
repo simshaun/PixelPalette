@@ -75,9 +75,9 @@ namespace PixelPalette.Color
         /// </summary>
         public int Brightness =>
             (int) Math.Sqrt(
-                Red * Red * .241 +
-                Green * Green * .691 +
-                Blue * Blue * .068
+                ScaledRed * ScaledRed * .241 +
+                ScaledGreen * ScaledGreen * .691 +
+                ScaledBlue * ScaledBlue * .068
             );
 
         /// <summary>
@@ -85,21 +85,37 @@ namespace PixelPalette.Color
         /// </summary>
         public Rgb ContrastingTextColor()
         {
-            return Brightness < 130 ? new Rgb(255, 255, 255) : new Rgb(0, 0, 0);
+            return Brightness < 130 ? new Rgb(1.0, 1.0, 1.0) : new Rgb(0.0, 0.0, 0.0);
         }
 
+        /// <param name="r">0-1</param>
+        /// <param name="g">0-1</param>
+        /// <param name="b">0-1</param>
+        /// <exception cref="ArgumentException">Thrown when a value is out-of-range</exception>
         public Rgb(double r, double g, double b)
         {
-            Red = ClampedComponent(r);
-            Green = ClampedComponent(g);
-            Blue = ClampedComponent(b);
+            // 0..360-range integers may unintentionally be used as arguments and be implicitly cast to doubles.
+            // That can still happen, but there's a good chance of catching it so long as the value is > 1.
+            if (!IsValidComponent(r)) throw new ArgumentException(@"Value is out-of-range", nameof(r));
+            if (!IsValidComponent(g)) throw new ArgumentException(@"Value is out-of-range", nameof(g));
+            if (!IsValidComponent(b)) throw new ArgumentException(@"Value is out-of-range", nameof(b));
+
+            Red = r;
+            Green = g;
+            Blue = b;
         }
 
-        public Rgb(int r, int g, int b)
+        /// <param name="r">0-255</param>
+        /// <param name="g">0-255</param>
+        /// <param name="b">0-255</param>
+        /// <exception cref="ArgumentException">Thrown when a value is out-of-range</exception>
+        public static Rgb FromScaledValues(int r, int g, int b)
         {
-            Red = ClampedComponent(r) / 255.0;
-            Green = ClampedComponent(g) / 255.0;
-            Blue = ClampedComponent(b) / 255.0;
+            if (!IsValidScaledComponent(r)) throw new ArgumentException(@"Value is out-of-range", nameof(r));
+            if (!IsValidScaledComponent(g)) throw new ArgumentException(@"Value is out-of-range", nameof(g));
+            if (!IsValidScaledComponent(b)) throw new ArgumentException(@"Value is out-of-range", nameof(b));
+            
+            return new Rgb(r / 255.0, g / 255.0, b / 255.0);
         }
 
         public static bool IsValidString(string theString)
@@ -159,7 +175,7 @@ namespace PixelPalette.Color
             var g = int.Parse(match.Groups["green"].Value);
             var b = int.Parse(match.Groups["blue"].Value);
             if (!IsValidScaledComponent(r) || !IsValidScaledComponent(g) || !IsValidScaledComponent(b)) return null;
-            return new Rgb(r, g, b);
+            return FromScaledValues(r, g, b);
         }
 
         public static double ClampedComponent(double c)
@@ -189,17 +205,17 @@ namespace PixelPalette.Color
 
         public Rgb WithRed(int r)
         {
-            return new Rgb(r / 255.0, Green, Blue);
+            return FromScaledValues(r, ScaledGreen, ScaledBlue);
         }
 
         public Rgb WithGreen(int g)
         {
-            return new Rgb(Red, g / 255.0, Blue);
+            return FromScaledValues(ScaledRed, g, ScaledBlue);
         }
 
         public Rgb WithBlue(int b)
         {
-            return new Rgb(Red, Green, b / 255.0);
+            return FromScaledValues(ScaledRed, ScaledGreen, b);
         }
 
         private static double Round(double d, int precision = 3)
@@ -368,7 +384,7 @@ namespace PixelPalette.Color
                 yellow = (1 - b1 - key) / (1 - key);
             }
 
-            return new Cmyk(cyan * 100, magenta * 100, yellow * 100, key * 100);
+            return new Cmyk(cyan, magenta, yellow, key);
         }
 
         /// <summary>

@@ -10,7 +10,10 @@ namespace PixelPalette.Tests.Color
         [TestMethod, ColorTestData]
         public void ColorConversions_ShouldBeAccurate(ColorData color)
         {
-            color.Xyz.ToRgb().ShouldBeEquivalentTo(color.Rgb);
+            var rgb = color.Xyz.ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(color.Rgb.ScaledRed);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(color.Rgb.ScaledGreen);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(color.Rgb.ScaledBlue);
 
             var lab = color.Xyz.ToLab();
             lab.RoundedL.ShouldBeEquivalentTo(color.Lab.RoundedL);

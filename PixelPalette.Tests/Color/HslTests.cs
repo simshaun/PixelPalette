@@ -70,7 +70,10 @@ namespace PixelPalette.Tests.Color
         [TestMethod, ColorTestData]
         public void ColorConversions_ShouldBeAccurate(ColorData color)
         {
-            color.Hsl.ToRgb().ShouldBeEquivalentTo(color.Rgb);
+            var rgb = color.Hsl.ToRgb();
+            rgb.RoundedRed.ShouldBeEquivalentTo(color.Rgb.RoundedRed);
+            rgb.RoundedGreen.ShouldBeEquivalentTo(color.Rgb.RoundedGreen);
+            rgb.RoundedBlue.ShouldBeEquivalentTo(color.Rgb.RoundedBlue);
 
             var hsv = color.Hsl.ToHsv();
             hsv.RoundedHue.ShouldBeEquivalentTo(color.Hsv.RoundedHue);
@@ -81,15 +84,16 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void ToRgb_ShouldBeCorrect_AtMaxHue()
         {
-            var hsl = Hsl.FromScaledValues(360, 50, 50);
-            hsl.ToRgb().ShouldBeEquivalentTo(new Rgb(191, 64, 64));
+            var rgb = Hsl.FromScaledValues(360, 50, 50).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(191);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(64);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(64);
         }
 
         [TestMethod]
         public void ToHsv_ShouldBeCorrect_AtMaxHue()
         {
-            var hsl = Hsl.FromScaledValues(360, 50, 50);
-            var hsv = hsl.ToHsv();
+            var hsv = Hsl.FromScaledValues(360, 50, 50).ToHsv();
             hsv.RoundedScaledHue.ShouldBe(360);
             hsv.RoundedScaledSaturation.ShouldBe(66.67);
             hsv.RoundedScaledValue.ShouldBe(75);
@@ -98,8 +102,7 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void ToHsv_ShouldBeCorrect_AtDecimals()
         {
-            var hsl = Hsl.FromScaledValues(60.2, 53, 70.91);
-            var hsv = hsl.ToHsv();
+            var hsv = Hsl.FromScaledValues(60.2, 53, 70.91).ToHsv();
             hsv.RoundedScaledHue.ShouldBe(60.2);
             hsv.RoundedScaledSaturation.ShouldBe(35.72);
             hsv.RoundedScaledValue.ShouldBe(86.33);
@@ -108,8 +111,15 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void ToRgb_ShouldBeCorrect_AtDecimals()
         {
-            var hsl = Hsl.FromScaledValues(60.2, 53, 70.91);
-            hsl.ToRgb().ShouldBeEquivalentTo(new Rgb(220, 220, 142));
+            var rgb = Hsl.FromScaledValues(60.2, 53, 70.91).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(220);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(220);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(142);
+
+            rgb = Hsl.FromScaledValues(60.5, 53, 70.91).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(219);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(220);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(142);
         }
 
         [TestMethod]
@@ -133,21 +143,15 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void Hue_ShouldBeClamped()
         {
-            var hsl = Hsl.FromScaledValues(-0.01, 100, 100);
-            hsl.ScaledHue.ShouldBe(0);
-
-            hsl = Hsl.FromScaledValues(360.01, 100, 100);
-            hsl.ScaledHue.ShouldBe(360);
+            Hsl.FromScaledValues(-0.01, 100, 100).ScaledHue.ShouldBe(0);
+            Hsl.FromScaledValues(360.01, 100, 100).ScaledHue.ShouldBe(360);
         }
 
         [TestMethod]
         public void Saturation_ShouldBeClamped()
         {
-            var hsl = Hsl.FromScaledValues(120, -1, 100);
-            hsl.ScaledSaturation.ShouldBe(0);
-
-            hsl = Hsl.FromScaledValues(120, 101, 100);
-            hsl.ScaledSaturation.ShouldBe(100);
+            Hsl.FromScaledValues(120, -1, 100).ScaledSaturation.ShouldBe(0);
+            Hsl.FromScaledValues(120, 101, 100).ScaledSaturation.ShouldBe(100);
         }
 
         [TestMethod]

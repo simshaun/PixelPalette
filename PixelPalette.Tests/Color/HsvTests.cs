@@ -40,7 +40,10 @@ namespace PixelPalette.Tests.Color
         [TestMethod, ColorTestData]
         public void ColorConversions_ShouldBeAccurate(ColorData color)
         {
-            color.Hsv.ToRgb().ShouldBeEquivalentTo(color.Rgb);
+            var rgb = color.Hsv.ToRgb();
+            rgb.RoundedRed.ShouldBeEquivalentTo(color.Rgb.RoundedRed);
+            rgb.RoundedGreen.ShouldBeEquivalentTo(color.Rgb.RoundedGreen);
+            rgb.RoundedBlue.ShouldBeEquivalentTo(color.Rgb.RoundedBlue);
 
             var hsl = color.Hsv.ToHsl();
             hsl.RoundedHue.ShouldBeEquivalentTo(color.Hsl.RoundedHue);
@@ -51,32 +54,39 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void ToRgb_ShouldBeCorrect_AtMaxHue()
         {
-            var hsv = Hsv.FromScaledValues(360, 50, 50);
-            hsv.ToRgb().ShouldBeEquivalentTo(new Rgb(128, 64, 64));
-        }
-
-        [TestMethod]
-        public void ToRgb_ShouldBeCorrect_AtDecimals()
-        {
-            var hsv = Hsv.FromScaledValues(60.2, 53, 70.91);
-            hsv.ToRgb().ShouldBeEquivalentTo(new Rgb(181, 181, 85));
+            var rgb = Hsv.FromScaledValues(360, 50, 50).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(128);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(64);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(64);
         }
 
         [TestMethod]
         public void ToHsl_ShouldBeCorrect_AtMaxHue()
         {
-            var hsv = Hsv.FromScaledValues(360, 50, 50);
-            var hsl = hsv.ToHsl();
+            var hsl = Hsv.FromScaledValues(360, 50, 50).ToHsl();
             hsl.RoundedScaledHue.ShouldBe(360);
             hsl.RoundedScaledSaturation.ShouldBe(33.33);
             hsl.RoundedScaledLuminance.ShouldBe(37.5);
         }
 
         [TestMethod]
+        public void ToRgb_ShouldBeCorrect_AtDecimals()
+        {
+            var rgb = Hsv.FromScaledValues(60.2, 53, 70.91).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(181);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(181);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(85);
+
+            rgb = Hsv.FromScaledValues(60.3, 53, 70.91).ToRgb();
+            rgb.ScaledRed.ShouldBeEquivalentTo(180);
+            rgb.ScaledGreen.ShouldBeEquivalentTo(181);
+            rgb.ScaledBlue.ShouldBeEquivalentTo(85);
+        }
+
+        [TestMethod]
         public void ToHsl_ShouldBeCorrect_AtDecimals()
         {
-            var hsv = Hsv.FromScaledValues(60.2, 53, 70.91);
-            var hsl = hsv.ToHsl();
+            var hsl = Hsv.FromScaledValues(60.2, 53, 70.91).ToHsl();
             hsl.RoundedScaledHue.ShouldBe(60.2);
             hsl.RoundedScaledSaturation.ShouldBe(39.25);
             hsl.RoundedScaledLuminance.ShouldBe(52.12);
@@ -85,67 +95,52 @@ namespace PixelPalette.Tests.Color
         [TestMethod]
         public void Hue_ShouldBeClamped()
         {
-            var hsv = Hsv.FromScaledValues(-0.01, 100, 100);
-            hsv.ScaledHue.ShouldBe(0);
-
-            hsv = new Hsv(360.01, 100, 100);
-            hsv.ScaledHue.ShouldBe(360);
+            Hsv.FromScaledValues(-0.01, 100, 100).ScaledHue.ShouldBe(0);
+            new Hsv(360.01, 100, 100).ScaledHue.ShouldBe(360);
         }
 
         [TestMethod]
         public void Saturation_ShouldBeClamped()
         {
-            var hsv = Hsv.FromScaledValues(120, -1, 100);
-            hsv.ScaledSaturation.ShouldBe(0);
-
-            hsv = Hsv.FromScaledValues(120, 101, 100);
-            hsv.ScaledSaturation.ShouldBe(100);
+            Hsv.FromScaledValues(120, -1, 100).ScaledSaturation.ShouldBe(0);
+            Hsv.FromScaledValues(120, 101, 100).ScaledSaturation.ShouldBe(100);
         }
 
         [TestMethod]
         public void Value_ShouldBeClamped()
         {
-            var hsv = Hsv.FromScaledValues(120, 0, -1);
-            hsv.ScaledValue.ShouldBe(0);
-
-            hsv = Hsv.FromScaledValues(120, 0, 101);
-            hsv.ScaledValue.ShouldBe(100);
+            Hsv.FromScaledValues(120, 0, -1).ScaledValue.ShouldBe(0);
+            Hsv.FromScaledValues(120, 0, 101).ScaledValue.ShouldBe(100);
         }
 
         [TestMethod]
         public void RoundedHue_ShouldRound()
         {
             // Half-up
-            var hsv = Hsv.FromScaledValues(240.585, 100, 50);
-            hsv.RoundedScaledHue.ShouldBe(240.59);
+            Hsv.FromScaledValues(240.585, 100, 50).RoundedScaledHue.ShouldBe(240.59);
 
             // Down
-            hsv = Hsv.FromScaledValues(240.584, 100, 50);
-            hsv.RoundedScaledHue.ShouldBe(240.58);
+            Hsv.FromScaledValues(240.584, 100, 50).RoundedScaledHue.ShouldBe(240.58);
         }
 
         [TestMethod]
         public void RoundedSaturation100_ShouldRound()
         {
             // Half-up
-            var hsv = Hsv.FromScaledValues(240, 59.645, 100);
-            hsv.RoundedScaledSaturation.ShouldBe(59.65);
+            Hsv.FromScaledValues(240, 59.645, 100).RoundedScaledSaturation.ShouldBe(59.65);
 
             // Down
-            hsv = Hsv.FromScaledValues(240, 59.644, 100);
-            hsv.RoundedScaledSaturation.ShouldBe(59.64);
+            Hsv.FromScaledValues(240, 59.644, 100).RoundedScaledSaturation.ShouldBe(59.64);
         }
 
         [TestMethod]
         public void RoundedValue100_ShouldRound()
         {
             // Half-up
-            var hsv = Hsv.FromScaledValues(240, 100, 59.645);
-            hsv.RoundedScaledValue.ShouldBe(59.65);
+            Hsv.FromScaledValues(240, 100, 59.645).RoundedScaledValue.ShouldBe(59.65);
 
             // Down
-            hsv = Hsv.FromScaledValues(240, 100, 59.644);
-            hsv.RoundedScaledValue.ShouldBe(59.64);
+            Hsv.FromScaledValues(240, 100, 59.644).RoundedScaledValue.ShouldBe(59.64);
         }
     }
 }

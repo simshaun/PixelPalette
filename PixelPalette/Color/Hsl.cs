@@ -74,6 +74,9 @@ namespace PixelPalette.Color
         /// </summary>
         public double RoundedScaledLuminance => Round(ScaledLuminance, 2);
 
+        /// <param name="h">0-1</param>
+        /// <param name="s">0-1</param>
+        /// <param name="l">0-1</param>
         public Hsl(double h, double s, double l)
         {
             Hue = ClampedHue(h);
@@ -81,6 +84,9 @@ namespace PixelPalette.Color
             Luminance = ClampedLuminance(l);
         }
 
+        /// <param name="h">0-360</param>
+        /// <param name="s">0-100</param>
+        /// <param name="l">0-100</param>
         public static Hsl FromScaledValues(double h, double s, double l)
         {
             return new Hsl(
@@ -298,11 +304,7 @@ namespace PixelPalette.Color
                 b1 = X;
             }
 
-            return new Rgb(
-                Convert.ToInt32((r1 + m) * 255),
-                Convert.ToInt32((g1 + m) * 255),
-                Convert.ToInt32((b1 + m) * 255)
-            );
+            return new Rgb(Rgb.ClampedComponent(r1 + m), Rgb.ClampedComponent(g1 + m), Rgb.ClampedComponent(b1 + m));
         }
 
         public Hsv ToHsv()
@@ -317,7 +319,7 @@ namespace PixelPalette.Color
             var sat = 0.0;
             if (val > 0)
             {
-                sat = 2 * (1 - (lum1 / val));
+                sat = 2 * (1 - lum1 / val);
             }
 
             return new Hsv(hue / 360.0, sat, val);

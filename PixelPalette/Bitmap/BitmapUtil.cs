@@ -100,7 +100,7 @@ namespace PixelPalette.Bitmap
             var rect = new Int32Rect(x, y, 1, 1);
             source.CopyPixels(rect, bytes, bytesPerPixel, 0);
 
-            return new Rgb(bytes[2], bytes[1], bytes[0]);
+            return Rgb.FromScaledValues(bytes[2], bytes[1], bytes[0]);
         }
 
         public static Rgb AverageColor(BitmapSource source)
@@ -125,7 +125,7 @@ namespace PixelPalette.Bitmap
                 red += pixelBuffer[i + 2];
             }
 
-            return new Rgb((byte) (red / numPixels), (byte) (green / numPixels), (byte) (blue / numPixels));
+            return Rgb.FromScaledValues((byte) (red / numPixels), (byte) (green / numPixels), (byte) (blue / numPixels));
         }
     }
 }

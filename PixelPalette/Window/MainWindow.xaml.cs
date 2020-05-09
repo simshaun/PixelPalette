@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,50 +65,6 @@ namespace PixelPalette.Window
         }
 
         // Shortcut method
-        private static void HandleInput(IEnumerable<TextBox> controls, Action<string, TextBox> action)
-        {
-            foreach (var control in controls)
-            {
-                control.TextChanged += (o, ev) =>
-                {
-                    if (!IsActiveControl(control)) return;
-                    action(control.Text, control);
-                };
-            }
-        }
-
-        private static void HandleInput(TextBox control, Action<string, TextBox> action)
-        {
-            HandleInput(new[] {control}, action);
-        }
-
-        // Shortcut method
-        private static void HandleInputEnterOrFocusLost(IEnumerable<TextBox> controls, Action<string, TextBox> action)
-        {
-            foreach (var control in controls)
-            {
-                void HandleIt()
-                {
-                    var text = control.Text;
-                    action(text, control);
-                }
-
-                control.KeyDown += (o, ev) =>
-                {
-                    if (ev.Key != Key.Enter) return;
-                    HandleIt();
-                };
-
-                control.LostFocus += (o, ev) => { HandleIt(); };
-            }
-        }
-
-        private static void HandleInputEnterOrFocusLost(TextBox control, Action<string, TextBox> action)
-        {
-            HandleInputEnterOrFocusLost(new[] {control}, action);
-        }
-
-        // Shortcut method
         private static void HandleSliderChange(Slider control, Action<double> action)
         {
             control.ValueChanged += (o, ev) =>
@@ -129,7 +84,7 @@ namespace PixelPalette.Window
             if (_vm.Rgb == Rgb.Empty)
             {
                 // Material Blue – #2196F3
-                _vm.RefreshFromRgb(new Rgb(33, 150, 243));
+                _vm.RefreshFromRgb(Rgb.FromScaledValues(33, 150, 243));
             }
 
             // Eyedropper

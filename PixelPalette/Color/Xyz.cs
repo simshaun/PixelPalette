@@ -132,11 +132,7 @@ namespace PixelPalette.Color
                 b1 = 12.92 * b1;
             }
 
-            return new Rgb(
-                Convert.ToInt32(r1 * 255),
-                Convert.ToInt32(g1 * 255),
-                Convert.ToInt32(b1 * 255)
-            );
+            return new Rgb(Rgb.ClampedComponent(r1), Rgb.ClampedComponent(g1), Rgb.ClampedComponent(b1));
         }
 
         [SuppressMessage("ReSharper", "InconsistentNaming")]

@@ -33,7 +33,7 @@ namespace PixelPalette.Tests.Color
                     Rgb = new Rgb(0, 0, 0),
                     Hsl = new Hsl(0, 0, 0),
                     Hsv = new Hsv(0, 0, 0),
-                    Cmyk = new Cmyk(0, 0, 0, 100),
+                    Cmyk = new Cmyk(0, 0, 0, 1),
                     Xyz = new Xyz(0, 0, 0),
                     Lab = new Lab(0, 0, 0)
                 }
@@ -43,9 +43,9 @@ namespace PixelPalette.Tests.Color
                 new ColorData
                 {
                     Name = "White",
-                    Rgb = new Rgb(255, 255, 255),
-                    Hsl = Hsl.FromScaledValues(0, 0, 100),
-                    Hsv = Hsv.FromScaledValues(0, 0, 100),
+                    Rgb = new Rgb(1, 1, 1),
+                    Hsl = new Hsl(0, 0, 1),
+                    Hsv = new Hsv(0, 0, 1),
                     Cmyk = new Cmyk(0, 0, 0, 0),
                     Xyz = new Xyz(95.047, 100, 108.883),
                     Lab = new Lab(100, 0, 0)
@@ -56,10 +56,10 @@ namespace PixelPalette.Tests.Color
                 new ColorData
                 {
                     Name = "Red",
-                    Rgb = new Rgb(255, 0, 0),
-                    Hsl = Hsl.FromScaledValues(0, 100, 50),
-                    Hsv = Hsv.FromScaledValues(0, 100, 100),
-                    Cmyk = new Cmyk(0, 100, 100, 0),
+                    Rgb = new Rgb(1, 0, 0),
+                    Hsl = new Hsl(0, 1, 0.5),
+                    Hsv = new Hsv(0, 1, 1),
+                    Cmyk = new Cmyk(0, 1, 1, 0),
                     Xyz = new Xyz(41.2456, 21.2673, 1.9334),
                     Lab = new Lab(53.2408, 80.0925, 67.2032)
                 }
@@ -69,10 +69,10 @@ namespace PixelPalette.Tests.Color
                 new ColorData
                 {
                     Name = "Green",
-                    Rgb = new Rgb(0, 255, 0),
+                    Rgb = new Rgb(0, 1, 0),
                     Hsl = Hsl.FromScaledValues(120, 100, 50),
                     Hsv = Hsv.FromScaledValues(120, 100, 100),
-                    Cmyk = new Cmyk(100, 0, 100, 0),
+                    Cmyk = new Cmyk(1, 0, 1, 0),
                     Xyz = new Xyz(35.7576, 71.5152, 11.9192),
                     Lab = new Lab(87.7347, -86.1827, 83.1793)
                 }
@@ -82,10 +82,10 @@ namespace PixelPalette.Tests.Color
                 new ColorData
                 {
                     Name = "Blue",
-                    Rgb = new Rgb(0, 0, 255),
+                    Rgb = new Rgb(0, 0, 1),
                     Hsl = Hsl.FromScaledValues(240, 100, 50),
                     Hsv = Hsv.FromScaledValues(240, 100, 100),
-                    Cmyk = new Cmyk(100, 100, 0, 0),
+                    Cmyk = new Cmyk(1, 1, 0, 0),
                     Xyz = new Xyz(18.0437, 7.2175, 95.0304),
                     Lab = new Lab(32.297, 79.1875, -107.8602)
                 }
@@ -95,10 +95,10 @@ namespace PixelPalette.Tests.Color
                 new ColorData
                 {
                     Name = "Material Blue",
-                    Rgb = new Rgb(33, 150, 243),
+                    Rgb = Rgb.FromScaledValues(33, 150, 243),
                     Hsl = Hsl.FromScaledValues(206.5716, 89.744, 54.118),
                     Hsv = Hsv.FromScaledValues(206.5716, 86.42, 95.294),
-                    Cmyk = new Cmyk(86.419753, 38.271604, 0, 4.705882),
+                    Cmyk = Cmyk.FromScaledValues(86.419753, 38.271604, 0, 4.705882),
                     Xyz = new Xyz(27.704960365063513, 28.60350077011483, 88.83745176406208),
                     Lab = new Lab(60.4301, 2.0799, -55.1094)
                 }

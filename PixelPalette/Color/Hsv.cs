@@ -77,6 +77,9 @@ namespace PixelPalette.Color
         /// </summary>
         public double RoundedScaledValue => Round(ScaledValue, 2);
 
+        /// <param name="h">0-1</param>
+        /// <param name="s">0-1</param>
+        /// <param name="v">0-1</param>
         public Hsv(double h, double s, double v)
         {
             Hue = ClampedHue(h);
@@ -84,6 +87,9 @@ namespace PixelPalette.Color
             Value = ClampedValue(v);
         }
 
+        /// <param name="h">0-360</param>
+        /// <param name="s">0-100</param>
+        /// <param name="v">0-100</param>
         public static Hsv FromScaledValues(double h, double s, double v)
         {
             return new Hsv(
@@ -285,11 +291,7 @@ namespace PixelPalette.Color
                 b1 = X;
             }
 
-            return new Rgb(
-                Convert.ToInt32((r1 + m) * 255),
-                Convert.ToInt32((g1 + m) * 255),
-                Convert.ToInt32((b1 + m) * 255)
-            );
+            return new Rgb(Rgb.ClampedComponent(r1 + m), Rgb.ClampedComponent(g1 + m), Rgb.ClampedComponent(b1 + m));
         }
 
         public Hsl ToHsl()

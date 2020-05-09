@@ -1,4 +1,5 @@
-﻿using PixelPalette.Color;
+﻿using System;
+using PixelPalette.Color;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
@@ -144,45 +145,22 @@ namespace PixelPalette.Tests.Color
         }
 
         [TestMethod]
-        public void Red_ShouldBeClamped()
+        public void NewRgb_WithOutOfRangeValue_ShouldThrowException()
         {
-            var rgb = new Rgb(-1, 0, 0);
-            rgb.ScaledRed.ShouldBe(0);
-            rgb = new Rgb(256, 0, 0);
-            rgb.ScaledRed.ShouldBe(255);
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(-0.1, 0, 0));
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(1.1, 0, 0));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(-1, 0, 0));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(256, 0, 0));
 
-            rgb = new Rgb(-0.1, 0, 0);
-            rgb.Red.ShouldBe(0.0);
-            rgb = new Rgb(1.1, 0, 0);
-            rgb.Red.ShouldBe(1.0);
-        }
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(0, -0.1, 0));
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(0, 1.1, 0));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(0, -1, 0));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(0, 256, 0));
 
-        [TestMethod]
-        public void Green_ShouldBeClamped()
-        {
-            var rgb = new Rgb(0, -1, 0);
-            rgb.ScaledGreen.ShouldBe(0);
-            rgb = new Rgb(0, 256, 0);
-            rgb.ScaledGreen.ShouldBe(255);
-
-            rgb = new Rgb(0, -0.1, 0);
-            rgb.Green.ShouldBe(0.0);
-            rgb = new Rgb(0, 1.1, 0);
-            rgb.Green.ShouldBe(1.0);
-        }
-
-        [TestMethod]
-        public void Blue_ShouldBeClamped()
-        {
-            var rgb = new Rgb(0, 0, -1);
-            rgb.ScaledBlue.ShouldBe(0);
-            rgb = new Rgb(0, 0, 256);
-            rgb.ScaledBlue.ShouldBe(255);
-            
-            rgb = new Rgb(0, 0, -0.1);
-            rgb.Blue.ShouldBe(0.0);
-            rgb = new Rgb(0, 0, 1.1);
-            rgb.Blue.ShouldBe(1.0);
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(0, 0, -0.1));
+            Assert.ThrowsException<ArgumentException>(() => new Rgb(0, 0, 1.1));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(0, 0, -1));
+            Assert.ThrowsException<ArgumentException>(() => Rgb.FromScaledValues(0, 0, 256));
         }
     }
 }

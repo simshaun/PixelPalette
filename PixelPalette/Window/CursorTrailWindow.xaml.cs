@@ -40,7 +40,7 @@ namespace PixelPalette.Window
             PreviewContainer.Width = gridWidth;
             PreviewContainer.Height = gridWidth;
 
-            #region Draw grid lines
+#region Draw grid lines
 
             for (var x = 1; x < numColumns; x += 1)
             {
@@ -86,10 +86,10 @@ namespace PixelPalette.Window
             };
             PreviewContainer.Children.Add(hLineCrosshair);
 
-            #endregion
+#endregion
 
 
-            #region Render the color preview
+#region Render the color preview
 
             var winHeight = (int) Height;
 
@@ -143,7 +143,7 @@ namespace PixelPalette.Window
             };
             _timer.Start();
 
-            #endregion
+#endregion
         }
 
         private void Window_Closing(object sender, CancelEventArgs cancelEventArgs)

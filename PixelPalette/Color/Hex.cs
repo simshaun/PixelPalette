@@ -116,7 +116,7 @@ namespace PixelPalette.Color
 
         public Rgb ToRgb()
         {
-            return new Rgb(_red, _green, _blue);
+            return Rgb.FromScaledValues(_red, _green, _blue);
         }
 
         public static bool IsValidHex(string hex)

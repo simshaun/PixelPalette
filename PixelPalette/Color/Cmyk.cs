@@ -152,7 +152,6 @@ namespace PixelPalette.Color
             var y = double.Parse(match.Groups["y"].Value);
             var k = double.Parse(match.Groups["k"].Value);
             return FromScaledValues(c, m, y, k);
-
         }
 
         public static double ClampedComponent(double v)
@@ -233,15 +232,11 @@ namespace PixelPalette.Color
             var y1 = Yellow;
             var k1 = Key;
 
-            var r = 255 * (1 - c1) * (1 - k1);
-            var g = 255 * (1 - m1) * (1 - k1);
-            var b = 255 * (1 - y1) * (1 - k1);
+            var r = (1 - c1) * (1 - k1);
+            var g = (1 - m1) * (1 - k1);
+            var b = (1 - y1) * (1 - k1);
 
-            return new Rgb(
-                (int) Math.Round(r, 0, MidpointRounding.ToPositiveInfinity),
-                (int) Math.Round(g, 0, MidpointRounding.ToPositiveInfinity),
-                (int) Math.Round(b, 0, MidpointRounding.ToPositiveInfinity)
-            );
+            return new Rgb(r, g, b);
         }
 
         public bool Equals(Cmyk other)
