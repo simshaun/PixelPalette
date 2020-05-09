@@ -167,40 +167,40 @@ namespace PixelPalette.Window
 
                 switch (ev.PropertyName)
                 {
-                    case "RgbText":
+                    case nameof(MainWindowViewModel.RgbText):
                         nullableRgb = Rgb.FromString(_vm.RgbText);
                         if (nullableRgb.HasValue) _vm.RefreshFromRgb(nullableRgb.Value);
                         break;
-                    case "RgbScaledText":
+                    case nameof(MainWindowViewModel.RgbScaledText):
                         nullableRgb = Rgb.FromScaledString(_vm.RgbScaledText);
                         if (nullableRgb.HasValue) _vm.RefreshFromRgb(nullableRgb.Value);
                         break;
-                    case "RgbScaledRed":
+                    case nameof(MainWindowViewModel.RgbScaledRed):
                         isInt = int.TryParse(_vm.RgbScaledRed, out intVal);
                         if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithRed(intVal));
                         break;
-                    case "RgbScaledGreen":
+                    case nameof(MainWindowViewModel.RgbScaledGreen):
                         isInt = int.TryParse(_vm.RgbScaledGreen, out intVal);
                         if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithGreen(intVal));
                         break;
-                    case "RgbScaledBlue":
+                    case nameof(MainWindowViewModel.RgbScaledBlue):
                         isInt = int.TryParse(_vm.RgbScaledBlue, out intVal);
                         if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithBlue(intVal));
                         break;
-                    case "RgbRed":
+                    case nameof(MainWindowViewModel.RgbRed):
                         isDouble = double.TryParse(_vm.RgbRed, out doubleVal);
                         if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithRed(doubleVal));
                         break;
-                    case "RgbGreen":
+                    case nameof(MainWindowViewModel.RgbGreen):
                         isDouble = double.TryParse(_vm.RgbGreen, out doubleVal);
                         if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithGreen(doubleVal));
                         break;
-                    case "RgbBlue":
+                    case nameof(MainWindowViewModel.RgbBlue):
                         isDouble = double.TryParse(_vm.RgbBlue, out doubleVal);
                         if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromRgb(_vm.Rgb.WithBlue(doubleVal));
@@ -244,21 +244,21 @@ namespace PixelPalette.Window
             {
                 switch (ev.PropertyName)
                 {
-                    case "HexText":
+                    case nameof(MainWindowViewModel.HexText):
                         var nullableHex = Hex.FromString(_vm.HexText);
                         if (nullableHex.HasValue) _vm.RefreshFromHex(nullableHex.Value);
                         break;
-                    case "HexRed":
+                    case nameof(MainWindowViewModel.HexRed):
                         // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
                         if (!Hex.IsValidHexPart(_vm.HexRed) || _vm.HexRed.Length != 2) return;
                         _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.HexRed));
                         break;
-                    case "HexGreen":
+                    case nameof(MainWindowViewModel.HexGreen):
                         // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
                         if (!Hex.IsValidHexPart(_vm.HexGreen) || _vm.HexGreen.Length != 2) return;
                         _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.HexGreen));
                         break;
-                    case "HexBlue":
+                    case nameof(MainWindowViewModel.HexBlue):
                         // Length comparison for better UX. Stops converting "0" to "00" and moving user cursor.
                         if (!Hex.IsValidHexPart(_vm.HexBlue) || _vm.HexBlue.Length != 2) return;
                         _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.HexBlue));
@@ -327,40 +327,40 @@ namespace PixelPalette.Window
 
                 switch (ev.PropertyName)
                 {
-                    case "HslText":
+                    case nameof(MainWindowViewModel.HslText):
                         nullableHsl = Hsl.FromString(_vm.HslText);
                         if (nullableHsl.HasValue) _vm.RefreshFromHsl(nullableHsl.Value);
                         break;
-                    case "HslScaledText":
+                    case nameof(MainWindowViewModel.HslScaledText):
                         nullableHsl = Hsl.FromScaledString(_vm.HslScaledText);
                         if (nullableHsl.HasValue) _vm.RefreshFromHsl(nullableHsl.Value);
                         break;
-                    case "HslHue":
+                    case nameof(MainWindowViewModel.HslHue):
                         isDouble = double.TryParse(_vm.HslHue, out doubleVal);
                         if (!isDouble || !Hsl.IsValidHue(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithHue(doubleVal));
                         break;
-                    case "HslSaturation":
+                    case nameof(MainWindowViewModel.HslSaturation):
                         isDouble = double.TryParse(_vm.HslSaturation, out doubleVal);
                         if (!isDouble || !Hsl.IsValidSaturation(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(doubleVal));
                         break;
-                    case "HslValue":
+                    case nameof(MainWindowViewModel.HslLuminance):
                         isDouble = double.TryParse(_vm.HslLuminance, out doubleVal);
                         if (!isDouble || !Hsl.IsValidLuminance(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(doubleVal));
                         break;
-                    case "HslScaledHue":
+                    case nameof(MainWindowViewModel.HslScaledHue):
                         isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
                         if (!isDouble || !Hsl.IsValidScaledHue(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithScaledHue(doubleVal));
                         break;
-                    case "HslScaledSaturation":
+                    case nameof(MainWindowViewModel.HslScaledSaturation):
                         isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
                         if (!isDouble || !Hsl.IsValidScaledSaturation(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithScaledSaturation(doubleVal));
                         break;
-                    case "HslScaledValue":
+                    case nameof(MainWindowViewModel.HslScaledLuminance):
                         isDouble = double.TryParse(_vm.HslScaledHue, out doubleVal);
                         if (!isDouble || !Hsl.IsValidScaledLuminance(doubleVal)) return;
                         _vm.RefreshFromHsl(_vm.Hsl.WithScaledLuminance(doubleVal));
@@ -411,40 +411,40 @@ namespace PixelPalette.Window
 
                 switch (ev.PropertyName)
                 {
-                    case "HsvText":
+                    case nameof(MainWindowViewModel.HsvText):
                         nullableHsv = Hsv.FromString(_vm.HsvText);
                         if (nullableHsv.HasValue) _vm.RefreshFromHsv(nullableHsv.Value);
                         break;
-                    case "HsvScaledText":
+                    case nameof(MainWindowViewModel.HsvScaledText):
                         nullableHsv = Hsv.FromScaledString(_vm.HsvScaledText);
                         if (nullableHsv.HasValue) _vm.RefreshFromHsv(nullableHsv.Value);
                         break;
-                    case "HsvHue":
+                    case nameof(MainWindowViewModel.HsvHue):
                         isDouble = double.TryParse(_vm.HsvHue, out doubleVal);
                         if (!isDouble || !Hsv.IsValidHue(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithHue(doubleVal));
                         break;
-                    case "HsvSaturation":
+                    case nameof(MainWindowViewModel.HsvSaturation):
                         isDouble = double.TryParse(_vm.HsvSaturation, out doubleVal);
                         if (!isDouble || !Hsv.IsValidSaturation(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(doubleVal));
                         break;
-                    case "HsvValue":
+                    case nameof(MainWindowViewModel.HsvValue):
                         isDouble = double.TryParse(_vm.HsvValue, out doubleVal);
                         if (!isDouble || !Hsv.IsValidValue(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithValue(doubleVal));
                         break;
-                    case "HsvScaledHue":
+                    case nameof(MainWindowViewModel.HsvScaledHue):
                         isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
                         if (!isDouble || !Hsv.IsValidScaledHue(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithScaledHue(doubleVal));
                         break;
-                    case "HsvScaledSaturation":
+                    case nameof(MainWindowViewModel.HsvScaledSaturation):
                         isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
                         if (!isDouble || !Hsv.IsValidScaledSaturation(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithScaledSaturation(doubleVal));
                         break;
-                    case "HsvScaledValue":
+                    case nameof(MainWindowViewModel.HsvScaledValue):
                         isDouble = double.TryParse(_vm.HsvScaledHue, out doubleVal);
                         if (!isDouble || !Hsv.IsValidScaledValue(doubleVal)) return;
                         _vm.RefreshFromHsv(_vm.Hsv.WithScaledValue(doubleVal));
@@ -512,50 +512,50 @@ namespace PixelPalette.Window
 
                 switch (ev.PropertyName)
                 {
-                    case "CmykText":
+                    case nameof(MainWindowViewModel.CmykText):
                         nullableCmyk = Cmyk.FromString(_vm.CmykText);
                         if (nullableCmyk.HasValue) _vm.RefreshFromCmyk(nullableCmyk.Value);
                         break;
-                    case "CmykScaledText":
+                    case nameof(MainWindowViewModel.CmykScaledText):
                         nullableCmyk = Cmyk.FromScaledString(_vm.CmykScaledText);
                         if (nullableCmyk.HasValue) _vm.RefreshFromCmyk(nullableCmyk.Value);
                         break;
-                    case "CmykCyan":
+                    case nameof(MainWindowViewModel.CmykCyan):
                         isDouble = double.TryParse(_vm.CmykCyan, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(doubleVal));
                         break;
-                    case "CmykMagenta":
+                    case nameof(MainWindowViewModel.CmykMagenta):
                         isDouble = double.TryParse(_vm.CmykMagenta, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(doubleVal));
                         break;
-                    case "CmykYellow":
+                    case nameof(MainWindowViewModel.CmykYellow):
                         isDouble = double.TryParse(_vm.CmykYellow, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(doubleVal));
                         break;
-                    case "CmykKey":
+                    case nameof(MainWindowViewModel.CmykKey):
                         isDouble = double.TryParse(_vm.CmykKey, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(doubleVal));
                         break;
-                    case "CmykScaledCyan":
+                    case nameof(MainWindowViewModel.CmykScaledCyan):
                         isDouble = double.TryParse(_vm.CmykScaledCyan, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledCyan(doubleVal));
                         break;
-                    case "CmykScaledMagenta":
+                    case nameof(MainWindowViewModel.CmykScaledMagenta):
                         isDouble = double.TryParse(_vm.CmykScaledMagenta, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledMagenta(doubleVal));
                         break;
-                    case "CmykScaledYellow":
+                    case nameof(MainWindowViewModel.CmykScaledYellow):
                         isDouble = double.TryParse(_vm.CmykScaledYellow, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledYellow(doubleVal));
                         break;
-                    case "CmykScaledKey":
+                    case nameof(MainWindowViewModel.CmykScaledKey):
                         isDouble = double.TryParse(_vm.CmykScaledKey, out doubleVal);
                         if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                         _vm.RefreshFromCmyk(_vm.Cmyk.WithScaledKey(doubleVal));
@@ -593,19 +593,19 @@ namespace PixelPalette.Window
             {
                 switch (ev.PropertyName)
                 {
-                    case "LabText":
+                    case nameof(MainWindowViewModel.LabText):
                         var nullableLab = Lab.FromString(_vm.LabText);
                         if (nullableLab.HasValue) _vm.RefreshFromLab(nullableLab.Value);
                         break;
-                    case "LabL":
+                    case nameof(MainWindowViewModel.LabL):
                         if (!Lab.IsValidL(_vm.LabL)) return;
                         _vm.RefreshFromLab(_vm.Lab.WithL(_vm.LabL));
                         break;
-                    case "LabA":
+                    case nameof(MainWindowViewModel.LabA):
                         if (!Lab.IsValidA(_vm.LabA)) return;
                         _vm.RefreshFromLab(_vm.Lab.WithA(_vm.LabA));
                         break;
-                    case "LabB":
+                    case nameof(MainWindowViewModel.LabB):
                         if (!Lab.IsValidB(_vm.LabB)) return;
                         _vm.RefreshFromLab(_vm.Lab.WithB(_vm.LabB));
                         break;
