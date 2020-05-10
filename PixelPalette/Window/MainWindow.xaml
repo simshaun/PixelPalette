@@ -381,24 +381,28 @@
                 Grid.Column="0"
                 x:Name="CmykCyanSlider"
                 Background="{Binding CmykCyanGradientFill}"
+                Style="{StaticResource GradientSlider}"
                 Value="{Binding CmykCyan, Mode=OneWay}" />
               <control:GradientSlider
                 Grid.Row="1"
                 Grid.Column="0"
                 x:Name="CmykMagentaSlider"
                 Background="{Binding CmykMagentaGradientFill}"
+                Style="{StaticResource GradientSlider}"
                 Value="{Binding CmykMagenta, Mode=OneWay}" />
               <control:GradientSlider
                 Grid.Row="2"
                 Grid.Column="0"
                 x:Name="CmykYellowSlider"
                 Background="{Binding CmykYellowGradientFill}"
+                Style="{StaticResource GradientSlider}"
                 Value="{Binding CmykYellow, Mode=OneWay}" />
               <control:GradientSlider
                 Grid.Row="3"
                 Grid.Column="0"
                 x:Name="CmykKeySlider"
                 Background="{Binding CmykKeyGradientFill}"
+                Style="{StaticResource GradientSlider}"
                 Value="{Binding CmykKey, Mode=OneWay}" />
               <Label
                 Grid.Row="0"
