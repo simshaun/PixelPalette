@@ -97,6 +97,12 @@ namespace PixelPalette.Color
             _blue = int.Parse(result.Groups[3].Value, NumberStyles.HexNumber);
         }
 
+        public static Hex? From6CharString(string theString)
+        {
+            if (!IsValid6CharHex(theString)) return null;
+            return new Hex(theString);
+        }
+
         public static Hex? FromString(string theString)
         {
             try
@@ -122,6 +128,12 @@ namespace PixelPalette.Color
         public static bool IsValidHex(string hex)
         {
             var regex = new Regex("^#?([0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase);
+            return regex.IsMatch(hex);
+        }
+
+        public static bool IsValid6CharHex(string hex)
+        {
+            var regex = new Regex("^#?([0-9A-F]{6})$", RegexOptions.IgnoreCase);
             return regex.IsMatch(hex);
         }
 

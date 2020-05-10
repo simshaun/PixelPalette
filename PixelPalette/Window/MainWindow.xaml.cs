@@ -65,6 +65,32 @@ namespace PixelPalette.Window
         }
 
         // Shortcut method
+        private static void HandleInputEnterOrFocusLost(IEnumerable<TextBox> controls, Action<string> action)
+        {
+            foreach (var control in controls)
+            {
+                void HandleIt()
+                {
+                    var text = control.Text;
+                    action(text);
+                }
+
+                control.KeyDown += (o, ev) =>
+                {
+                    if (ev.Key != Key.Enter) return;
+                    HandleIt();
+                };
+
+                control.LostFocus += (o, ev) => { HandleIt(); };
+            }
+        }
+
+        private static void HandleInputEnterOrFocusLost(TextBox control, Action<string> action)
+        {
+            HandleInputEnterOrFocusLost(new[] { control }, action);
+        }
+
+        // Shortcut method
         private static void HandleSliderChange(Slider control, Action<double> action)
         {
             control.ValueChanged += (o, ev) =>
@@ -240,12 +266,20 @@ namespace PixelPalette.Window
             HandleSliderChange(HexGreenSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(value)); });
             HandleSliderChange(HexBlueSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(value)); });
 
+            // The box actively ignores 3-char hex strings while typing so that 6-chars may be entered without interruption.
+            // However, 3-char hex strings can still be entered by pressing Enter or dropping focus:
+            HandleInputEnterOrFocusLost(HexText, value =>
+            {
+                var nullableHex = Hex.FromString(_vm.HexText);
+                if (nullableHex.HasValue) _vm.RefreshFromHex(nullableHex.Value);
+            });
+
             _vm.PropertyChangedByUser += (o, ev) =>
             {
                 switch (ev.PropertyName)
                 {
                     case nameof(MainWindowViewModel.HexText):
-                        var nullableHex = Hex.FromString(_vm.HexText);
+                        var nullableHex = Hex.From6CharString(_vm.HexText);
                         if (nullableHex.HasValue) _vm.RefreshFromHex(nullableHex.Value);
                         break;
                     case nameof(MainWindowViewModel.HexRed):
