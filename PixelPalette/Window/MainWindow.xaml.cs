@@ -238,28 +238,28 @@ namespace PixelPalette.Window
             // HEX fields
             //
 
-            HandleKey(Key.Up, HexRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); });
-            HandleKey(Key.Up, HexGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); });
-            HandleKey(Key.Up, HexBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); });
+            HandleKey(Key.Up, HexRed, () => { _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.Hex.Red + 1)); });
+            HandleKey(Key.Up, HexGreen, () => { _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.Hex.Green + 1)); });
+            HandleKey(Key.Up, HexBlue, () => { _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.Hex.Blue + 1)); });
 
-            HandleKey(Key.Down, HexRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); });
-            HandleKey(Key.Down, HexGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); });
-            HandleKey(Key.Down, HexBlue, () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); });
+            HandleKey(Key.Down, HexRed, () => { _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.Hex.Red - 1)); });
+            HandleKey(Key.Down, HexGreen, () => { _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.Hex.Green - 1)); });
+            HandleKey(Key.Down, HexBlue, () => { _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.Hex.Blue - 1)); });
 
             HandleMouseWheel(
                 HexRed,
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.ScaledRed - 1)); }
+                () => { _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.Hex.Red + 1)); },
+                () => { _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.Hex.Red - 1)); }
             );
             HandleMouseWheel(
                 HexGreen,
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.ScaledGreen - 1)); }
+                () => { _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.Hex.Green + 1)); },
+                () => { _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.Hex.Green - 1)); }
             );
             HandleMouseWheel(
                 HexBlue,
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue + 1)); },
-                () => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(_vm.Rgb.ScaledBlue - 1)); }
+                () => { _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.Hex.Blue + 1)); },
+                () => { _vm.RefreshFromHex(_vm.Hex.WithBlue(_vm.Hex.Blue - 1)); }
             );
 
             HandleSliderChange(HexRedSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(value)); });
