@@ -144,7 +144,8 @@
         <!-- RGB -->
         <TabItem
           Header="RGB"
-          Name="RgbTab">
+          Name="RgbTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox
@@ -257,7 +258,8 @@
         <!-- Hex -->
         <TabItem
           Header="Hex"
-          Name="HexTab">
+          Name="HexTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox
@@ -344,7 +346,8 @@
         <!-- CMYK -->
         <TabItem
           Header="CMYK"
-          Name="CmykTab">
+          Name="CmykTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox
@@ -484,7 +487,8 @@
         <!-- HSL -->
         <TabItem
           Header="HSL"
-          Name="HslTab">
+          Name="HslTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox
@@ -597,7 +601,8 @@
         <!-- HSV -->
         <TabItem
           Header="HSV/HSB"
-          Name="HsvTab">
+          Name="HsvTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox
@@ -710,7 +715,8 @@
         <!-- Lab -->
         <TabItem
           Header="CIELAB (D65/2°)"
-          Name="LabTab">
+          Name="LabTab"
+          Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
             <TextBox

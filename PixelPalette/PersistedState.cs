@@ -10,6 +10,8 @@ namespace PixelPalette
     {
         [XmlElement("ActiveColorModelTab")] public string ActiveColorModelTab { get; set; } = null;
 
+        [XmlElement("ActiveColorModel")] public string ActiveColorModel { get; set; } = null;
+
         [XmlElement("ActiveColorValue")] public string ActiveColorValue { get; set; } = null;
     }
 

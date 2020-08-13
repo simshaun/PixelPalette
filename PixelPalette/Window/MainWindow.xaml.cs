@@ -701,6 +701,11 @@ namespace PixelPalette.Window
             };
         }
 
+        private void OnColorModelTabSelected(object sender, RoutedEventArgs e)
+        {
+            PersistedState.Data.ActiveColorModelTab = ((TabItem) e.Source).Name;
+        }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault

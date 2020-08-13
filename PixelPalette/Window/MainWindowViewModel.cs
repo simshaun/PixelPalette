@@ -30,29 +30,29 @@ namespace PixelPalette.Window
                                       .OfType<TabItem>()
                                       .SingleOrDefault(t => t.Name == (data.ActiveColorModelTab ?? "RgbTab"));
 
-            switch (data.ActiveColorModelTab)
+            switch (data.ActiveColorModel)
             {
-                case "RgbTab":
+                case "Rgb":
                     var rgb = Rgb.FromString(data.ActiveColorValue);
                     if (rgb.HasValue) RefreshFromRgb(rgb.Value);
                     break;
-                case "HexTab":
+                case "Hex":
                     var hex = Hex.FromString(data.ActiveColorValue);
                     if (hex.HasValue) RefreshFromHex(hex.Value);
                     break;
-                case "CmykTab":
+                case "Cmy":
                     var cmyk = Cmyk.FromString(data.ActiveColorValue);
                     if (cmyk.HasValue) RefreshFromCmyk(cmyk.Value);
                     break;
-                case "HslTab":
+                case "Hsl":
                     var hsl = Hsl.FromString(data.ActiveColorValue);
                     if (hsl.HasValue) RefreshFromHsl(hsl.Value);
                     break;
-                case "HsvTab":
+                case "Hsv":
                     var hsv = Hsv.FromString(data.ActiveColorValue);
                     if (hsv.HasValue) RefreshFromHsv(hsv.Value);
                     break;
-                case "LabTab":
+                case "Lab":
                     var lab = Lab.FromString(data.ActiveColorValue);
                     if (lab.HasValue) RefreshFromLab(lab.Value);
                     break;
@@ -62,14 +62,14 @@ namespace PixelPalette.Window
         public void SaveToPersistedData(PersistedData data)
         {
             data.ActiveColorModelTab = _activeColorModelTabItem.Name;
-            data.ActiveColorValue = data.ActiveColorModelTab switch
+            data.ActiveColorValue = data.ActiveColorModel switch
             {
-                "RgbTab" => Rgb.ToString(),
-                "HexTab" => Hex.ToString(),
-                "CmykTab" => Cmyk.ToString(),
-                "HslTab" => Hsl.ToString(),
-                "HsvTab" => Hsv.ToString(),
-                "LabTab" => Lab.ToString(),
+                "Rgb" => Rgb.ToString(),
+                "Hex" => Hex.ToString(),
+                "Cmyk" => Cmyk.ToString(),
+                "Hsl" => Hsl.ToString(),
+                "Hsv" => Hsv.ToString(),
+                "Lab" => Lab.ToString(),
                 _ => data.ActiveColorValue
             };
         }
@@ -539,7 +539,7 @@ namespace PixelPalette.Window
         {
             if (_rgb != Rgb.Empty && rgb == Rgb) return;
 
-            PersistedState.Data.ActiveColorModelTab = "RgbTab";
+            PersistedState.Data.ActiveColorModel = "Rgb";
             PersistedState.Data.ActiveColorValue = rgb.ToString();
 
             var hsl = rgb.ToHsl();
@@ -562,7 +562,7 @@ namespace PixelPalette.Window
         {
             if (_hex != Hex.Empty && hex == Hex) return;
 
-            PersistedState.Data.ActiveColorModelTab = "HexTab";
+            PersistedState.Data.ActiveColorModel = "Hex";
             PersistedState.Data.ActiveColorValue = hex.ToString();
 
             var rgb = hex.ToRgb();
@@ -585,7 +585,7 @@ namespace PixelPalette.Window
         {
             if (_hsl != Hsl.Empty && hsl == Hsl) return;
 
-            PersistedState.Data.ActiveColorModelTab = "HslTab";
+            PersistedState.Data.ActiveColorModel = "Hsl";
             PersistedState.Data.ActiveColorValue = hsl.ToString();
 
             var rgb = hsl.ToRgb();
@@ -608,7 +608,7 @@ namespace PixelPalette.Window
         {
             if (_hsv != Hsv.Empty && hsv == Hsv) return;
 
-            PersistedState.Data.ActiveColorModelTab = "HsvTab";
+            PersistedState.Data.ActiveColorModel = "Hsv";
             PersistedState.Data.ActiveColorValue = hsv.ToString();
 
             var rgb = hsv.ToRgb();
@@ -631,7 +631,7 @@ namespace PixelPalette.Window
         {
             if (_cmyk != Cmyk.Empty && cmyk == Cmyk) return;
 
-            PersistedState.Data.ActiveColorModelTab = "CmykTab";
+            PersistedState.Data.ActiveColorModel = "Cmyk";
             PersistedState.Data.ActiveColorValue = cmyk.ToString();
 
             var rgb = cmyk.ToRgb();
@@ -654,7 +654,7 @@ namespace PixelPalette.Window
         {
             if (_lab != Lab.Empty && lab == Lab) return;
 
-            PersistedState.Data.ActiveColorModelTab = "LabTab";
+            PersistedState.Data.ActiveColorModel = "Lab";
             PersistedState.Data.ActiveColorValue = lab.ToString();
 
             var rgb = lab.ToRgb();
