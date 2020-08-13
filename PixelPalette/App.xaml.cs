@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 
 namespace PixelPalette
 {
@@ -7,5 +8,9 @@ namespace PixelPalette
     /// </summary>
     public partial class App : Application
     {
+        private void OnStartup(object sender, StartupEventArgs e)
+        {
+            EphemeralState.Data.DebugMode = e.Args.Contains("-debug");
+        }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PixelPalette": {
+      "commandName": "Project",
+      "commandLineArgs": "-debug"
+    }
+  }
+}

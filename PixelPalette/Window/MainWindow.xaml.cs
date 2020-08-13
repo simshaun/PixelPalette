@@ -754,5 +754,12 @@ namespace PixelPalette.Window
         }
 
 #endregion
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!EphemeralState.Data.DebugMode) return;
+            var debugWin = new DebugWindow(Left + Width, Top);
+            debugWin.Show();
+        }
     }
 }

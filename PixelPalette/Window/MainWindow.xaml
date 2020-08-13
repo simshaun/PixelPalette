@@ -12,6 +12,7 @@
   d:DataContext="{d:DesignInstance window:MainWindowViewModel }"
   KeyDown="Window_KeyDown"
   MouseDown="MainWindow_OnMouseDown"
+  Loaded="MainWindow_OnLoaded"
   Closing="MainWindow_OnClosing"
   Width="300"
   Height="Auto"

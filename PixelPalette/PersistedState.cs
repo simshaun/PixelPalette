@@ -28,10 +28,17 @@ namespace PixelPalette
         public static void Read()
         {
             var settingFilePath = SettingFilePath();
+
+            AppDebug.WriteLine($"Setting file: {settingFilePath}");
             if (!File.Exists(settingFilePath))
             {
+                AppDebug.WriteLine($"File does not exist");
                 return;
             }
+            AppDebug.WriteLine($"File exists");
+            AppDebug.WriteLine($"--------");
+            AppDebug.WriteLine(File.ReadAllText(settingFilePath));
+            AppDebug.WriteLine($"--------");
 
             var sr = new StringReader(File.ReadAllText(settingFilePath));
             Data = (PersistedData) Serializer.Deserialize(sr);
@@ -75,6 +82,8 @@ namespace PixelPalette
 
             return path;
         }
+
+        // TODO ADD DEBUG FLAG TO STARTUP
 
         private static bool CanWriteToExeFolder()
         {
