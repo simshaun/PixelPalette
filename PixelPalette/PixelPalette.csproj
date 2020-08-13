@@ -11,7 +11,7 @@
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
-    <Company>IndelibleVI</Company>
+    <Company>FoxAndFly</Company>
   </PropertyGroup>
 
   <ItemGroup>

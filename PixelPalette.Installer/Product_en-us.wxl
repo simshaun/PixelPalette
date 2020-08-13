@@ -3,8 +3,8 @@
   <String Id="Language">1033</String>
 
   <String Id="ApplicationName">PixelPalette</String>
-  <String Id="ManufacturerName">IndelibleVI</String>
-  <String Id="ManufacturerFullName">IndelibleVI</String>
+  <String Id="ManufacturerName">FoxAndFly</String>
+  <String Id="ManufacturerFullName">FoxAndFly</String>
   <String Id="ProductDescription">Color picker</String>
   <String Id="Comments">Installs PixelPalette</String>
 
