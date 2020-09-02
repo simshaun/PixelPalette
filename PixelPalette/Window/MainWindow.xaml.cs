@@ -663,6 +663,12 @@ namespace PixelPalette.Window
             FreezeFrame.Instance.BitmapSource = freezeFrame;
 
             _freezeFrameWin = new FreezeFrameWindow(_vm);
+            _freezeFrameWin.ColorPicked += (sender, args) =>
+            {
+                var el = WpfHelper.FindFirstVisualChild<TextBox>(_vm.ActiveColorModelTabItem);
+                el?.Focus();
+                el?.SelectAll();
+            };
             _freezeFrameWin.Show();
             _freezeFrameWin.Focus();
             _freezeFrameWin.Closed += (o2, e2) =>

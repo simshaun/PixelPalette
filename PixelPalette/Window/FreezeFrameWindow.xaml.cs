@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Windows.Input;
 using PixelPalette.Bitmap;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -10,6 +11,8 @@ namespace PixelPalette.Window
     /// </summary>
     public partial class FreezeFrameWindow : System.Windows.Window
     {
+        public event EventHandler ColorPicked;
+
         private readonly MainWindowViewModel _vm;
 
         public FreezeFrameWindow(MainWindowViewModel vm)
@@ -28,6 +31,7 @@ namespace PixelPalette.Window
             var mouse = MouseUtil.GetMousePosition();
             var rgb = BitmapUtil.PixelToRgb(FreezeFrame.Instance.BitmapSource, mouse.X, mouse.Y);
             _vm.RefreshFromRgb(rgb);
+            ColorPicked?.Invoke(this, EventArgs.Empty);
             Close();
         }
 
