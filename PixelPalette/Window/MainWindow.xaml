@@ -14,7 +14,7 @@
   MouseDown="MainWindow_OnMouseDown"
   Loaded="MainWindow_OnLoaded"
   Closing="MainWindow_OnClosing"
-  Width="300"
+  Width="320"
   Height="Auto"
   SizeToContent="Height"
   ResizeMode="CanMinimize"
@@ -23,19 +23,129 @@
   Icon="/Resources/icon.ico">
   <Window.Resources>
     <Style
-      x:Key="GradientSlider"
-      TargetType="{x:Type control:GradientSlider}"
-      BasedOn="{StaticResource {x:Type control:GradientSlider}}">
+      TargetType="{x:Type Window}">
+      <Setter
+        Property="FontFamily"
+        Value="Tahoma,Arial" />
+      <Setter
+        Property="FontSize"
+        Value="11" />
+    </Style>
+
+    <BitmapImage
+      x:Key="PipetteImage"
+      UriSource="/Resources/pipette.png" />
+
+    <BitmapImage
+      x:Key="ClipboardImage"
+      UriSource="/Resources/clipboard.png" />
+
+    <BitmapImage
+      x:Key="CheckmarkImage"
+      UriSource="/Resources/checkmark.png" />
+
+    <Style
+      x:Key="TabContentStyle"
+      TargetType="{x:Type StackPanel}">
       <Setter
         Property="Margin"
-        Value="0,0,10,0" />
+        Value="5" />
       <Setter
         Property="HorizontalAlignment"
         Value="Stretch" />
     </Style>
 
     <Style
+      x:Key="ColorOutputContainerBorder"
+      TargetType="{x:Type Border}">
+      <Setter
+        Property="Background"
+        Value="#efeff2" />
+      <Setter
+        Property="Padding"
+        Value="7,7,7,4" />
+      <Setter
+        Property="Margin"
+        Value="-7,-7,-7,2" />
+    </Style>
+
+    <Style
+      x:Key="ColorOutputRow"
+      TargetType="{x:Type StackPanel}">
+      <Setter
+        Property="Margin"
+        Value="0,0,0,3" />
+      <Setter
+        Property="Orientation"
+        Value="Horizontal" />
+      <Setter
+        Property="HorizontalAlignment"
+        Value="Right" />
+    </Style>
+
+    <Style
+      x:Key="ColorOutputLabel"
+      TargetType="{x:Type Label}">
+      <Setter
+        Property="VerticalAlignment"
+        Value="Center" />
+      <Setter
+        Property="Foreground"
+        Value="#999" />
+      <Setter
+        Property="FontSize"
+        Value="10" />
+      <Setter
+        Property="FontWeight"
+        Value="Bold" />
+    </Style>
+
+    <Style
       x:Key="ColorOutputBox"
+      TargetType="{x:Type TextBox}"
+      BasedOn="{StaticResource ResourceKey={x:Type TextBox}}">
+      <Setter
+        Property="VerticalAlignment"
+        Value="Top" />
+      <Setter
+        Property="HorizontalAlignment"
+        Value="Right" />
+      <Setter
+        Property="Margin"
+        Value="0, 0, 0, 0" />
+      <Setter
+        Property="Padding"
+        Value="6, 6, 6, 6" />
+    </Style>
+
+    <Style
+      x:Key="CopyToClipboardButton"
+      TargetType="{x:Type Button}"
+      BasedOn="{StaticResource ResourceKey={x:Type Button}}">
+      <Setter
+        Property="Background"
+        Value="White" />
+      <Setter
+        Property="Margin"
+        Value="2,0,0,0" />
+      <Setter
+        Property="ToolTip"
+        Value="Copy to Clipboard" />
+    </Style>
+
+    <Style
+      x:Key="CopyToClipboardButtonImage"
+      TargetType="{x:Type Image}">
+      <Setter
+        Property="Source"
+        Value="{StaticResource ClipboardImage}" />
+      <Setter
+        Property="Height"
+        Value="16" />
+    </Style>
+
+    <Style
+      x:Key="ColorInputBox"
       TargetType="{x:Type TextBox}"
       BasedOn="{StaticResource ResourceKey={x:Type TextBox}}">
       <Setter
@@ -53,22 +163,17 @@
     </Style>
 
     <Style
-      x:Key="TabContentStyle"
-      TargetType="{x:Type StackPanel}">
+      x:Key="GradientSlider"
+      TargetType="{x:Type control:GradientSlider}"
+      BasedOn="{StaticResource {x:Type control:GradientSlider}}">
       <Setter
         Property="Margin"
-        Value="10,20,10,20" />
+        Value="0,0,10,0" />
       <Setter
         Property="HorizontalAlignment"
         Value="Stretch" />
     </Style>
 
-    <Style
-      TargetType="{x:Type GroupBox}">
-      <Setter
-        Property="BorderThickness"
-        Value="0" />
-    </Style>
   </Window.Resources>
 
   <!-- Focusable so that user can click outside of text box and it will lose focus. -->
@@ -84,19 +189,6 @@
 
     <StackPanel
       Grid.Column="0">
-      <StackPanel.Resources>
-        <Style
-          TargetType="{x:Type GroupBox}">
-          <Setter
-            Property="Margin"
-            Value="0,10,0,0" />
-          <Setter
-            Property="Padding"
-            Value="10" />
-        </Style>
-        <Style
-          TargetType="{x:Type DockPanel}" />
-      </StackPanel.Resources>
 
       <!-- Color Preview -->
       <StackPanel
@@ -107,7 +199,7 @@
 
         <!-- Actions -->
         <StackPanel
-          HorizontalAlignment="Center"
+          HorizontalAlignment="Stretch"
           Orientation="Horizontal"
           Margin="0,5,0,0">
           <StackPanel.Resources>
@@ -115,8 +207,35 @@
               TargetType="{x:Type Button}"
               BasedOn="{StaticResource {x:Type Button}}">
               <Setter
+                Property="FontWeight"
+                Value="Bold" />
+              <Setter
+                Property="Background">
+                <Setter.Value>
+                  <LinearGradientBrush
+                    StartPoint="0,0"
+                    EndPoint="0,1">
+                    <GradientStop
+                      Color="#FFFFD190"
+                      Offset="0.2" />
+                    <GradientStop
+                      Color="Orange"
+                      Offset="0.85" />
+                    <GradientStop
+                      Color="#FFFFD190"
+                      Offset="1" />
+                  </LinearGradientBrush>
+                </Setter.Value>
+              </Setter>
+              <Setter
+                Property="BorderBrush"
+                Value="LightGray" />
+              <Setter
+                Property="Padding"
+                Value="13,2" />
+              <Setter
                 Property="Margin"
-                Value="2.5,0,2.5,0" />
+                Value="0,0,3,0" />
             </Style>
             <Style
               TargetType="{x:Type ToggleButton}"
@@ -127,8 +246,16 @@
             </Style>
           </StackPanel.Resources>
           <Button
-            Content="Eyedropper (F3)"
-            Name="EyedropperButton" />
+            Name="EyedropperButton">
+            <StackPanel
+              Orientation="Horizontal">
+              <Image
+                Source="{StaticResource PipetteImage}"
+                Height="16" />
+              <Label
+                Content="Eyedropper (F3)" />
+            </StackPanel>
+          </Button>
           <Button
             Content="Lighter"
             Name="LighterButton" />
@@ -141,6 +268,25 @@
       <TabControl
         Name="ColorModelTabs"
         SelectedItem="{Binding ActiveColorModelTabItem}">
+        <TabControl.Resources>
+          <Style
+            TargetType="{x:Type TabItem}"
+            BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter
+              Property="HeaderTemplate">
+              <Setter.Value>
+                <DataTemplate>
+                  <TextBlock
+                    Text="{Binding}" />
+                </DataTemplate>
+              </Setter.Value>
+            </Setter>
+            <Setter
+              Property="Padding"
+              Value="9,3" />
+          </Style>
+        </TabControl.Resources>
+
         <!-- RGB -->
         <TabItem
           Header="RGB"
@@ -148,14 +294,43 @@
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="RgbScaledText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding RgbScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
-            <TextBox
-              x:Name="RgbText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding RgbText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-255" />
+                  <TextBox
+                    x:Name="RgbScaledText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding RgbScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="RgbScaledTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-1" />
+                  <TextBox
+                    x:Name="RgbText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding RgbText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="RgbTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -164,9 +339,9 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="45" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="45" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -213,42 +388,42 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="RgbScaledRed"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding RgbScaledRed, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="RgbScaledGreen"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding RgbScaledGreen, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="RgbScaledBlue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding RgbScaledBlue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="0"
                 Grid.Column="3"
                 x:Name="RgbRed"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding RgbRed, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="3"
                 x:Name="RgbGreen"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding RgbGreen, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="3"
                 x:Name="RgbBlue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding RgbBlue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>
@@ -262,11 +437,29 @@
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="HexText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding HexText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
-              MaxLength="9" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="HEX" />
+                  <TextBox
+                    x:Name="HexText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding HexText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                    MaxLength="9"
+                    Width="65" />
+                  <Button
+                    x:Name="HexTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -275,7 +468,7 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="120" />
+                  Width="40" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -322,21 +515,21 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="HexRed"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="2"
                 Text="{Binding HexRed, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="HexGreen"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="2"
                 Text="{Binding HexGreen, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="HexBlue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="2"
                 Text="{Binding HexBlue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>
@@ -350,14 +543,43 @@
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="CmykScaledText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding CmykScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
-            <TextBox
-              x:Name="CmykText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding CmykText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-100" />
+                  <TextBox
+                    x:Name="CmykScaledText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding CmykScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="CmykScaledTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-1" />
+                  <TextBox
+                    x:Name="CmykText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding CmykText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="CmykTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -366,9 +588,9 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="40" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="46" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -428,56 +650,56 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="CmykScaledCyan"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding CmykScaledCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="CmykScaledMagenta"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding CmykScaledMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="CmykScaledYellow"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding CmykScaledYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="3"
                 Grid.Column="2"
                 x:Name="CmykScaledKey"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="3"
                 Text="{Binding CmykScaledKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="0"
                 Grid.Column="3"
                 x:Name="CmykCyan"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding CmykCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="3"
                 x:Name="CmykMagenta"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding CmykMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="3"
                 x:Name="CmykYellow"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding CmykYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="3"
                 Grid.Column="3"
                 x:Name="CmykKey"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding CmykKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>
@@ -491,14 +713,43 @@
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="HslScaledText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding HslScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
-            <TextBox
-              x:Name="HslText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding HslText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-100" />
+                  <TextBox
+                    x:Name="HslScaledText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding HslScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="HslScaledTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-1" />
+                  <TextBox
+                    x:Name="HslText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding HslText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="HslTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -507,9 +758,9 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="50" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="45" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -556,42 +807,42 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="HslScaledHue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HslScaledHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="HslScaledSaturation"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HslScaledSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="HslScaledLuminance"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HslScaledLuminance, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="0"
                 Grid.Column="3"
                 x:Name="HslHue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HslHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="3"
                 x:Name="HslSaturation"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HslSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="3"
                 x:Name="HslLuminance"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HslLuminance, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>
@@ -605,14 +856,43 @@
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="HsvScaledText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding HsvScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
-            <TextBox
-              x:Name="HsvText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding HsvText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-100" />
+                  <TextBox
+                    x:Name="HsvScaledText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding HsvScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="HsvScaledTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <Label
+                    Style="{StaticResource ColorOutputLabel}"
+                    Content="0-1" />
+                  <TextBox
+                    x:Name="HsvText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding HsvText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="HsvTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -621,9 +901,9 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="50" />
                 <ColumnDefinition
-                  Width="60" />
+                  Width="45" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -670,42 +950,42 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="HsvScaledHue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HsvScaledHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="HsvScaledSaturation"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HsvScaledSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="HsvScaledValue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding HsvScaledValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="0"
                 Grid.Column="3"
                 x:Name="HsvHue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HsvHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="3"
                 x:Name="HsvSaturation"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HsvSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="3"
                 x:Name="HsvValue"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="5"
                 Text="{Binding HsvValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>
@@ -714,15 +994,39 @@
 
         <!-- Lab -->
         <TabItem
-          Header="CIELAB (D65/2°)"
+          Header="CIELAB"
           Name="LabTab"
           Selector.Selected="OnColorModelTabSelected">
           <StackPanel
             Style="{StaticResource TabContentStyle}">
-            <TextBox
-              x:Name="LabText"
-              Style="{StaticResource ColorOutputBox}"
-              Text="{Binding LabText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            <Border
+              Style="{StaticResource ColorOutputContainerBorder}">
+              <StackPanel>
+                <StackPanel
+                  Style="{StaticResource ColorOutputRow}">
+                  <StackPanel>
+                    <Label
+                      Style="{StaticResource ColorOutputLabel}"
+                      Padding="4,0"
+                      Content="CIELAB" />
+                    <Label
+                      Style="{StaticResource ColorOutputLabel}"
+                      Padding="4,0"
+                      Content="(D65/2°)" />
+                  </StackPanel>
+                  <TextBox
+                    x:Name="LabText"
+                    Style="{StaticResource ColorOutputBox}"
+                    Text="{Binding LabText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+                  <Button
+                    x:Name="LabTextClipboardButton"
+                    Style="{StaticResource CopyToClipboardButton}">
+                    <Image
+                      Style="{StaticResource CopyToClipboardButtonImage}" />
+                  </Button>
+                </StackPanel>
+              </StackPanel>
+            </Border>
             <Grid
               Margin="0,5,0,0">
               <Grid.ColumnDefinitions>
@@ -731,7 +1035,7 @@
                 <ColumnDefinition
                   Width="20" />
                 <ColumnDefinition
-                  Width="120" />
+                  Width="60" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                 <RowDefinition
@@ -784,21 +1088,21 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 x:Name="LabL"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding LabL, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="1"
                 Grid.Column="2"
                 x:Name="LabA"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding LabA, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
               <TextBox
                 Grid.Row="2"
                 Grid.Column="2"
                 x:Name="LabB"
-                Style="{StaticResource ColorOutputBox}"
+                Style="{StaticResource ColorInputBox}"
                 MaxLength="6"
                 Text="{Binding LabB, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
             </Grid>

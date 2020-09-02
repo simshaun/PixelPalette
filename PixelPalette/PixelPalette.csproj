@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <Version>1.2.7</Version>
+    <Version>1.3</Version>
     <Authors>Shaun</Authors>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -15,7 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\checkmark.png" />
+    <None Remove="Resources\clipboard.png" />
     <None Remove="Resources\icon.ico" />
+    <None Remove="Resources\pipette.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +29,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\checkmark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\clipboard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\pipette.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
