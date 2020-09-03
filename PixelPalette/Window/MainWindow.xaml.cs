@@ -59,8 +59,9 @@ namespace PixelPalette.Window
             {
                 EventUtil.HandleClick(button, (sender, e) =>
                 {
-                    DisplayClipboardCheckmark((Button) sender);
-                    Clipboard.SetData(DataFormats.Text, valueGetter());
+                    // SetDataObject seems to work better than SetText or other methods, when programs like RealVNC are locking up the clipboard.
+                    Clipboard.SetDataObject(valueGetter());
+                    DisplayClipboardCheckmark((Button)sender);
                 });
             }
 
