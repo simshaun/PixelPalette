@@ -103,6 +103,19 @@ namespace PixelPalette.Tests.Color
                     Lab = new Lab(60.4301, 2.0799, -55.1094)
                 }
             };
+            yield return new object[]
+            {
+                new ColorData
+                {
+                    Name = "Purple HEX to HSL/HSV issue",
+                    Rgb = Rgb.FromScaledValues(116, 58, 111),
+                    Hsl = Hsl.FromScaledValues(305.172, 33.333, 34.118),
+                    Hsv = Hsv.FromScaledValues(305.172, 50, 45.49),
+                    Cmyk = Cmyk.FromScaledValues(0, 50, 4.310, 54.510),
+                    Xyz = new Xyz(11.5846, 7.8875, 15.9481),
+                    Lab = new Lab(33.7475, 33.4761, -19.6542)
+                }
+            };
         }
 
         public string GetDisplayName(MethodInfo methodInfo, object[] data)

@@ -114,7 +114,7 @@ namespace PixelPalette.Color
             if (!IsValidScaledComponent(r)) throw new ArgumentException(@"Value is out-of-range", nameof(r));
             if (!IsValidScaledComponent(g)) throw new ArgumentException(@"Value is out-of-range", nameof(g));
             if (!IsValidScaledComponent(b)) throw new ArgumentException(@"Value is out-of-range", nameof(b));
-            
+
             return new Rgb(r / 255.0, g / 255.0, b / 255.0);
         }
 
@@ -265,47 +265,45 @@ namespace PixelPalette.Color
 
         public Hsl ToHsl()
         {
-            // Formula from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
+            // Formula from https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
 
             var r = Red;
             var g = Green;
             var b = Blue;
-            var max = Math.Max(r, Math.Max(g, b));
-            var min = Math.Min(r, Math.Min(g, b));
-            var delta = max - min;
+            var xMax = Math.Max(r, Math.Max(g, b));
+            var xMin = Math.Min(r, Math.Min(g, b));
+            var chroma = xMax - xMin;
+
+            var h = 0.0;
+            var s = 0.0;
+            var l = (xMax + xMin) / 2;
+
+            if (chroma == 0) return new Hsl(h, s, l);
 
             // Hue
-            var h = 0.0;
-            if (max == r)
+            if (xMax == r)
             {
-                h = 60 * ((g - b) / delta % 6);
+                h = (g - b) / chroma + (g < b ? 6.0 : 0.0);
             }
-            else if (max == g)
+            else if (xMax == g)
             {
-                h = 60 * ((b - r) / delta + 2);
+                h = (b - r) / chroma + 2.0;
             }
-            else if (max == b)
+            else if (xMax == b)
             {
-                h = 60 * ((r - g) / delta + 4);
-            }
-
-            // Fix potential div-by-zero
-            if (double.IsNaN(h))
-            {
-                h = 0.0;
+                h = (r - g) / chroma + 4.0;
             }
 
-            // Lightness
-            var l = (max + min) / 2;
+            h /= 6.0;
 
             // Saturation
-            var s = 0.0;
-            if (delta != 0)
+            // s = l > 0.5 ? chroma / (2.0 - xMax - xMin) : chroma / (xMax + xMin);
+            if (l > 0.0 && l < 1.0)
             {
-                s = delta / (1 - Math.Abs(2 * l - 1));
+                s = chroma / (1 - Math.Abs(2 * xMax - chroma - 1));
             }
 
-            return new Hsl(h / 360.0, s, l);
+            return new Hsl(h, s, l);
         }
 
         public Hsv ToHsv()
@@ -315,42 +313,33 @@ namespace PixelPalette.Color
             var r = Red;
             var g = Green;
             var b = Blue;
-            var max = Math.Max(r, Math.Max(g, b));
-            var min = Math.Min(r, Math.Min(g, b));
-            var delta = max - min;
+            var xMax = Math.Max(r, Math.Max(g, b));
+            var xMin = Math.Min(r, Math.Min(g, b));
+            var chroma = xMax - xMin;
+
+            var h = 0.0;
+            var s = xMax == 0.0 ? 0.0 : chroma / xMax;
+            var v = xMax;
+
+            if (chroma == 0) return new Hsv(h, s, v);
 
             // Hue
-            var h = 0.0;
-            if (max == r)
+            if (xMax == r)
             {
-                h = 60 * ((g - b) / delta % 6);
+                h = (g - b) / chroma + (g < b ? 6.0 : 0.0);
             }
-            else if (max == g)
+            else if (xMax == g)
             {
-                h = 60 * ((b - r) / delta + 2);
+                h = (b - r) / chroma + 2.0;
             }
-            else if (max == b)
+            else if (xMax == b)
             {
-                h = 60 * ((r - g) / delta + 4);
-            }
-
-            // Fix potential div-by-zero
-            if (double.IsNaN(h))
-            {
-                h = 0.0;
+                h = (r - g) / chroma + 4.0;
             }
 
-            // Saturation
-            var s = 0.0;
-            if (max != 0)
-            {
-                s = delta / max;
-            }
+            h /= 6.0;
 
-            // Value
-            var v = max;
-
-            return new Hsv(h / 360.0, s, v);
+            return new Hsv(h, s, v);
         }
 
         /// <summary>

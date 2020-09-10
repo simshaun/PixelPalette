@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PixelPalette.Color;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System;
 
 namespace PixelPalette.Tests.Color
 {
