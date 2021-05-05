@@ -32,10 +32,10 @@ jobs:
       # Therefore, we need both MSBuild and NuGet.
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.0
+        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Add nuget to PATH
-        uses: nuget/setup-nuget@v1
+        uses: nuget/setup-nuget@v1.0.5
         with:
           nuget-version: '5.x'
 
