@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -614,9 +615,16 @@ namespace PixelPalette.Window
 
         private void StartEyedropper()
         {
-            var cap = new ScreenCapture();
-            var freezeFrame = cap.GetFullScreen();
+            var freezeFrame = ScreenCapture.GetFullScreen();
             FreezeFrame.Instance.BitmapSource = freezeFrame;
+
+            // Debug - Write freeze frame to file
+            // using (var fileStream = new FileStream("cap.png", FileMode.Create))
+            // {
+            //     BitmapEncoder encoder = new PngBitmapEncoder();
+            //     encoder.Frames.Add(BitmapFrame.Create(freezeFrame));
+            //     encoder.Save(fileStream);
+            // }
 
             _freezeFrameWin = new FreezeFrameWindow(_vm);
             _freezeFrameWin.ColorPicked += (sender, args) =>

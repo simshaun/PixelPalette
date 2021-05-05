@@ -15,7 +15,7 @@ namespace PixelPalette.Window
     /// <summary>
     /// Interaction logic for CursorTrailWindow.xaml
     /// </summary>
-    public partial class CursorTrailWindow : System.Windows.Window
+    public partial class CursorTrailWindow
     {
         private DispatcherTimer _timer;
 
@@ -121,10 +121,12 @@ namespace PixelPalette.Window
 
                 var sourceX = mouse.X - (numColumns - 1) / 2; // Make cursor the center
                 var sourceY = mouse.Y - (numColumns - 1) / 2; // Make cursor the center
+                var compensatedX = sourceX - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
+                var compensatedY = sourceY - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor
 
                 var previewImageSource = BitmapUtil.CropBitmapSource(
                     FreezeFrame.Instance.BitmapSource,
-                    sourceX, sourceY,
+                    compensatedX, compensatedY,
                     numColumns, numColumns,
                     FreezeFrame.Instance.PixelBuffer
                 );

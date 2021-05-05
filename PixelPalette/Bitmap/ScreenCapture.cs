@@ -1,20 +1,20 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace PixelPalette.Bitmap
 {
-    public class ScreenCapture
+    public static class ScreenCapture
     {
-        public BitmapSource GetFullScreen()
+        public static BitmapSource GetFullScreen()
         {
             return GetCapture(
-                0,
-                0,
+                SystemInformation.VirtualScreen.Left,
+                SystemInformation.VirtualScreen.Top,
                 SystemInformation.VirtualScreen.Width,
                 SystemInformation.VirtualScreen.Height
             );

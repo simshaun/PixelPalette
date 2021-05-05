@@ -20,8 +20,8 @@ namespace PixelPalette.Window
             InitializeComponent();
             _vm = vm;
             FrozenImage.Source = FreezeFrame.Instance.BitmapSource;
-            Top = 0;
-            Left = 0;
+            Top = SystemInformation.VirtualScreen.Top;
+            Left = SystemInformation.VirtualScreen.Left;
             Width = SystemInformation.VirtualScreen.Width;
             Height = SystemInformation.VirtualScreen.Height;
         }
@@ -29,7 +29,9 @@ namespace PixelPalette.Window
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var mouse = MouseUtil.GetMousePosition();
-            var rgb = BitmapUtil.PixelToRgb(FreezeFrame.Instance.BitmapSource, mouse.X, mouse.Y);
+            var compensatedX = mouse.X - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
+            var compensatedY = mouse.Y - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor 
+            var rgb = BitmapUtil.PixelToRgb(FreezeFrame.Instance.BitmapSource, compensatedX, compensatedY);
             _vm.RefreshFromRgb(rgb);
             ColorPicked?.Invoke(this, EventArgs.Empty);
             Close();
