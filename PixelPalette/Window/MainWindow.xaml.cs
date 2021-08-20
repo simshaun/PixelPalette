@@ -66,7 +66,7 @@ namespace PixelPalette.Window
                 }
             };
 
-            // Color model tabs
+            // Remember what tab is selected
             _vm.PropertyChanged += (_, ev) =>
             {
                 if (ev.PropertyName == "ActiveColorModelTabItem")
@@ -86,9 +86,7 @@ namespace PixelPalette.Window
                 });
             }
 
-            //
-            // RGB fields
-            //
+#region RGB fields
 
             EventUtil.HandleKey(Key.Up, RgbRed, () => { _vm.RefreshFromRgb(_vm.Rgb.WithRed(_vm.Rgb.Red + 0.01)); });
             EventUtil.HandleKey(Key.Up, RgbGreen, () => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(_vm.Rgb.Green + 0.01)); });
@@ -194,9 +192,9 @@ namespace PixelPalette.Window
             SetupClipboardButton(RgbScaledTextClipboardButton, () => _vm.RgbScaledText);
             SetupClipboardButton(RgbTextClipboardButton, () => _vm.RgbText);
 
-            //
-            // HEX fields
-            //
+#endregion
+
+#region HEX fields
 
             EventUtil.HandleKey(Key.Up, HexRed, () => { _vm.RefreshFromHex(_vm.Hex.WithRed(_vm.Hex.Red + 1)); });
             EventUtil.HandleKey(Key.Up, HexGreen, () => { _vm.RefreshFromHex(_vm.Hex.WithGreen(_vm.Hex.Green + 1)); });
@@ -262,9 +260,9 @@ namespace PixelPalette.Window
 
             SetupClipboardButton(HexTextClipboardButton, () => _vm.HexText);
 
-            //
-            // HSL fields
-            //
+#endregion
+
+#region HSL fields
 
             EventUtil.HandleKey(Key.Up, HslHue, () => { _vm.RefreshFromHsl(_vm.Hsl.WithHue(_vm.Hsl.Hue + 0.01)); });
             EventUtil.HandleKey(Key.Up, HslSaturation, () => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(_vm.Hsl.Saturation + 0.01)); });
@@ -367,9 +365,9 @@ namespace PixelPalette.Window
             SetupClipboardButton(HslScaledTextClipboardButton, () => _vm.HslScaledText);
             SetupClipboardButton(HslTextClipboardButton, () => _vm.HslText);
 
-            //
-            // HSV fields
-            //
+#endregion
+
+#region HSV fields
 
             EventUtil.HandleKey(Key.Up, HsvHue, () => { _vm.RefreshFromHsv(_vm.Hsv.WithHue(_vm.Hsv.Hue + 0.01)); });
             EventUtil.HandleKey(Key.Up, HsvSaturation, () => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(_vm.Hsv.Saturation + 0.01)); });
@@ -454,9 +452,9 @@ namespace PixelPalette.Window
             SetupClipboardButton(HsvScaledTextClipboardButton, () => _vm.HsvScaledText);
             SetupClipboardButton(HsvTextClipboardButton, () => _vm.HsvText);
 
-            //
-            // CMYK fields
-            //
+#endregion
+
+#region CMYK fields
 
             EventUtil.HandleKey(Key.Up, CmykCyan, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithCyan(_vm.Cmyk.Cyan + 0.01)); });
             EventUtil.HandleKey(Key.Up, CmykMagenta, () => { _vm.RefreshFromCmyk(_vm.Cmyk.WithMagenta(_vm.Cmyk.Magenta + 0.01)); });
@@ -568,9 +566,9 @@ namespace PixelPalette.Window
             SetupClipboardButton(CmykScaledTextClipboardButton, () => _vm.CmykScaledText);
             SetupClipboardButton(CmykTextClipboardButton, () => _vm.CmykText);
 
-            //
-            // LAB fields
-            //
+#endregion
+
+#region LAB fields
 
             EventUtil.HandleKey(Key.Up, LabL, () => { _vm.RefreshFromLab(_vm.Lab.WithL(_vm.Lab.L + 1)); });
             EventUtil.HandleKey(Key.Up, LabA, () => { _vm.RefreshFromLab(_vm.Lab.WithA(_vm.Lab.A + 1)); });
@@ -618,6 +616,8 @@ namespace PixelPalette.Window
             };
 
             SetupClipboardButton(LabTextClipboardButton, () => _vm.LabText);
+
+#endregion
 
             //
             // ----
