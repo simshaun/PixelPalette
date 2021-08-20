@@ -14,6 +14,13 @@ namespace PixelPalette.Window
 {
     public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
+        private readonly GlobalState _globalState;
+
+        public MainWindowViewModel(GlobalState globalState)
+        {
+            _globalState = globalState;
+        }
+
         private TabItem _activeColorModelTabItem;
 
         public TabItem ActiveColorModelTabItem
@@ -554,7 +561,7 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -579,7 +586,7 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -604,7 +611,7 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -629,7 +636,7 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -654,7 +661,7 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -679,11 +686,11 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
-            GlobalState.Rgb = rgb;
+            _globalState.Rgb = rgb;
 
             RefreshValues();
         }
-        
+
         private bool _isUserUpdate = true;
 
         private void RefreshValues()
@@ -741,7 +748,7 @@ namespace PixelPalette.Window
             LabB = _lab.RoundedB;
 
             static LinearGradientBrush NewBrush() =>
-                new LinearGradientBrush
+                new()
                 {
                     StartPoint = new Point(0, .5),
                     EndPoint = new Point(1, .5)

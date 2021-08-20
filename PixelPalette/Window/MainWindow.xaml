@@ -10,17 +10,18 @@
   mc:Ignorable="d"
   Title="PixelPalette"
   d:DataContext="{d:DesignInstance window:MainWindowViewModel }"
-  KeyDown="Window_KeyDown"
+  KeyDown="MainWindow_KeyDown"
   MouseDown="MainWindow_OnMouseDown"
   Loaded="MainWindow_OnLoaded"
   Closing="MainWindow_OnClosing"
   LocationChanged="MainWindow_OnLocationChanged"
+  SourceInitialized="MainWindow_SourceInitialized"
+  StateChanged="MainWindow_OnStateChanged"
   Width="320"
   Height="Auto"
   SizeToContent="Height"
   ResizeMode="CanMinimize"
   Background="#FFEFEFF2"
-  SourceInitialized="Window_SourceInitialized"
   Icon="/Resources/icon.ico">
   <Window.Resources>
     <Style

@@ -22,13 +22,16 @@ namespace PixelPalette.Window
         private FreezeFrameWindow _freezeFrameWin;
         private CursorTrailWindow _cursorTrailWin;
         private readonly HistoryWindow _historyWin;
+        private readonly GlobalState _globalState;
         private readonly MainWindowViewModel _vm;
 
         public MainWindow()
         {
             InitializeComponent();
             Style = (Style) FindResource(typeof(System.Windows.Window));
-            _vm = new MainWindowViewModel();
+
+            _globalState = new GlobalState();
+            _vm = new MainWindowViewModel(_globalState);
             _vm.LoadFromPersistedData(PersistedState.Data, ColorModelTabs);
             DataContext = _vm;
 
@@ -39,24 +42,27 @@ namespace PixelPalette.Window
             }
 
             // Eyedropper
-            EyedropperButton.Click += (_, ev) => { StartEyedropper(); };
+            EyedropperButton.Click += (_, _) => { StartEyedropper(); };
 
             // Lighter / Darker Buttons
-            LighterButton.Click += (_, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
-            DarkerButton.Click += (_, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
+            LighterButton.Click += (_, _) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
+            DarkerButton.Click += (_, _) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
 
             // History Button
-            var historyVm = new HistoryWindowViewModel();
-            _historyWin = new HistoryWindow(historyVm, Left + Width, Top);
+            _historyWin = new HistoryWindow(_globalState, Left + Width, Top);
             _historyWin.HistoryItemSelected += (_, args) => { _vm.RefreshFromRgb(args.HistoryItem.Color.ToRgb()); };
-            HistoryButton.Click += (_, ev) =>
+            HistoryButton.Click += (_, _) =>
             {
                 if (_historyWin.IsVisible)
+                {
                     _historyWin.Hide();
+                    _globalState.HistoryVisible = false;
+                }
                 else
                 {
                     RepositionHistoryWin();
                     _historyWin.Show();
+                    _globalState.HistoryVisible = true;
                 }
             };
 
@@ -72,7 +78,7 @@ namespace PixelPalette.Window
             // Helper function to reduce clipboard button boilerplate:
             void SetupClipboardButton(IInputElement button, Func<string> valueGetter)
             {
-                EventUtil.HandleClick(button, (sender, e) =>
+                EventUtil.HandleClick(button, (sender, _) =>
                 {
                     // SetDataObject seems to work better than SetText or other methods, when programs like RealVNC are locking up the clipboard.
                     Clipboard.SetDataObject(valueGetter());
@@ -134,7 +140,7 @@ namespace PixelPalette.Window
             EventUtil.HandleSliderChange(RgbGreenSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithGreen(value)); });
             EventUtil.HandleSliderChange(RgbBlueSlider, value => { _vm.RefreshFromRgb(_vm.Rgb.WithBlue(value)); });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 int intVal;
                 bool isInt;
@@ -222,13 +228,13 @@ namespace PixelPalette.Window
 
             // The box actively ignores 3-char hex strings while typing so that 6-chars may be entered without interruption.
             // However, 3-char hex strings can still be entered by pressing Enter or dropping focus:
-            EventUtil.HandleInputEnterOrFocusLost(HexText, value =>
+            EventUtil.HandleInputEnterOrFocusLost(HexText, _ =>
             {
                 var nullableHex = Hex.FromString(_vm.HexText);
                 if (nullableHex.HasValue) _vm.RefreshFromHex(nullableHex.Value);
             });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 switch (ev.PropertyName)
                 {
@@ -309,7 +315,7 @@ namespace PixelPalette.Window
             EventUtil.HandleSliderChange(HslSaturationSlider, value => { _vm.RefreshFromHsl(_vm.Hsl.WithSaturation(value)); });
             EventUtil.HandleSliderChange(HslLuminanceSlider, value => { _vm.RefreshFromHsl(_vm.Hsl.WithLuminance(value)); });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 bool isDouble;
                 double doubleVal;
@@ -396,7 +402,7 @@ namespace PixelPalette.Window
             EventUtil.HandleSliderChange(HsvSaturationSlider, value => { _vm.RefreshFromHsv(_vm.Hsv.WithSaturation(value)); });
             EventUtil.HandleSliderChange(HsvValueSlider, value => { _vm.RefreshFromHsv(_vm.Hsv.WithValue(value)); });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 bool isDouble;
                 double doubleVal;
@@ -500,7 +506,7 @@ namespace PixelPalette.Window
             EventUtil.HandleSliderChange(CmykYellowSlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithYellow(value)); });
             EventUtil.HandleSliderChange(CmykKeySlider, value => { _vm.RefreshFromCmyk(_vm.Cmyk.WithKey(value)); });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 bool isDouble;
                 double doubleVal;
@@ -588,7 +594,7 @@ namespace PixelPalette.Window
             EventUtil.HandleSliderChange(LabASlider, value => { _vm.RefreshFromLab(_vm.Lab.WithA(value)); });
             EventUtil.HandleSliderChange(LabBSlider, value => { _vm.RefreshFromLab(_vm.Lab.WithB(value)); });
 
-            _vm.PropertyChangedByUser += (o, ev) =>
+            _vm.PropertyChangedByUser += (_, ev) =>
             {
                 switch (ev.PropertyName)
                 {
@@ -641,7 +647,7 @@ namespace PixelPalette.Window
             // }
 
             _freezeFrameWin = new FreezeFrameWindow(_vm);
-            _freezeFrameWin.ColorPicked += (sender, args) =>
+            _freezeFrameWin.ColorPicked += (_, _) =>
             {
                 var el = WpfHelper.FindFirstVisualChild<TextBox>(_vm.ActiveColorModelTabItem);
                 el?.Focus();
@@ -649,7 +655,7 @@ namespace PixelPalette.Window
             };
             _freezeFrameWin.Show();
             _freezeFrameWin.Focus();
-            _freezeFrameWin.Closed += (o2, e2) =>
+            _freezeFrameWin.Closed += (_, _) =>
             {
                 try
                 {
@@ -668,7 +674,7 @@ namespace PixelPalette.Window
             _cursorTrailWin = new CursorTrailWindow();
             _cursorTrailWin.Show();
             _cursorTrailWin.Focus();
-            _cursorTrailWin.Closed += (o2, e2) =>
+            _cursorTrailWin.Closed += (_, _) =>
             {
                 try
                 {
@@ -704,7 +710,7 @@ namespace PixelPalette.Window
         // -------------
         //
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (e.Key)
@@ -732,7 +738,7 @@ namespace PixelPalette.Window
 
 #region Disable Maximize window
 
-        private void Window_SourceInitialized(object sender, EventArgs e)
+        private void MainWindow_SourceInitialized(object sender, EventArgs e)
         {
             var hWnd = new WindowInteropHelper((System.Windows.Window) sender).Handle;
             WindowHelper.DisableMaximize(hWnd);
@@ -745,6 +751,12 @@ namespace PixelPalette.Window
             if (!EphemeralState.Data.DebugMode) return;
             var debugWin = new DebugWindow(Left + Width, Top);
             debugWin.Show();
+        }
+
+        private void MainWindow_OnStateChanged(object sender, EventArgs e)
+        {
+            if (WindowState != WindowState.Normal) return;
+            if (_globalState.HistoryVisible) _historyWin.Focus();
         }
 
         private void MainWindow_OnLocationChanged(object sender, EventArgs e)

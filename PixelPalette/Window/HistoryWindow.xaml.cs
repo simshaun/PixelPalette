@@ -1,31 +1,37 @@
 using System;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using System.Windows.Threading;
+using PixelPalette.Annotations;
 
 namespace PixelPalette.Window
 {
     public partial class HistoryWindow
     {
-        public HistoryWindow(HistoryWindowViewModel vm, double initLeft, double initTop)
+        public HistoryWindow(GlobalState globalState, double initLeft, double initTop)
         {
             InitializeComponent();
             Left = initLeft;
             Top = initTop;
+
+            var vm = new HistoryWindowViewModel();
             DataContext = vm;
 
-            var dt = new DispatcherTimer(
-                new TimeSpan(0, 0, 1),
-                DispatcherPriority.Normal, (sender, args) =>
+            void AddToHistory([CanBeNull] object _)
+            {
+                if (vm.States.Count != 0 && vm.States.Last().Color.ToRgb().Equals(globalState.Rgb)) return;
+                vm.States.Add(new HistoryItem(globalState.Rgb));
+            }
+
+            AddToHistory(null);
+            var debouncer = new Debouncer();
+            globalState.PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName == "Rgb")
                 {
-                    if (vm.States.Count != 0 && vm.States.Last().Color.ToRgb().Equals(GlobalState.Rgb)) return;
-                    vm.States.Add(new HistoryItem(GlobalState.Rgb));
-                },
-                Application.Current.Dispatcher
-            );
-            dt.Start();
+                    debouncer.Debounce(TimeSpan.FromMilliseconds(1000), AddToHistory);
+                }
+            };
         }
 
         private void HistoryWindow_OnSourceInitialized(object sender, EventArgs e)
