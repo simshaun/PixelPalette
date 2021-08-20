@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+
 namespace PixelPalette.Color
 {
     public struct Hex : IColor
@@ -16,19 +19,19 @@ namespace PixelPalette.Color
         public int Red
         {
             get => _red;
-            set => _red = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            set => _red = value > 255 ? 255 : value < 0 ? 0 : value;
         }
 
         public int Green
         {
             get => _green;
-            set => _green = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            set => _green = value > 255 ? 255 : value < 0 ? 0 : value;
         }
 
         public int Blue
         {
             get => _blue;
-            set => _blue = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            set => _blue = value > 255 ? 255 : value < 0 ? 0 : value;
         }
 
         public string RedPart => $"{Red:x2}".ToUpper();
@@ -37,9 +40,9 @@ namespace PixelPalette.Color
 
         public Hex(int r, int g, int b)
         {
-            _red = (r > 255) ? 255 : ((r < 0) ? 0 : r);
-            _green = (g > 255) ? 255 : ((g < 0) ? 0 : g);
-            _blue = (b > 255) ? 255 : ((b < 0) ? 0 : b);
+            _red = r > 255 ? 255 : r < 0 ? 0 : r;
+            _green = g > 255 ? 255 : g < 0 ? 0 : g;
+            _blue = b > 255 ? 255 : b < 0 ? 0 : b;
         }
 
         public Hex WithRed(int r)

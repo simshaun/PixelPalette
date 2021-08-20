@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace PixelPalette
 {
-    public class WpfHelper
+    public static class WpfHelper
     {
         public static T FindFirstVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {

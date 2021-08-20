@@ -6,9 +6,12 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using PixelPalette.Annotations;
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+
 namespace PixelPalette
 {
-    class EventUtil
+    internal static class EventUtil
     {
         public static void HandleClick(IEnumerable<IInputElement> controls, Action action)
         {
@@ -25,7 +28,7 @@ namespace PixelPalette
 
         public static void HandleClick(IInputElement control, Action action)
         {
-            HandleClick(new[] {control}, action);
+            HandleClick(new[] { control }, action);
         }
 
         public static void HandleClick(IEnumerable<IInputElement> controls, RoutedEventHandler handler)
@@ -38,7 +41,7 @@ namespace PixelPalette
 
         public static void HandleClick(IInputElement control, RoutedEventHandler handler)
         {
-            HandleClick(new[] {control}, handler);
+            HandleClick(new[] { control }, handler);
         }
 
         public static void HandleKey(Key? key, IEnumerable<IInputElement> controls, Action action)
@@ -55,7 +58,7 @@ namespace PixelPalette
 
         public static void HandleKey(Key? key, IInputElement control, Action action)
         {
-            HandleKey(key, new[] {control}, action);
+            HandleKey(key, new[] { control }, action);
         }
 
         public static void HandleMouseWheel(IEnumerable<IInputElement> controls, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
@@ -78,7 +81,7 @@ namespace PixelPalette
 
         public static void HandleMouseWheel(IInputElement control, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
         {
-            HandleMouseWheel(new[] {control}, upAction, downAction);
+            HandleMouseWheel(new[] { control }, upAction, downAction);
         }
 
         public static void HandleInputEnterOrFocusLost(IEnumerable<TextBox> controls, Action<string> action)
@@ -103,7 +106,7 @@ namespace PixelPalette
 
         public static void HandleInputEnterOrFocusLost(TextBox control, Action<string> action)
         {
-            HandleInputEnterOrFocusLost(new[] {control}, action);
+            HandleInputEnterOrFocusLost(new[] { control }, action);
         }
 
         public static void HandleSliderChange(Slider control, Action<double> action)

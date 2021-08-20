@@ -39,17 +39,17 @@ namespace PixelPalette.Window
             }
 
             // Eyedropper
-            EyedropperButton.Click += (o, ev) => { StartEyedropper(); };
+            EyedropperButton.Click += (_, ev) => { StartEyedropper(); };
 
             // Lighter / Darker Buttons
-            LighterButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
-            DarkerButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
+            LighterButton.Click += (_, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
+            DarkerButton.Click += (_, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
 
             // History Button
             var historyVm = new HistoryWindowViewModel();
             _historyWin = new HistoryWindow(historyVm, Left + Width, Top);
             _historyWin.HistoryItemSelected += (_, args) => { _vm.RefreshFromRgb(args.HistoryItem.Color.ToRgb()); };
-            HistoryButton.Click += (o, ev) =>
+            HistoryButton.Click += (_, ev) =>
             {
                 if (_historyWin.IsVisible)
                     _historyWin.Hide();
@@ -61,7 +61,7 @@ namespace PixelPalette.Window
             };
 
             // Color model tabs
-            _vm.PropertyChanged += (o, ev) =>
+            _vm.PropertyChanged += (_, ev) =>
             {
                 if (ev.PropertyName == "ActiveColorModelTabItem")
                 {
@@ -70,7 +70,7 @@ namespace PixelPalette.Window
             };
 
             // Helper function to reduce clipboard button boilerplate:
-            void SetupClipboardButton(Button button, Func<string> valueGetter)
+            void SetupClipboardButton(IInputElement button, Func<string> valueGetter)
             {
                 EventUtil.HandleClick(button, (sender, e) =>
                 {

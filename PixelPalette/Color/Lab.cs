@@ -2,6 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+
 namespace PixelPalette.Color
 {
     public readonly struct Lab : IColor
@@ -11,12 +14,12 @@ namespace PixelPalette.Color
         private const string StringPattern =
             @"^lab\(\s*(?<L>\d+(?:\.\d+)?)\s*,\s*(?<A>-?\d+(?:\.\d+)?)%?\s*,\s*(?<B>-?\d+(?:\.\d+)?)%?\s*\)$";
 
-        public static readonly double MinL = 0;
-        public static readonly double MaxL = 100;
-        public static readonly double MinA = -128;
-        public static readonly double MaxA = 127;
-        public static readonly double MinB = -128;
-        public static readonly double MaxB = 127;
+        public const double MinL = 0;
+        public const double MaxL = 100;
+        public const double MinA = -128;
+        public const double MaxA = 127;
+        public const double MinB = -128;
+        public const double MaxB = 127;
 
         public double L { get; }
 

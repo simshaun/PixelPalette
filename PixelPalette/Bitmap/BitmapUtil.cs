@@ -5,9 +5,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PixelPalette.Color;
 
+// ReSharper disable InlineTemporaryVariable
+
 namespace PixelPalette.Bitmap
 {
-    public class BitmapUtil
+    public static class BitmapUtil
     {
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
@@ -46,7 +48,7 @@ namespace PixelPalette.Bitmap
             {
                 for (var y = 0; y < outputHeight; y++)
                 {
-                    var offset = (outputStride * y) + (x * bytesPerPixel);
+                    var offset = outputStride * y + x * bytesPerPixel;
                     outputBuffer[offset] = 0; // B
                     outputBuffer[offset + 1] = 0; // G
                     outputBuffer[offset + 2] = 0; // R

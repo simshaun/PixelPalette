@@ -4,7 +4,7 @@ namespace PixelPalette
 {
     public static class AppDebug
     {
-        public static List<string> Lines { get; } = new List<string>();
+        private static List<string> Lines { get; } = new List<string>();
 
         public static string LinesText => string.Join("\n", Lines);
 

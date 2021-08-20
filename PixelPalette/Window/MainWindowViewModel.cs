@@ -12,10 +12,9 @@ using PixelPalette.Color;
 
 namespace PixelPalette.Window
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         private TabItem _activeColorModelTabItem;
-        public bool IsUserUpdate = true;
 
         public TabItem ActiveColorModelTabItem
         {
@@ -152,43 +151,43 @@ namespace PixelPalette.Window
         public Rgb Rgb
         {
             get => _rgb;
-            set => SetField(ref _rgb, value);
+            private set => SetField(ref _rgb, value);
         }
 
         public Hsl Hsl
         {
             get => _hsl;
-            set => SetField(ref _hsl, value);
+            private set => SetField(ref _hsl, value);
         }
 
         public Hsv Hsv
         {
             get => _hsv;
-            set => SetField(ref _hsv, value);
+            private set => SetField(ref _hsv, value);
         }
 
         public Hex Hex
         {
             get => _hex;
-            set => SetField(ref _hex, value);
+            private set => SetField(ref _hex, value);
         }
 
         public Cmyk Cmyk
         {
             get => _cmyk;
-            set => SetField(ref _cmyk, value);
+            private set => SetField(ref _cmyk, value);
         }
 
         public Lab Lab
         {
             get => _lab;
-            set => SetField(ref _lab, value);
+            private set => SetField(ref _lab, value);
         }
 
         public Brush ColorPreviewBrush
         {
             get => _colorPreviewBrush;
-            set => SetField(ref _colorPreviewBrush, value);
+            private set => SetField(ref _colorPreviewBrush, value);
         }
 
         public string HexText
@@ -446,91 +445,91 @@ namespace PixelPalette.Window
         public LinearGradientBrush RedGradientFill
         {
             get => _redGradientFill;
-            set => SetField(ref _redGradientFill, value);
+            private set => SetField(ref _redGradientFill, value);
         }
 
         public LinearGradientBrush GreenGradientFill
         {
             get => _greenGradientFill;
-            set => SetField(ref _greenGradientFill, value);
+            private set => SetField(ref _greenGradientFill, value);
         }
 
         public LinearGradientBrush BlueGradientFill
         {
             get => _blueGradientFill;
-            set => SetField(ref _blueGradientFill, value);
+            private set => SetField(ref _blueGradientFill, value);
         }
 
         public LinearGradientBrush HueGradientFill
         {
             get => _hueGradientFill;
-            set => SetField(ref _hueGradientFill, value);
+            private set => SetField(ref _hueGradientFill, value);
         }
 
         public LinearGradientBrush HslSaturationGradientFill
         {
             get => _hslSaturationGradientFill;
-            set => SetField(ref _hslSaturationGradientFill, value);
+            private set => SetField(ref _hslSaturationGradientFill, value);
         }
 
         public LinearGradientBrush HslLuminanceGradientFill
         {
             get => _hslLuminanceGradientFill;
-            set => SetField(ref _hslLuminanceGradientFill, value);
+            private set => SetField(ref _hslLuminanceGradientFill, value);
         }
 
         public LinearGradientBrush HsvSaturationGradientFill
         {
             get => _hsvSaturationGradientFill;
-            set => SetField(ref _hsvSaturationGradientFill, value);
+            private set => SetField(ref _hsvSaturationGradientFill, value);
         }
 
         public LinearGradientBrush HsvValueGradientFill
         {
             get => _hsvValueGradientFill;
-            set => SetField(ref _hsvValueGradientFill, value);
+            private set => SetField(ref _hsvValueGradientFill, value);
         }
 
         public LinearGradientBrush CmykCyanGradientFill
         {
             get => _cmykCyanGradientFill;
-            set => SetField(ref _cmykCyanGradientFill, value);
+            private set => SetField(ref _cmykCyanGradientFill, value);
         }
 
         public LinearGradientBrush CmykMagentaGradientFill
         {
             get => _cmykMagentaGradientFill;
-            set => SetField(ref _cmykMagentaGradientFill, value);
+            private set => SetField(ref _cmykMagentaGradientFill, value);
         }
 
         public LinearGradientBrush CmykYellowGradientFill
         {
             get => _cmykYellowGradientFill;
-            set => SetField(ref _cmykYellowGradientFill, value);
+            private set => SetField(ref _cmykYellowGradientFill, value);
         }
 
         public LinearGradientBrush CmykKeyGradientFill
         {
             get => _cmykKeyGradientFill;
-            set => SetField(ref _cmykKeyGradientFill, value);
+            private set => SetField(ref _cmykKeyGradientFill, value);
         }
 
         public LinearGradientBrush LabLGradientFill
         {
             get => _labLGradientFill;
-            set => SetField(ref _labLGradientFill, value);
+            private set => SetField(ref _labLGradientFill, value);
         }
 
         public LinearGradientBrush LabAGradientFill
         {
             get => _labAGradientFill;
-            set => SetField(ref _labAGradientFill, value);
+            private set => SetField(ref _labAGradientFill, value);
         }
 
         public LinearGradientBrush LabBGradientFill
         {
             get => _labBGradientFill;
-            set => SetField(ref _labBGradientFill, value);
+            private set => SetField(ref _labBGradientFill, value);
         }
 
 #endregion
@@ -684,10 +683,12 @@ namespace PixelPalette.Window
 
             RefreshValues();
         }
+        
+        private bool _isUserUpdate = true;
 
         private void RefreshValues()
         {
-            IsUserUpdate = false;
+            _isUserUpdate = false;
 
             ColorPreviewBrush = new SolidColorBrush(_rgb.ToMediaColor());
 
@@ -827,28 +828,27 @@ namespace PixelPalette.Window
             LabAGradientFill = labAGradientFill;
             LabBGradientFill = labBGradientFill;
 
-            IsUserUpdate = true;
+            _isUserUpdate = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-            if (IsUserUpdate)
+            if (_isUserUpdate)
             {
                 PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
 
         public event EventHandler<PropertyChangedEventArgs> PropertyChangedByUser;

@@ -13,7 +13,7 @@ namespace PixelPalette
         {
             public readonly int X;
             public readonly int Y;
-        };
+        }
 
         public static Position GetMousePosition()
         {

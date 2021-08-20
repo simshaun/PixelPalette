@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using MathNet.Numerics.LinearAlgebra.Double;
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace PixelPalette.Color
 {
@@ -8,12 +10,12 @@ namespace PixelPalette.Color
     {
         public static readonly Xyz Empty = new Xyz();
 
-        public static readonly double MinX = 0;
-        public static readonly double MaxX = 95.0489;
-        public static readonly double MinY = 0;
-        public static readonly double MaxY = 100;
-        public static readonly double MinZ = 0;
-        public static readonly double MaxZ = 108.884;
+        public const double MinX = 0;
+        public const double MaxX = 95.0489;
+        public const double MinY = 0;
+        public const double MaxY = 100;
+        public const double MinZ = 0;
+        public const double MaxZ = 108.884;
 
         public double X { get; }
 
@@ -150,9 +152,9 @@ namespace PixelPalette.Color
             var yr = Y / 100 / (refWhiteY / 100);
             var zr = Z / 100 / (refWhiteZ / 100);
 
-            var fx = (xr > kE) ? Math.Pow(xr, 1.0 / 3.0) : (kK * xr + 16.0) / 116.0;
-            var fy = (yr > kE) ? Math.Pow(yr, 1.0 / 3.0) : (kK * yr + 16.0) / 116.0;
-            var fz = (zr > kE) ? Math.Pow(zr, 1.0 / 3.0) : (kK * zr + 16.0) / 116.0;
+            var fx = xr > kE ? Math.Pow(xr, 1.0 / 3.0) : (kK * xr + 16.0) / 116.0;
+            var fy = yr > kE ? Math.Pow(yr, 1.0 / 3.0) : (kK * yr + 16.0) / 116.0;
+            var fz = zr > kE ? Math.Pow(zr, 1.0 / 3.0) : (kK * zr + 16.0) / 116.0;
 
             var L = 116.0 * fy - 16.0;
             var A = 500.0 * (fx - fy);

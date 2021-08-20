@@ -2,6 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+
 namespace PixelPalette.Color
 {
     public readonly struct Hsl : IColor

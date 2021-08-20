@@ -8,11 +8,11 @@ namespace PixelPalette
 {
     public class PersistedData
     {
-        [XmlElement("ActiveColorModelTab")] public string ActiveColorModelTab { get; set; } = null;
+        [XmlElement("ActiveColorModelTab")] public string ActiveColorModelTab { get; set; }
 
-        [XmlElement("ActiveColorModel")] public string ActiveColorModel { get; set; } = null;
+        [XmlElement("ActiveColorModel")] public string ActiveColorModel { get; set; }
 
-        [XmlElement("ActiveColorValue")] public string ActiveColorValue { get; set; } = null;
+        [XmlElement("ActiveColorValue")] public string ActiveColorValue { get; set; }
     }
 
     public static class PersistedState
@@ -27,20 +27,21 @@ namespace PixelPalette
             Read();
         }
 
-        public static void Read()
+        private static void Read()
         {
             var settingFilePath = SettingFilePath();
 
             AppDebug.WriteLine($"Setting file: {settingFilePath}");
             if (!File.Exists(settingFilePath))
             {
-                AppDebug.WriteLine($"File does not exist");
+                AppDebug.WriteLine("File does not exist");
                 return;
             }
-            AppDebug.WriteLine($"File exists");
-            AppDebug.WriteLine($"--------");
+
+            AppDebug.WriteLine("File exists");
+            AppDebug.WriteLine("--------");
             AppDebug.WriteLine(File.ReadAllText(settingFilePath));
-            AppDebug.WriteLine($"--------");
+            AppDebug.WriteLine("--------");
 
             var sr = new StringReader(File.ReadAllText(settingFilePath));
             Data = (PersistedData) Serializer.Deserialize(sr);

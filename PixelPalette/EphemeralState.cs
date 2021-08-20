@@ -2,12 +2,12 @@
 {
     public class EphemeralData
     {
-        public bool DebugMode { get; set; } = false;
+        public bool DebugMode { get; set; }
     }
 
     public static class EphemeralState
     {
-        public static EphemeralData Data;
+        public static readonly EphemeralData Data;
 
         static EphemeralState()
         {

@@ -9,23 +9,19 @@ namespace PixelPalette.Window
 {
     public partial class HistoryWindow
     {
-        private readonly HistoryWindowViewModel _vm;
-
         public HistoryWindow(HistoryWindowViewModel vm, double initLeft, double initTop)
         {
             InitializeComponent();
             Left = initLeft;
             Top = initTop;
-
-            _vm = vm;
-            DataContext = _vm;
+            DataContext = vm;
 
             var dt = new DispatcherTimer(
                 new TimeSpan(0, 0, 1),
                 DispatcherPriority.Normal, (sender, args) =>
                 {
-                    if (_vm.States.Count != 0 && _vm.States.First().Color.ToRgb().Equals(GlobalState.Rgb)) return;
-                    _vm.States.Insert(0, new HistoryItem(GlobalState.Rgb));
+                    if (vm.States.Count != 0 && vm.States.Last().Color.ToRgb().Equals(GlobalState.Rgb)) return;
+                    vm.States.Add(new HistoryItem(GlobalState.Rgb));
                 },
                 Application.Current.Dispatcher
             );
@@ -36,9 +32,10 @@ namespace PixelPalette.Window
         {
             var hWnd = new WindowInteropHelper((System.Windows.Window) sender).Handle;
             WindowHelper.DisableMaximize(hWnd);
+            WindowHelper.DisableAltTab(hWnd);
         }
 
-        private bool _ignoreSelectionFlag = false;
+        private bool _ignoreSelectionFlag;
         public event EventHandler<HistoryItemSelectedEventArgs> HistoryItemSelected;
 
         private void History_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -9,7 +9,7 @@ namespace PixelPalette.Window
     /// <summary>
     /// Interaction logic for FreezeFrameWindow.xaml
     /// </summary>
-    public partial class FreezeFrameWindow : System.Windows.Window
+    public partial class FreezeFrameWindow
     {
         public event EventHandler ColorPicked;
 

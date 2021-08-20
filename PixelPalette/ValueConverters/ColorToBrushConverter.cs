@@ -12,7 +12,7 @@ namespace PixelPalette.ValueConverters
         {
             value ??= "transparent";
 
-            return (SolidColorBrush) (new BrushConverter().ConvertFrom(value));
+            return (SolidColorBrush) new BrushConverter().ConvertFrom(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -11,11 +11,7 @@ namespace PixelPalette.Bitmap
     {
         private static FreezeFrame _instance;
 
-        public static FreezeFrame Instance
-        {
-            get => _instance ??= new FreezeFrame();
-            set => throw new System.NotImplementedException();
-        }
+        public static FreezeFrame Instance => _instance ??= new FreezeFrame();
 
         private FreezeFrame()
         {

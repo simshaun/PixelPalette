@@ -3,7 +3,7 @@
     /// <summary>
     /// Interaction logic for DebugWindow.xaml
     /// </summary>
-    public partial class DebugWindow : System.Windows.Window
+    public partial class DebugWindow
     {
         public DebugWindow(double initLeft, double initTop)
         {

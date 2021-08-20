@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 using MathNet.Numerics.LinearAlgebra.Double;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
+// ReSharper disable InlineTemporaryVariable
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace PixelPalette.Color
 {
@@ -396,7 +399,7 @@ namespace PixelPalette.Color
                     companded = -companded;
                 }
 
-                var linear = (companded < 0.04045) ? (companded / 12.92) : Math.Pow((companded + 0.055) / 1.055, 2.4);
+                var linear = companded < 0.04045 ? companded / 12.92 : Math.Pow((companded + 0.055) / 1.055, 2.4);
                 return linear * sign;
             }
 

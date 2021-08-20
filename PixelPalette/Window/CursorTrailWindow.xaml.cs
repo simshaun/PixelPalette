@@ -33,9 +33,9 @@ namespace PixelPalette.Window
             const int numColumns = 9;
             const int columnWidth = 13;
             const double segmentWidth = (double) columnWidth / 2;
-            const int gridWidth = (columnWidth * numColumns) + (numColumns - 1);
+            const int gridWidth = columnWidth * numColumns + (numColumns - 1);
 
-            const int winWidth = (winBorderWidth * 2) + gridWidth;
+            const int winWidth = winBorderWidth * 2 + gridWidth;
             Width = winWidth;
             PreviewContainer.Width = gridWidth;
             PreviewContainer.Height = gridWidth;
@@ -109,7 +109,7 @@ namespace PixelPalette.Window
 
                 if (winY + winHeight > screenBounds.Bottom)
                 {
-                    winY -= (winY + winHeight) - screenBounds.Bottom;
+                    winY -= winY + winHeight - screenBounds.Bottom;
                 }
 
                 Left = winX;

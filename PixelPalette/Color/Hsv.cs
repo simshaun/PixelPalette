@@ -2,6 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+
 namespace PixelPalette.Color
 {
     /// <summary>
@@ -302,7 +305,7 @@ namespace PixelPalette.Color
             var sat1 = Saturation;
             var val1 = Value;
 
-            var val = val1 * (1 - (sat1 / 2));
+            var val = val1 * (1 - sat1 / 2);
             var sat = 0.0;
             if (val > 0 && val < 1)
             {

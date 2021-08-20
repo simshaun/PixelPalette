@@ -5,7 +5,7 @@ using PixelPalette.Annotations;
 
 namespace PixelPalette.Window
 {
-    public class CursorTrailWindowViewModel : INotifyPropertyChanged
+    public sealed class CursorTrailWindowViewModel : INotifyPropertyChanged
     {
         private string _hex;
         private string _hexTextColor;
@@ -32,17 +32,16 @@ namespace PixelPalette.Window
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
     }
 }
