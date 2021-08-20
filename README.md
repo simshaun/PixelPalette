@@ -6,7 +6,7 @@ PixelPalette is a Windows application that makes it easy to grab a color from yo
 
 ## Dependencies
 
-- Minimum of .NET Core 3.1 (https://dotnet.microsoft.com/download/dotnet-core)
+- Minimum of .NET 5 (https://dotnet.microsoft.com/download/dotnet)
 
 ## Portable variant
 
