@@ -12,6 +12,7 @@
     <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <Company>FoxAndFly</Company>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
