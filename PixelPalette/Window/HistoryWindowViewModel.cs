@@ -20,6 +20,6 @@ namespace PixelPalette.Window
 
     public sealed class HistoryWindowViewModel
     {
-        public ObservableCollection<HistoryItem> States { get; } = new ObservableCollection<HistoryItem>();
+        public ObservableCollection<HistoryItem> States { get; } = new();
     }
 }
