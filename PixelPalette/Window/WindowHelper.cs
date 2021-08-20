@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Interop;
 
 namespace PixelPalette.Window
 {

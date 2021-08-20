@@ -48,7 +48,7 @@ namespace PixelPalette
         {
             foreach (var control in controls)
             {
-                control.PreviewKeyDown += (o, ev) =>
+                control.PreviewKeyDown += (_, ev) =>
                 {
                     if (key != null && ev.Key != key) return;
                     action();
@@ -65,7 +65,7 @@ namespace PixelPalette
         {
             foreach (var control in controls)
             {
-                control.MouseWheel += (o, ev) =>
+                control.MouseWheel += (_, ev) =>
                 {
                     if (ev.Delta > 0)
                     {
@@ -94,13 +94,13 @@ namespace PixelPalette
                     action(text);
                 }
 
-                control.KeyDown += (o, ev) =>
+                control.KeyDown += (_, ev) =>
                 {
                     if (ev.Key != Key.Enter) return;
                     HandleIt();
                 };
 
-                control.LostFocus += (o, ev) => { HandleIt(); };
+                control.LostFocus += (_, _) => { HandleIt(); };
             }
         }
 
@@ -111,7 +111,7 @@ namespace PixelPalette
 
         public static void HandleSliderChange(Slider control, Action<double> action)
         {
-            control.ValueChanged += (o, ev) =>
+            control.ValueChanged += (_, ev) =>
             {
                 if (!IsActiveControl(control)) return;
                 action(ev.NewValue);

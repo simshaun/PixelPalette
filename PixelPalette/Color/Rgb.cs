@@ -11,7 +11,7 @@ namespace PixelPalette.Color
 {
     public readonly struct Rgb : IColor
     {
-        public static readonly Rgb Empty = new Rgb();
+        public static readonly Rgb Empty = new();
 
         // sRGB to CIE-XYZ matrix (D65) – http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
         // Long values pulled from Bruce's color calculator JS
@@ -138,19 +138,19 @@ namespace PixelPalette.Color
 
         public static bool IsValidComponent(double value)
         {
-            return value >= 0.0 && value <= 1.0;
+            return value is >= 0.0 and <= 1.0;
         }
 
         public static bool IsValidScaledComponent(string theString)
         {
             var isInt = int.TryParse(theString, out var value);
             if (!isInt) return false;
-            return value >= 0 && value <= 255;
+            return value is >= 0 and <= 255;
         }
 
         public static bool IsValidScaledComponent(int value)
         {
-            return value >= 0 && value <= 255;
+            return value is >= 0 and <= 255;
         }
 
         public static Rgb? FromString(string theString)
@@ -301,7 +301,7 @@ namespace PixelPalette.Color
 
             // Saturation
             // s = l > 0.5 ? chroma / (2.0 - xMax - xMin) : chroma / (xMax + xMin);
-            if (l > 0.0 && l < 1.0)
+            if (l is > 0.0 and < 1.0)
             {
                 s = chroma / (1 - Math.Abs(2 * xMax - chroma - 1));
             }

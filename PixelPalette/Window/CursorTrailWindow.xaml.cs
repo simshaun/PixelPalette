@@ -94,7 +94,7 @@ namespace PixelPalette.Window
             var winHeight = (int) Height;
 
             _timer = new DispatcherTimer(DispatcherPriority.Render) {Interval = TimeSpan.FromMilliseconds(16)};
-            _timer.Tick += (sender, e) =>
+            _timer.Tick += (_, _) =>
             {
                 var mouse = MouseUtil.GetMousePosition();
                 const int pxFromCursor = 30;

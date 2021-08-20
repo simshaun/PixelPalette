@@ -12,7 +12,7 @@ namespace PixelPalette.Color
     /// </summary>
     public readonly struct Hsv : IColor
     {
-        public static readonly Hsv Empty = new Hsv();
+        public static readonly Hsv Empty = new();
 
         private const string StringPattern =
             @"^hsv\(\s*(?<hue>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<sat>0|1(?:\.0)|0\.\d+)\s*,\s*(?<val>0|1(?:\.0)|0\.\d+)\s*\)$";
@@ -103,32 +103,32 @@ namespace PixelPalette.Color
 
         public static bool IsValidHue(double value)
         {
-            return value >= 0.0 && value <= 1.0;
+            return value is >= 0.0 and <= 1.0;
         }
 
         public static bool IsValidSaturation(double value)
         {
-            return value >= 0.0 && value <= 1.0;
+            return value is >= 0.0 and <= 1.0;
         }
 
         public static bool IsValidValue(double value)
         {
-            return value >= 0.0 && value <= 1.0;
+            return value is >= 0.0 and <= 1.0;
         }
 
         public static bool IsValidScaledHue(double value)
         {
-            return value >= 0.0 && value <= 360.0;
+            return value is >= 0.0 and <= 360.0;
         }
 
         public static bool IsValidScaledSaturation(double value)
         {
-            return value >= 0.0 && value <= 100.0;
+            return value is >= 0.0 and <= 100.0;
         }
 
         public static bool IsValidScaledValue(double value)
         {
-            return value >= 0.0 && value <= 100.0;
+            return value is >= 0.0 and <= 100.0;
         }
 
         public static Hsv? FromString(string theString)
@@ -257,41 +257,38 @@ namespace PixelPalette.Color
             var g1 = 0.0;
             var b1 = 0.0;
 
-            if (hue >= 0 && hue < 60)
+            switch (hue)
             {
-                r1 = C;
-                g1 = X;
-                b1 = 0;
-            }
-            else if (hue >= 60 && hue < 120)
-            {
-                r1 = X;
-                g1 = C;
-                b1 = 0;
-            }
-            else if (hue >= 120 && hue < 180)
-            {
-                r1 = 0;
-                g1 = C;
-                b1 = X;
-            }
-            else if (hue >= 180 && hue < 240)
-            {
-                r1 = 0;
-                g1 = X;
-                b1 = C;
-            }
-            else if (hue >= 240 && hue < 300)
-            {
-                r1 = X;
-                g1 = 0;
-                b1 = C;
-            }
-            else if (hue >= 300 && hue < 360)
-            {
-                r1 = C;
-                g1 = 0;
-                b1 = X;
+                case >= 0 and < 60:
+                    r1 = C;
+                    g1 = X;
+                    b1 = 0;
+                    break;
+                case >= 60 and < 120:
+                    r1 = X;
+                    g1 = C;
+                    b1 = 0;
+                    break;
+                case >= 120 and < 180:
+                    r1 = 0;
+                    g1 = C;
+                    b1 = X;
+                    break;
+                case >= 180 and < 240:
+                    r1 = 0;
+                    g1 = X;
+                    b1 = C;
+                    break;
+                case >= 240 and < 300:
+                    r1 = X;
+                    g1 = 0;
+                    b1 = C;
+                    break;
+                case >= 300 and < 360:
+                    r1 = C;
+                    g1 = 0;
+                    b1 = X;
+                    break;
             }
 
             return new Rgb(Rgb.ClampedComponent(r1 + m), Rgb.ClampedComponent(g1 + m), Rgb.ClampedComponent(b1 + m));
@@ -307,7 +304,7 @@ namespace PixelPalette.Color
 
             var val = val1 * (1 - sat1 / 2);
             var sat = 0.0;
-            if (val > 0 && val < 1)
+            if (val is > 0 and < 1)
             {
                 sat = (val1 - val) / Math.Min(val, 1 - val);
             }

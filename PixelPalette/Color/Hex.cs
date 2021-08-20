@@ -10,7 +10,7 @@ namespace PixelPalette.Color
 {
     public struct Hex : IColor
     {
-        public static readonly Hex Empty = new Hex();
+        public static readonly Hex Empty = new();
 
         private int _red;
         private int _green;
@@ -144,7 +144,7 @@ namespace PixelPalette.Color
         {
             var isInt = int.TryParse(hexPart, NumberStyles.HexNumber, null, out var partAsInt);
 
-            return isInt && partAsInt >= 0 && partAsInt <= 255;
+            return isInt && partAsInt is >= 0 and <= 255;
         }
 
         public static int ClampedComponent(int c)

@@ -38,13 +38,13 @@ namespace PixelPalette.Control
             // Speed up the arrow keys if Shift is held down:
             // Note: Currently broken due to KeyboardNavigation.DirectionalNavigation "None" being bugged.
             var originalSmallChange = SmallChange;
-            KeyDown += (o, ev) =>
+            KeyDown += (_, _) =>
             {
                 if (Keyboard.Modifiers != ModifierKeys.Shift) return;
                 SmallChange = 10;
             };
 
-            KeyUp += (o, ev) =>
+            KeyUp += (_, ev) =>
             {
                 if (ev.Key != Key.LeftShift && ev.Key != Key.RightShift) return;
                 SmallChange = originalSmallChange;

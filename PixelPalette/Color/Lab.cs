@@ -9,7 +9,7 @@ namespace PixelPalette.Color
 {
     public readonly struct Lab : IColor
     {
-        public static readonly Lab Empty = new Lab();
+        public static readonly Lab Empty = new();
 
         private const string StringPattern =
             @"^lab\(\s*(?<L>\d+(?:\.\d+)?)\s*,\s*(?<A>-?\d+(?:\.\d+)?)%?\s*,\s*(?<B>-?\d+(?:\.\d+)?)%?\s*\)$";
@@ -51,17 +51,17 @@ namespace PixelPalette.Color
 
         public static bool IsValidL(double value)
         {
-            return value >= MinL && value <= MaxL;
+            return value is >= MinL and <= MaxL;
         }
 
         public static bool IsValidA(double value)
         {
-            return value >= MinA && value <= MaxA;
+            return value is >= MinA and <= MaxA;
         }
 
         public static bool IsValidB(double value)
         {
-            return value >= MinB && value <= MaxB;
+            return value is >= MinB and <= MaxB;
         }
 
         public static Lab? FromString(string theString)

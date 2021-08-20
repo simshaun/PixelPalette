@@ -8,7 +8,7 @@ namespace PixelPalette.Color
 {
     public readonly struct Xyz : IColor
     {
-        public static readonly Xyz Empty = new Xyz();
+        public static readonly Xyz Empty = new();
 
         public const double MinX = 0;
         public const double MaxX = 95.0489;

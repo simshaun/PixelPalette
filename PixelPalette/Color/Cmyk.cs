@@ -9,7 +9,7 @@ namespace PixelPalette.Color
 {
     public readonly struct Cmyk : IColor
     {
-        public static readonly Cmyk Empty = new Cmyk();
+        public static readonly Cmyk Empty = new();
 
         private const string StringPattern =
             @"^cmyk\(\s*(?<c>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<m>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<y>0|1(?:\.0)?|0?\.\d+)\s*,\s*(?<k>0|1(?:\.0)?|0?\.\d+)\s*\)$";
@@ -120,12 +120,12 @@ namespace PixelPalette.Color
 
         public static bool IsValidComponent(double value)
         {
-            return value >= 0.0 && value <= 1.0;
+            return value is >= 0.0 and <= 1.0;
         }
 
         public static bool IsValidScaledComponent(double value)
         {
-            return value >= 0.0 && value <= 100.0;
+            return value is >= 0.0 and <= 100.0;
         }
 
         public static Cmyk? FromString(string theString)
