@@ -6,7 +6,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace PixelPalette.Color
 {
-    public readonly struct Rgb
+    public readonly struct Rgb : IColor
     {
         public static readonly Rgb Empty = new Rgb();
 
@@ -413,6 +413,11 @@ namespace PixelPalette.Color
         public Lab ToLab()
         {
             return ToXyz().ToLab();
+        }
+
+        public Rgb ToRgb()
+        {
+            return this;
         }
 
         public System.Windows.Media.Color ToMediaColor()

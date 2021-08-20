@@ -555,6 +555,8 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
+            GlobalState.Rgb = rgb;
+
             RefreshValues();
         }
 
@@ -577,6 +579,8 @@ namespace PixelPalette.Window
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
+
+            GlobalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -601,6 +605,8 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
+            GlobalState.Rgb = rgb;
+
             RefreshValues();
         }
 
@@ -623,6 +629,8 @@ namespace PixelPalette.Window
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
+
+            GlobalState.Rgb = rgb;
 
             RefreshValues();
         }
@@ -647,6 +655,8 @@ namespace PixelPalette.Window
             Cmyk = cmyk;
             Lab = lab;
 
+            GlobalState.Rgb = rgb;
+
             RefreshValues();
         }
 
@@ -669,6 +679,8 @@ namespace PixelPalette.Window
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
+
+            GlobalState.Rgb = rgb;
 
             RefreshValues();
         }

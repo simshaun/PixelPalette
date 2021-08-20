@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color
 {
-    public struct Hex
+    public struct Hex : IColor
     {
         public static readonly Hex Empty = new Hex();
 

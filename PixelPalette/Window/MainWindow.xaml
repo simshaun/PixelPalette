@@ -14,6 +14,7 @@
   MouseDown="MainWindow_OnMouseDown"
   Loaded="MainWindow_OnLoaded"
   Closing="MainWindow_OnClosing"
+  LocationChanged="MainWindow_OnLocationChanged"
   Width="320"
   Height="Auto"
   SizeToContent="Height"
@@ -232,7 +233,7 @@
                 Value="LightGray" />
               <Setter
                 Property="Padding"
-                Value="13,2" />
+                Value="12,2" />
               <Setter
                 Property="Margin"
                 Value="0,0,3,0" />
@@ -246,14 +247,14 @@
             </Style>
           </StackPanel.Resources>
           <Button
-            Name="EyedropperButton">
+            Name="EyedropperButton" ToolTip="Eyedropper (F3)">
             <StackPanel
               Orientation="Horizontal">
               <Image
                 Source="{StaticResource PipetteImage}"
                 Height="16" />
               <Label
-                Content="Eyedropper (F3)" />
+                Content="Pick" />
             </StackPanel>
           </Button>
           <Button
@@ -262,6 +263,9 @@
           <Button
             Content="Darker"
             Name="DarkerButton" />
+          <Button
+            Content="History"
+            Name="HistoryButton" />
         </StackPanel>
       </StackPanel>
 

@@ -7,7 +7,7 @@ namespace PixelPalette.Color
     /// <summary>
     /// HSV/HSB (same thing)
     /// </summary>
-    public readonly struct Hsv
+    public readonly struct Hsv : IColor
     {
         public static readonly Hsv Empty = new Hsv();
 

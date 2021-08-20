@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace PixelPalette.Color
 {
-    public readonly struct Xyz
+    public readonly struct Xyz : IColor
     {
         public static readonly Xyz Empty = new Xyz();
 

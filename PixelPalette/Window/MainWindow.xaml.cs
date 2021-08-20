@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +21,7 @@ namespace PixelPalette.Window
     {
         private FreezeFrameWindow _freezeFrameWin;
         private CursorTrailWindow _cursorTrailWin;
+        private readonly HistoryWindow _historyWin;
         private readonly MainWindowViewModel _vm;
 
         public MainWindow()
@@ -46,6 +45,21 @@ namespace PixelPalette.Window
             LighterButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Lighter(5)); };
             DarkerButton.Click += (o, ev) => { _vm.RefreshFromHsl(_vm.Hsl.Darker(5)); };
 
+            // History Button
+            var historyVm = new HistoryWindowViewModel();
+            _historyWin = new HistoryWindow(historyVm, Left + Width, Top);
+            _historyWin.HistoryItemSelected += (_, args) => { _vm.RefreshFromRgb(args.HistoryItem.Color.ToRgb()); };
+            HistoryButton.Click += (o, ev) =>
+            {
+                if (_historyWin.IsVisible)
+                    _historyWin.Hide();
+                else
+                {
+                    RepositionHistoryWin();
+                    _historyWin.Show();
+                }
+            };
+
             // Color model tabs
             _vm.PropertyChanged += (o, ev) =>
             {
@@ -62,7 +76,7 @@ namespace PixelPalette.Window
                 {
                     // SetDataObject seems to work better than SetText or other methods, when programs like RealVNC are locking up the clipboard.
                     Clipboard.SetDataObject(valueGetter());
-                    DisplayClipboardCheckmark((Button)sender);
+                    DisplayClipboardCheckmark((Button) sender);
                 });
             }
 
@@ -718,23 +732,10 @@ namespace PixelPalette.Window
 
 #region Disable Maximize window
 
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        // ReSharper disable once InconsistentNaming
-        private const int GWL_STYLE = -16;
-
-        // ReSharper disable once InconsistentNaming
-        private const int WS_MAXIMIZE_BOX = 0x10000;
-
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             var hWnd = new WindowInteropHelper((System.Windows.Window) sender).Handle;
-            var value = GetWindowLong(hWnd, GWL_STYLE);
-            SetWindowLong(hWnd, GWL_STYLE, value & ~WS_MAXIMIZE_BOX);
+            WindowHelper.DisableMaximize(hWnd);
         }
 
 #endregion
@@ -744,6 +745,17 @@ namespace PixelPalette.Window
             if (!EphemeralState.Data.DebugMode) return;
             var debugWin = new DebugWindow(Left + Width, Top);
             debugWin.Show();
+        }
+
+        private void MainWindow_OnLocationChanged(object sender, EventArgs e)
+        {
+            RepositionHistoryWin();
+        }
+
+        private void RepositionHistoryWin()
+        {
+            _historyWin.Left = Left + Width;
+            _historyWin.Top = Top;
         }
     }
 }

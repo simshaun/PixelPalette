@@ -1,0 +1,38 @@
+<Window
+  x:Class="PixelPalette.Window.HistoryWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:window="clr-namespace:PixelPalette.Window"
+  mc:Ignorable="d"
+  Title="History"
+  d:DataContext="{d:DesignInstance window:HistoryWindowViewModel }"
+  Height="300"
+  Width="120"
+  WindowStyle="None"
+  ResizeMode="NoResize"
+  ShowInTaskbar="False"
+  SourceInitialized="HistoryWindow_OnSourceInitialized">
+  <Grid>
+    <ListBox
+      Name="History"
+      ItemsSource="{Binding States, Mode=OneWay}"
+      SelectionMode="Multiple"
+      SelectionChanged="History_OnSelectionChanged">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel
+            Orientation="Horizontal">
+            <Rectangle
+              Width="20"
+              Height="20"
+              Fill="{Binding ColorBrush, Mode=OneWay}" />
+            <Label
+              Content="{Binding ColorString, Mode=OneWay}" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </Grid>
+</Window>
