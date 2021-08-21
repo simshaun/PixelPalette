@@ -93,7 +93,7 @@ namespace PixelPalette.Window
 
             var winHeight = (int) Height;
 
-            _timer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(16) };
+            _timer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(12) };
             _timer.Tick += (_, _) =>
             {
                 var mouse = MouseUtil.GetMousePosition();
@@ -125,7 +125,7 @@ namespace PixelPalette.Window
                 var compensatedY = sourceY - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor
 
                 if (FreezeFrame.Instance.BitmapSource == null) return;
-                
+
                 var previewImageSource = BitmapUtil.CropBitmapSource(
                     FreezeFrame.Instance.BitmapSource,
                     compensatedX, compensatedY,
