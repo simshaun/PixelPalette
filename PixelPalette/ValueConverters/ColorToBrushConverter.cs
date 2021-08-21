@@ -8,14 +8,17 @@ namespace PixelPalette.ValueConverters
 {
     public class ColorToBrushConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            value ??= "transparent";
+            if (value == null || (string) value == "")
+            {
+                value = "transparent";
+            }
 
-            return (SolidColorBrush) new BrushConverter().ConvertFrom(value);
+            return new BrushConverter().ConvertFrom(value) as SolidColorBrush ?? throw new InvalidOperationException();
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             Debug.Assert(value != null, nameof(value) + " != null");
 

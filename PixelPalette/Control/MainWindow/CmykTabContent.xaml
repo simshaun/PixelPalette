@@ -1,0 +1,177 @@
+<UserControl
+  x:Class="PixelPalette.Control.MainWindow.CmykTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:control="clr-namespace:PixelPalette.Control"
+  xmlns:mainWindow="clr-namespace:PixelPalette.Control.MainWindow"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance mainWindow:CmykTabViewModel }"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/Resources/MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <StackPanel
+    Style="{StaticResource TabContentStyle}">
+    <Border
+      Style="{StaticResource ColorOutputContainerBorder}">
+      <StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-100" />
+          <TextBox
+            x:Name="CmykScaledText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding CmykScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="CmykScaledTextClipboardButton" />
+        </StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-1" />
+          <TextBox
+            x:Name="CmykText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding CmykText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="CmykTextClipboardButton" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Grid
+      Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="20" />
+        <ColumnDefinition
+          Width="40" />
+        <ColumnDefinition
+          Width="46" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <control:GradientSlider
+        Grid.Row="0"
+        Grid.Column="0"
+        x:Name="CmykCyanSlider"
+        Background="{Binding CmykCyanGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding CmykCyan, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="1"
+        Grid.Column="0"
+        x:Name="CmykMagentaSlider"
+        Background="{Binding CmykMagentaGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding CmykMagenta, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="2"
+        Grid.Column="0"
+        x:Name="CmykYellowSlider"
+        Background="{Binding CmykYellowGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding CmykYellow, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="3"
+        Grid.Column="0"
+        x:Name="CmykKeySlider"
+        Background="{Binding CmykKeyGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding CmykKey, Mode=OneWay}" />
+      <Label
+        Grid.Row="0"
+        Grid.Column="1"
+        Content="C" />
+      <Label
+        Grid.Row="1"
+        Grid.Column="1"
+        Content="M" />
+      <Label
+        Grid.Row="2"
+        Grid.Column="1"
+        Content="Y" />
+      <Label
+        Grid.Row="3"
+        Grid.Column="1"
+        Content="K" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="2"
+        x:Name="CmykScaledCyan"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding CmykScaledCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="2"
+        x:Name="CmykScaledMagenta"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding CmykScaledMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="2"
+        x:Name="CmykScaledYellow"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding CmykScaledYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="3"
+        Grid.Column="2"
+        x:Name="CmykScaledKey"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding CmykScaledKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="3"
+        x:Name="CmykCyan"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding CmykCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="3"
+        x:Name="CmykMagenta"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding CmykMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="3"
+        x:Name="CmykYellow"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding CmykYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="3"
+        Grid.Column="3"
+        x:Name="CmykKey"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding CmykKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+    </Grid>
+  </StackPanel>
+</UserControl>

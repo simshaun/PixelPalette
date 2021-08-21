@@ -167,7 +167,7 @@ namespace PixelPalette.Color
                    B.Equals(other.B);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Lab other && Equals(other);
         }

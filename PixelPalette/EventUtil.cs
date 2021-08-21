@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using PixelPalette.Annotations;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -61,7 +60,7 @@ namespace PixelPalette
             HandleKey(key, new[] { control }, action);
         }
 
-        public static void HandleMouseWheel(IEnumerable<IInputElement> controls, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
+        public static void HandleMouseWheel(IEnumerable<IInputElement> controls, Action? upAction, Action? downAction)
         {
             foreach (var control in controls)
             {
@@ -79,7 +78,7 @@ namespace PixelPalette
             }
         }
 
-        public static void HandleMouseWheel(IInputElement control, [CanBeNull] Action upAction, [CanBeNull] Action downAction)
+        public static void HandleMouseWheel(IInputElement control, Action? upAction, Action? downAction)
         {
             HandleMouseWheel(new[] { control }, upAction, downAction);
         }

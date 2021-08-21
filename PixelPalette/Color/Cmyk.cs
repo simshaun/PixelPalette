@@ -250,7 +250,7 @@ namespace PixelPalette.Color
                    Key.Equals(other.Key);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Cmyk other && Equals(other);
         }

@@ -16,6 +16,9 @@ namespace PixelPalette.Color
         private int _green;
         private int _blue;
 
+        private static readonly Regex HexRegex = new("^#?([0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase);
+        private static readonly Regex SixCharHexRegex = new("^#?([0-9A-F]{6})$", RegexOptions.IgnoreCase);
+
         public int Red
         {
             get => _red;
@@ -130,14 +133,12 @@ namespace PixelPalette.Color
 
         public static bool IsValidHex(string hex)
         {
-            var regex = new Regex("^#?([0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase);
-            return regex.IsMatch(hex);
+            return HexRegex.IsMatch(hex);
         }
 
         public static bool IsValid6CharHex(string hex)
         {
-            var regex = new Regex("^#?([0-9A-F]{6})$", RegexOptions.IgnoreCase);
-            return regex.IsMatch(hex);
+            return SixCharHexRegex.IsMatch(hex);
         }
 
         public static bool IsValidHexPart(string hexPart)
@@ -163,7 +164,7 @@ namespace PixelPalette.Color
             return _red == other._red && _green == other._green && _blue == other._blue;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Hex other && Equals(other);
         }

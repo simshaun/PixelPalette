@@ -170,7 +170,7 @@ namespace PixelPalette.Color
                    Z.Equals(other.Z);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Xyz other && Equals(other);
         }

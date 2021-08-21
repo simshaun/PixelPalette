@@ -8,23 +8,27 @@ namespace PixelPalette
 {
     public class PersistedData
     {
-        [XmlElement("ActiveColorModelTab")] public string ActiveColorModelTab { get; set; }
+        [XmlElement("ActiveColorModelTab")] public string? ActiveColorModelTab { get; set; }
 
-        [XmlElement("ActiveColorModel")] public string ActiveColorModel { get; set; }
+        [XmlElement("ActiveColorModel")] public string? ActiveColorModel { get; set; }
 
-        [XmlElement("ActiveColorValue")] public string ActiveColorValue { get; set; }
+        [XmlElement("ActiveColorValue")] public string? ActiveColorValue { get; set; }
     }
 
     public static class PersistedState
     {
-        public static PersistedData Data;
+        private static PersistedData _data = new();
         private static readonly XmlSerializer Serializer;
 
         static PersistedState()
         {
-            Data = new PersistedData();
-            Serializer = new XmlSerializer(Data.GetType());
+            Serializer = new XmlSerializer(_data.GetType());
             Read();
+        }
+
+        public static PersistedData Data()
+        {
+            return _data;
         }
 
         private static void Read()
@@ -44,7 +48,7 @@ namespace PixelPalette
             AppDebug.WriteLine("--------");
 
             var sr = new StringReader(File.ReadAllText(settingFilePath));
-            Data = (PersistedData) Serializer.Deserialize(sr);
+            _data = Serializer.Deserialize(sr) as PersistedData ?? new PersistedData();
         }
 
         public static void Save()
@@ -54,7 +58,7 @@ namespace PixelPalette
             {
                 Formatting = Formatting.Indented
             };
-            Serializer.Serialize(xw, Data);
+            Serializer.Serialize(xw, Data());
             try
             {
                 var path = SettingFilePath();
@@ -86,14 +90,12 @@ namespace PixelPalette
             return path;
         }
 
-        // TODO ADD DEBUG FLAG TO STARTUP
-
         private static bool CanWriteToExeFolder()
         {
             return !File.Exists(Path.Join(ExeFolder(), "IS_INSTALLATION.do-not-delete"));
         }
 
-        private static string ExeFolder()
+        private static string? ExeFolder()
         {
             return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }

@@ -1,0 +1,129 @@
+<UserControl
+  x:Class="PixelPalette.Control.MainWindow.LabTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:control="clr-namespace:PixelPalette.Control"
+  xmlns:color="clr-namespace:PixelPalette.Color"
+  xmlns:mainWindow="clr-namespace:PixelPalette.Control.MainWindow"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance mainWindow:LabTabViewModel }"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/Resources/MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <StackPanel
+    Style="{StaticResource TabContentStyle}">
+    <Border
+      Style="{StaticResource ColorOutputContainerBorder}">
+      <StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <StackPanel>
+            <Label
+              Style="{StaticResource ColorOutputLabel}"
+              Padding="4,0"
+              Content="CIELAB" />
+            <Label
+              Style="{StaticResource ColorOutputLabel}"
+              Padding="4,0"
+              Content="(D65/2°)" />
+          </StackPanel>
+          <TextBox
+            x:Name="LabText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding LabText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="LabTextClipboardButton" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Grid
+      Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="20" />
+        <ColumnDefinition
+          Width="60" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <control:GradientSlider
+        Grid.Row="0"
+        Grid.Column="0"
+        x:Name="LabLSlider"
+        Background="{Binding LabLGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Minimum="{x:Static color:Lab.MinL}"
+        Maximum="{x:Static color:Lab.MaxL}"
+        Value="{Binding LabL, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="1"
+        Grid.Column="0"
+        x:Name="LabASlider"
+        Background="{Binding LabAGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Minimum="{x:Static color:Lab.MinA}"
+        Maximum="{x:Static color:Lab.MaxA}"
+        Value="{Binding LabA, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="2"
+        Grid.Column="0"
+        x:Name="LabBSlider"
+        Background="{Binding LabBGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Minimum="{x:Static color:Lab.MinB}"
+        Maximum="{x:Static color:Lab.MaxB}"
+        Value="{Binding LabB, Mode=OneWay}" />
+      <Label
+        Grid.Row="0"
+        Grid.Column="1"
+        Content="L*" />
+      <Label
+        Grid.Row="1"
+        Grid.Column="1"
+        Content="a*" />
+      <Label
+        Grid.Row="2"
+        Grid.Column="1"
+        Content="b*" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="2"
+        x:Name="LabL"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding LabL, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="2"
+        x:Name="LabA"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding LabA, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="2"
+        x:Name="LabB"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding LabB, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+    </Grid>
+  </StackPanel>
+</UserControl>

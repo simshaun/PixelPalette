@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using PixelPalette.Annotations;
 
 namespace PixelPalette.Window
 {
@@ -17,7 +16,7 @@ namespace PixelPalette.Window
             var vm = new HistoryWindowViewModel();
             DataContext = vm;
 
-            void AddToHistory([CanBeNull] object _)
+            void AddToHistory(object? _)
             {
                 if (vm.States.Count != 0 && vm.States.Last().Color.ToRgb().Equals(globalState.Rgb)) return;
                 vm.States.Add(new HistoryItem(globalState.Rgb));
@@ -42,7 +41,7 @@ namespace PixelPalette.Window
         }
 
         private bool _ignoreSelectionFlag;
-        public event EventHandler<HistoryItemSelectedEventArgs> HistoryItemSelected;
+        public event EventHandler<HistoryItemSelectedEventArgs>? HistoryItemSelected;
 
         private void History_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -56,15 +55,17 @@ namespace PixelPalette.Window
             e.Handled = true;
             _ignoreSelectionFlag = false;
 
-            HistoryItemSelected?.Invoke(this, new HistoryItemSelectedEventArgs
-            {
-                HistoryItem = (HistoryItem) e.AddedItems[0]
-            });
+            HistoryItemSelected?.Invoke(this, new HistoryItemSelectedEventArgs(e.AddedItems[0] as HistoryItem ?? throw new InvalidOperationException()));
         }
     }
 
     public class HistoryItemSelectedEventArgs : EventArgs
     {
-        public HistoryItem HistoryItem { get; set; }
+        public HistoryItemSelectedEventArgs(HistoryItem historyItem)
+        {
+            HistoryItem = historyItem;
+        }
+
+        public HistoryItem HistoryItem { get; }
     }
 }

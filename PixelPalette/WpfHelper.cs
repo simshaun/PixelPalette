@@ -5,7 +5,7 @@ namespace PixelPalette
 {
     public static class WpfHelper
     {
-        public static T FindFirstVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        public static T? FindFirstVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
             if (obj is T o)
             {
@@ -19,11 +19,7 @@ namespace PixelPalette
                     return c;
                 }
 
-                var match = FindFirstVisualChild<T>(child);
-                if (match != null)
-                {
-                    return match;
-                }
+                return FindFirstVisualChild<T>(child);
             }
 
             return null;

@@ -1,0 +1,117 @@
+<UserControl
+  x:Class="PixelPalette.Control.MainWindow.HexTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:control="clr-namespace:PixelPalette.Control"
+  xmlns:mainWindow="clr-namespace:PixelPalette.Control.MainWindow"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance mainWindow:HexTabViewModel }"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/Resources/MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <StackPanel
+    Style="{StaticResource TabContentStyle}">
+    <Border
+      Style="{StaticResource ColorOutputContainerBorder}">
+      <StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="HEX" />
+          <TextBox
+            x:Name="HexText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding HexText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+            MaxLength="9"
+            Width="65" />
+          <control:ClipboardButton
+            x:Name="HexTextClipboardButton" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Grid
+      Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="20" />
+        <ColumnDefinition
+          Width="40" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <control:GradientSlider
+        Grid.Row="0"
+        Grid.Column="0"
+        x:Name="HexRedSlider"
+        Background="{Binding RedGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Rgb.Red, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="1"
+        Grid.Column="0"
+        x:Name="HexGreenSlider"
+        Background="{Binding GreenGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Rgb.Green, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="2"
+        Grid.Column="0"
+        x:Name="HexBlueSlider"
+        Background="{Binding BlueGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Rgb.Blue, Mode=OneWay}" />
+      <Label
+        Grid.Row="0"
+        Grid.Column="1"
+        Content="R" />
+      <Label
+        Grid.Row="1"
+        Grid.Column="1"
+        Content="G" />
+      <Label
+        Grid.Row="2"
+        Grid.Column="1"
+        Content="B" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="2"
+        x:Name="HexRed"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="2"
+        Text="{Binding HexRed, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="2"
+        x:Name="HexGreen"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="2"
+        Text="{Binding HexGreen, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="2"
+        x:Name="HexBlue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="2"
+        Text="{Binding HexBlue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+    </Grid>
+  </StackPanel>
+</UserControl>

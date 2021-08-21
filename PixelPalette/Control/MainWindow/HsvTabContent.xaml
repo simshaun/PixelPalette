@@ -1,0 +1,148 @@
+<UserControl
+  x:Class="PixelPalette.Control.MainWindow.HsvTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:control="clr-namespace:PixelPalette.Control"
+  xmlns:mainWindow="clr-namespace:PixelPalette.Control.MainWindow"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance mainWindow:HsvTabViewModel }"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/Resources/MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <StackPanel
+    Style="{StaticResource TabContentStyle}">
+    <Border
+      Style="{StaticResource ColorOutputContainerBorder}">
+      <StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-100" />
+          <TextBox
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding HsvScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="HsvScaledTextClipboardButton" />
+        </StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-1" />
+          <TextBox
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding HsvText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="HsvTextClipboardButton" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Grid
+      Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="20" />
+        <ColumnDefinition
+          Width="50" />
+        <ColumnDefinition
+          Width="45" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <control:GradientSlider
+        Grid.Row="0"
+        Grid.Column="0"
+        x:Name="HsvHueSlider"
+        Background="{Binding HueGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Hsv.Hue, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="1"
+        Grid.Column="0"
+        x:Name="HsvSaturationSlider"
+        Background="{Binding HsvSaturationGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Hsv.Saturation, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="2"
+        Grid.Column="0"
+        x:Name="HsvValueSlider"
+        Background="{Binding HsvValueGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding GlobalState.Hsv.Value, Mode=OneWay}" />
+      <Label
+        Grid.Row="0"
+        Grid.Column="1"
+        Content="H" />
+      <Label
+        Grid.Row="1"
+        Grid.Column="1"
+        Content="S" />
+      <Label
+        Grid.Row="2"
+        Grid.Column="1"
+        Content="V" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="2"
+        x:Name="HsvScaledHue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding HsvScaledHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="2"
+        x:Name="HsvScaledSaturation"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding HsvScaledSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="2"
+        x:Name="HsvScaledValue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="6"
+        Text="{Binding HsvScaledValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="3"
+        x:Name="HsvHue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding HsvHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="3"
+        x:Name="HsvSaturation"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding HsvSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="3"
+        x:Name="HsvValue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding HsvValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+    </Grid>
+  </StackPanel>
+</UserControl>

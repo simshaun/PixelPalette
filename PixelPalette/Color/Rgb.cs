@@ -241,7 +241,7 @@ namespace PixelPalette.Color
             return Red == other.Red && Green == other.Green && Blue == other.Blue;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Rgb other && Equals(other);
         }

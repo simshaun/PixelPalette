@@ -20,7 +20,7 @@ namespace PixelPalette.Bitmap
             int sourceY,
             int width,
             int height,
-            byte[] cachedSourcePixels = null
+            byte[]? cachedSourcePixels = null
         )
         {
             // A couple things are hardcoded to expect 4 bytes per pixel.
@@ -63,7 +63,7 @@ namespace PixelPalette.Bitmap
                 if (sourceY + y < 0 || sourceY + y > sourceHeight - 1) continue;
 
                 var rowOffset = (sourceY + y) * sourceStride;
-                if (rowOffset < 0 || rowOffset >= sourceBuffer.Length) continue;
+                if (sourceBuffer != null && (rowOffset < 0 || rowOffset >= sourceBuffer.Length)) continue;
 
                 for (var x = 0; x < width; x++)
                 {
@@ -73,7 +73,7 @@ namespace PixelPalette.Bitmap
                     var sourceOffset = rowOffset + (sourceX + x) * bytesPerPixel;
                     var outputOffset = y * outputStride + x * bytesPerPixel;
 
-                    if (sourceOffset < 0 || sourceOffset >= sourceBuffer.Length) continue;
+                    if (sourceBuffer != null && (sourceOffset < 0 || sourceOffset >= sourceBuffer.Length)) continue;
                     outputBuffer[outputOffset] = sourceBuffer[sourceOffset];
                     outputBuffer[outputOffset + 1] = sourceBuffer[sourceOffset + 1];
                     outputBuffer[outputOffset + 2] = sourceBuffer[sourceOffset + 2];

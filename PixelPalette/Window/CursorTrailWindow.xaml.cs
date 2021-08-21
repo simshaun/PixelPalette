@@ -17,7 +17,7 @@ namespace PixelPalette.Window
     /// </summary>
     public partial class CursorTrailWindow
     {
-        private DispatcherTimer _timer;
+        private DispatcherTimer? _timer;
 
         public CursorTrailWindow()
         {
@@ -93,7 +93,7 @@ namespace PixelPalette.Window
 
             var winHeight = (int) Height;
 
-            _timer = new DispatcherTimer(DispatcherPriority.Render) {Interval = TimeSpan.FromMilliseconds(16)};
+            _timer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(16) };
             _timer.Tick += (_, _) =>
             {
                 var mouse = MouseUtil.GetMousePosition();
@@ -124,6 +124,8 @@ namespace PixelPalette.Window
                 var compensatedX = sourceX - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
                 var compensatedY = sourceY - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor
 
+                if (FreezeFrame.Instance.BitmapSource == null) return;
+                
                 var previewImageSource = BitmapUtil.CropBitmapSource(
                     FreezeFrame.Instance.BitmapSource,
                     compensatedX, compensatedY,
@@ -150,7 +152,7 @@ namespace PixelPalette.Window
 
         private void Window_Closing(object sender, CancelEventArgs cancelEventArgs)
         {
-            _timer.Stop();
+            _timer?.Stop();
             _timer = null;
             PreviewImage.Source = null;
         }

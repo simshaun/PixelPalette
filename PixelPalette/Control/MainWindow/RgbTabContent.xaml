@@ -1,0 +1,150 @@
+<UserControl
+  x:Class="PixelPalette.Control.MainWindow.RgbTabContent"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:control="clr-namespace:PixelPalette.Control"
+  xmlns:mainWindow="clr-namespace:PixelPalette.Control.MainWindow"
+  mc:Ignorable="d"
+  d:DataContext="{d:DesignInstance mainWindow:RgbTabViewModel }"
+  d:DesignHeight="300"
+  d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/Resources/MainWindowResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <StackPanel
+    Style="{StaticResource TabContentStyle}">
+    <Border
+      Style="{StaticResource ColorOutputContainerBorder}">
+      <StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-255" />
+          <TextBox
+            x:Name="RgbScaledText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding RgbScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="RgbScaledTextClipboardButton" />
+        </StackPanel>
+        <StackPanel
+          Style="{StaticResource ColorOutputRow}">
+          <Label
+            Style="{StaticResource ColorOutputLabel}"
+            Content="0-1" />
+          <TextBox
+            x:Name="RgbText"
+            Style="{StaticResource ColorOutputBox}"
+            Text="{Binding RgbText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+          <control:ClipboardButton
+            x:Name="RgbTextClipboardButton" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Grid
+      Margin="0,5,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="20" />
+        <ColumnDefinition
+          Width="45" />
+        <ColumnDefinition
+          Width="45" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <control:GradientSlider
+        Grid.Row="0"
+        Grid.Column="0"
+        x:Name="RgbRedSlider"
+        Background="{Binding RedGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding RgbR, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="1"
+        Grid.Column="0"
+        x:Name="RgbGreenSlider"
+        Background="{Binding GreenGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding RgbG, Mode=OneWay}" />
+      <control:GradientSlider
+        Grid.Row="2"
+        Grid.Column="0"
+        x:Name="RgbBlueSlider"
+        Background="{Binding BlueGradientFill}"
+        Style="{StaticResource GradientSlider}"
+        Value="{Binding RgbB, Mode=OneWay}" />
+      <Label
+        Grid.Row="0"
+        Grid.Column="1"
+        Content="R" />
+      <Label
+        Grid.Row="1"
+        Grid.Column="1"
+        Content="G" />
+      <Label
+        Grid.Row="2"
+        Grid.Column="1"
+        Content="B" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="2"
+        x:Name="RgbScaledRed"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding RgbScaledRedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="2"
+        x:Name="RgbScaledGreen"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding RgbScaledGreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="2"
+        x:Name="RgbScaledBlue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="3"
+        Text="{Binding RgbScaledBlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="0"
+        Grid.Column="3"
+        x:Name="RgbRed"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding RgbRedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="3"
+        x:Name="RgbGreen"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding RgbGreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+      <TextBox
+        Grid.Row="2"
+        Grid.Column="3"
+        x:Name="RgbBlue"
+        Style="{StaticResource ColorInputBox}"
+        MaxLength="5"
+        Text="{Binding RgbBlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+    </Grid>
+  </StackPanel>
+</UserControl>

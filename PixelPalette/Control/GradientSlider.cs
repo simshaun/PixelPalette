@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Runtime;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace PixelPalette.Control
@@ -49,6 +52,10 @@ namespace PixelPalette.Control
                 if (ev.Key != Key.LeftShift && ev.Key != Key.RightShift) return;
                 SmallChange = originalSmallChange;
             };
+
+            var slider = this;
+            slider.AddHandler(Thumb.DragStartedEvent, new DragStartedEventHandler((_, _) => { GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency; }));
+            slider.AddHandler(Thumb.DragCompletedEvent, new DragCompletedEventHandler((_, _) => { GCSettings.LatencyMode = GCLatencyMode.Interactive; }));
         }
     }
 }

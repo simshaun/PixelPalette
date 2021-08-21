@@ -9,32 +9,32 @@ namespace PixelPalette.Bitmap
     /// </summary>
     public sealed class FreezeFrame
     {
-        private static FreezeFrame _instance;
+        private static FreezeFrame? _instance;
 
         public static FreezeFrame Instance => _instance ??= new FreezeFrame();
 
-        private FreezeFrame()
-        {
-        }
+        private BitmapSource? _bitmapSource;
 
-        private BitmapSource _bitmapSource;
-
-        public BitmapSource BitmapSource
+        public BitmapSource? BitmapSource
         {
             get => _bitmapSource;
             set
             {
-                var bytesPerPixel = value.Format.BitsPerPixel / 8;
-                var width = value.PixelWidth;
-                var height = value.PixelHeight;
-                var stride = width * bytesPerPixel;
-                var buffer = new byte[stride * height];
-                value.CopyPixels(buffer, stride, 0);
-                PixelBuffer = buffer;
+                if (value != null)
+                {
+                    var bytesPerPixel = value.Format.BitsPerPixel / 8;
+                    var width = value.PixelWidth;
+                    var height = value.PixelHeight;
+                    var stride = width * bytesPerPixel;
+                    var buffer = new byte[stride * height];
+                    value.CopyPixels(buffer, stride, 0);
+                    PixelBuffer = buffer;
+                }
+
                 _bitmapSource = value;
             }
         }
 
-        public byte[] PixelBuffer { get; private set; }
+        public byte[]? PixelBuffer { get; private set; }
     }
 }

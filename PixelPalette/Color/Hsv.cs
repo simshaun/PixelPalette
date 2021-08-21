@@ -324,7 +324,7 @@ namespace PixelPalette.Color
                    Value.Equals(other.Value);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is Hsv other && Equals(other);
         }

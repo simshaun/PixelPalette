@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using PixelPalette.Annotations;
 
 namespace PixelPalette.Window
 {
     public sealed class CursorTrailWindowViewModel : INotifyPropertyChanged
     {
-        private string _hex;
-        private string _hexTextColor;
-        private string _gridLineColor;
+        private string _hex = "";
+        private string _hexTextColor = "";
+        private string _gridLineColor = "";
 
         public string Hex
         {
@@ -29,19 +28,19 @@ namespace PixelPalette.Window
             set => SetField(ref _gridLineColor, value);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+#region boilerplate
 
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
         }
+
+#endregion
     }
 }

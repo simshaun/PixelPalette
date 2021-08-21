@@ -11,7 +11,7 @@ namespace PixelPalette.Window
     /// </summary>
     public partial class FreezeFrameWindow
     {
-        public event EventHandler ColorPicked;
+        public event EventHandler? ColorPicked;
 
         private readonly MainWindowViewModel _vm;
 
@@ -31,8 +31,12 @@ namespace PixelPalette.Window
             var mouse = MouseUtil.GetMousePosition();
             var compensatedX = mouse.X - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
             var compensatedY = mouse.Y - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor 
-            var rgb = BitmapUtil.PixelToRgb(FreezeFrame.Instance.BitmapSource, compensatedX, compensatedY);
-            _vm.RefreshFromRgb(rgb);
+            if (FreezeFrame.Instance.BitmapSource != null)
+            {
+                var rgb = BitmapUtil.PixelToRgb(FreezeFrame.Instance.BitmapSource, compensatedX, compensatedY);
+                _vm.GlobalState.RefreshFromRgb(rgb);
+            }
+
             ColorPicked?.Invoke(this, EventArgs.Empty);
             Close();
         }

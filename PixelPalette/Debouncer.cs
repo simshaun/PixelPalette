@@ -7,18 +7,15 @@ namespace PixelPalette
     {
         private readonly DispatcherPriority _dispatcherPriority;
         private readonly Dispatcher _dispatcher;
-        private DispatcherTimer _timer;
+        private DispatcherTimer? _timer;
 
-        public Debouncer(
-            DispatcherPriority priority = DispatcherPriority.ApplicationIdle,
-            Dispatcher dispatcher = null
-        )
+        public Debouncer(Dispatcher? dispatcher = null, DispatcherPriority priority = DispatcherPriority.ApplicationIdle)
         {
             _dispatcherPriority = priority;
             _dispatcher = dispatcher ?? Dispatcher.CurrentDispatcher;
         }
 
-        public void Debounce(TimeSpan interval, Action<object> action, object parameter = null)
+        public void Debounce(TimeSpan interval, Action<object?> action, object? parameter = null)
         {
             _timer?.Stop();
             _timer = null;
@@ -32,7 +29,7 @@ namespace PixelPalette
             _timer.Start();
         }
 
-        private void ExecuteDebouncedAction(Action<object> action, object parameter)
+        private void ExecuteDebouncedAction(Action<object?> action, object? parameter)
         {
             if (_timer == null) return;
 
