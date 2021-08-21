@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using PixelPalette.Color;
 
@@ -37,80 +38,68 @@ namespace PixelPalette.Control.MainWindow
         public string Text
         {
             get => _text;
-            set => SetField(ref _text, value, TextEventArgs);
+            set => SetField(ref _text, value);
         }
 
         public string ScaledText
         {
             get => _scaledText;
-            set => SetField(ref _scaledText, value, ScaledTextEventArgs);
+            set => SetField(ref _scaledText, value);
         }
 
         public string Hue
         {
             get => _hue;
-            set => SetField(ref _hue, value, HueEventArgs);
+            set => SetField(ref _hue, value);
         }
 
         public string Saturation
         {
             get => _saturation;
-            set => SetField(ref _saturation, value, SaturationEventArgs);
+            set => SetField(ref _saturation, value);
         }
 
         public string Value
         {
             get => _value;
-            set => SetField(ref _value, value, ValueEventArgs);
+            set => SetField(ref _value, value);
         }
 
         public string ScaledHue
         {
             get => _scaledHue;
-            set => SetField(ref _scaledHue, value, ScaledHueEventArgs);
+            set => SetField(ref _scaledHue, value);
         }
 
         public string ScaledSaturation
         {
             get => _scaledSaturation;
-            set => SetField(ref _scaledSaturation, value, ScaledSaturationEventArgs);
+            set => SetField(ref _scaledSaturation, value);
         }
 
         public string ScaledValue
         {
             get => _scaledValue;
-            set => SetField(ref _scaledValue, value, ScaledValueEventArgs);
+            set => SetField(ref _scaledValue, value);
         }
 
         public LinearGradientBrush? HueGradientFill
         {
             get => _hueGradientFill;
-            private set => SetField(ref _hueGradientFill, value, HueGradientFillEventArgs);
+            private set => SetField(ref _hueGradientFill, value);
         }
 
         public LinearGradientBrush? SaturationGradientFill
         {
             get => _saturationGradientFill;
-            private set => SetField(ref _saturationGradientFill, value, SaturationGradientFillEventArgs);
+            private set => SetField(ref _saturationGradientFill, value);
         }
 
         public LinearGradientBrush? ValueGradientFill
         {
             get => _valueGradientFill;
-            private set => SetField(ref _valueGradientFill, value, ValueGradientFillEventArgs);
+            private set => SetField(ref _valueGradientFill, value);
         }
-
-        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
-        private static readonly PropertyChangedEventArgs ScaledTextEventArgs = new(nameof(ScaledText));
-        private static readonly PropertyChangedEventArgs HueEventArgs = new(nameof(Hue));
-        private static readonly PropertyChangedEventArgs SaturationEventArgs = new(nameof(Saturation));
-        private static readonly PropertyChangedEventArgs ValueEventArgs = new(nameof(Value));
-        private static readonly PropertyChangedEventArgs ScaledHueEventArgs = new(nameof(ScaledHue));
-        private static readonly PropertyChangedEventArgs ScaledSaturationEventArgs = new(nameof(ScaledSaturation));
-        private static readonly PropertyChangedEventArgs ScaledValueEventArgs = new(nameof(ScaledValue));
-        private static readonly PropertyChangedEventArgs HueGradientFillEventArgs = new(nameof(HueGradientFill));
-        private static readonly PropertyChangedEventArgs SaturationGradientFillEventArgs = new(nameof(SaturationGradientFill));
-        private static readonly PropertyChangedEventArgs ValueGradientFillEventArgs = new(nameof(ValueGradientFill));
 
         private void RefreshValues()
         {
@@ -157,17 +146,18 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        private void OnPropertyChanged(string propertyName)
         {
+            var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged?.Invoke(this, eventArgs);
             if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(eventArgs);
+            OnPropertyChanged(propertyName);
         }
 
 #endregion

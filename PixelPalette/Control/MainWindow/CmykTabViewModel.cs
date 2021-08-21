@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace PixelPalette.Control.MainWindow
@@ -39,101 +40,86 @@ namespace PixelPalette.Control.MainWindow
         public string Text
         {
             get => _text;
-            set => SetField(ref _text, value, TextEventArgs);
+            set => SetField(ref _text, value);
         }
 
         public string ScaledText
         {
             get => _scaledText;
-            set => SetField(ref _scaledText, value, ScaledTextEventArgs);
+            set => SetField(ref _scaledText, value);
         }
 
         public string Cyan
         {
             get => _cyan;
-            set => SetField(ref _cyan, value, CyanEventArgs);
+            set => SetField(ref _cyan, value);
         }
 
         public string Magenta
         {
             get => _magenta;
-            set => SetField(ref _magenta, value, MagentaEventArgs);
+            set => SetField(ref _magenta, value);
         }
 
         public string Yellow
         {
             get => _yellow;
-            set => SetField(ref _yellow, value, YellowEventArgs);
+            set => SetField(ref _yellow, value);
         }
 
         public string Key
         {
             get => _key;
-            set => SetField(ref _key, value, KeyEventArgs);
+            set => SetField(ref _key, value);
         }
 
         public string ScaledCyan
         {
             get => _scaledCyan;
-            set => SetField(ref _scaledCyan, value, ScaledCyanEventArgs);
+            set => SetField(ref _scaledCyan, value);
         }
 
         public string ScaledMagenta
         {
             get => _scaledMagenta;
-            set => SetField(ref _scaledMagenta, value, ScaledMagentaEventArgs);
+            set => SetField(ref _scaledMagenta, value);
         }
 
         public string ScaledYellow
         {
             get => _scaledYellow;
-            set => SetField(ref _scaledYellow, value, ScaledYellowEventArgs);
+            set => SetField(ref _scaledYellow, value);
         }
 
         public string ScaledKey
         {
             get => _scaledKey;
-            set => SetField(ref _scaledKey, value, ScaledKeyEventArgs);
+            set => SetField(ref _scaledKey, value);
         }
 
         public LinearGradientBrush? CyanGradientFill
         {
             get => _cyanGradientFill;
-            private set => SetField(ref _cyanGradientFill, value, CyanGradientFillEventArgs);
+            private set => SetField(ref _cyanGradientFill, value);
         }
 
         public LinearGradientBrush? MagentaGradientFill
         {
             get => _magentaGradientFill;
-            private set => SetField(ref _magentaGradientFill, value, MagentaGradientFillEventArgs);
+            private set => SetField(ref _magentaGradientFill, value);
         }
 
         public LinearGradientBrush? YellowGradientFill
         {
             get => _yellowGradientFill;
-            private set => SetField(ref _yellowGradientFill, value, YellowGradientFillEventArgs);
+            private set => SetField(ref _yellowGradientFill, value);
         }
 
         public LinearGradientBrush? KeyGradientFill
         {
             get => _keyGradientFill;
-            private set => SetField(ref _keyGradientFill, value, KeyGradientFillEventArgs);
+            private set => SetField(ref _keyGradientFill, value);
         }
-
-        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
-        private static readonly PropertyChangedEventArgs ScaledTextEventArgs = new(nameof(ScaledText));
-        private static readonly PropertyChangedEventArgs CyanEventArgs = new(nameof(Cyan));
-        private static readonly PropertyChangedEventArgs MagentaEventArgs = new(nameof(Magenta));
-        private static readonly PropertyChangedEventArgs YellowEventArgs = new(nameof(Yellow));
-        private static readonly PropertyChangedEventArgs KeyEventArgs = new(nameof(Key));
-        private static readonly PropertyChangedEventArgs ScaledCyanEventArgs = new(nameof(ScaledCyan));
-        private static readonly PropertyChangedEventArgs ScaledMagentaEventArgs = new(nameof(ScaledMagenta));
-        private static readonly PropertyChangedEventArgs ScaledYellowEventArgs = new(nameof(ScaledYellow));
-        private static readonly PropertyChangedEventArgs ScaledKeyEventArgs = new(nameof(ScaledKey));
-        private static readonly PropertyChangedEventArgs CyanGradientFillEventArgs = new(nameof(CyanGradientFill));
-        private static readonly PropertyChangedEventArgs MagentaGradientFillEventArgs = new(nameof(MagentaGradientFill));
-        private static readonly PropertyChangedEventArgs YellowGradientFillEventArgs = new(nameof(YellowGradientFill));
-        private static readonly PropertyChangedEventArgs KeyGradientFillEventArgs = new(nameof(KeyGradientFill));
 
         private void RefreshValues()
         {
@@ -178,17 +164,18 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        private void OnPropertyChanged(string propertyName)
         {
+            var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged?.Invoke(this, eventArgs);
             if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(eventArgs);
+            OnPropertyChanged(propertyName);
         }
 
 #endregion

@@ -33,52 +33,44 @@ namespace PixelPalette.Control.MainWindow
         public string Text
         {
             get => _text;
-            set => SetField(ref _text, value, TextEventArgs);
+            set => SetField(ref _text, value);
         }
 
         public double L
         {
             get => _l;
-            set => SetField(ref _l, value, LEventArgs);
+            set => SetField(ref _l, value);
         }
 
         public double A
         {
             get => _a;
-            set => SetField(ref _a, value, AEventArgs);
+            set => SetField(ref _a, value);
         }
 
         public double B
         {
             get => _b;
-            set => SetField(ref _b, value, BEventArgs);
+            set => SetField(ref _b, value);
         }
 
         public LinearGradientBrush? LGradientFill
         {
             get => _lGradientFill;
-            private set => SetField(ref _lGradientFill, value, LGradientFillEventArgs);
+            private set => SetField(ref _lGradientFill, value);
         }
 
         public LinearGradientBrush? AGradientFill
         {
             get => _aGradientFill;
-            private set => SetField(ref _aGradientFill, value, AGradientFillEventArgs);
+            private set => SetField(ref _aGradientFill, value);
         }
 
         public LinearGradientBrush? BGradientFill
         {
             get => _bGradientFill;
-            private set => SetField(ref _bGradientFill, value, BGradientFillEventArgs);
+            private set => SetField(ref _bGradientFill, value);
         }
-
-        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
-        private static readonly PropertyChangedEventArgs LEventArgs = new(nameof(L));
-        private static readonly PropertyChangedEventArgs AEventArgs = new(nameof(A));
-        private static readonly PropertyChangedEventArgs BEventArgs = new(nameof(B));
-        private static readonly PropertyChangedEventArgs LGradientFillEventArgs = new(nameof(LGradientFill));
-        private static readonly PropertyChangedEventArgs AGradientFillEventArgs = new(nameof(AGradientFill));
-        private static readonly PropertyChangedEventArgs BGradientFillEventArgs = new(nameof(BGradientFill));
 
         private void RefreshValues()
         {
@@ -113,17 +105,18 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        private void OnPropertyChanged(string propertyName)
         {
+            var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged?.Invoke(this, eventArgs);
             if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(eventArgs);
+            OnPropertyChanged(propertyName);
         }
 
 #endregion

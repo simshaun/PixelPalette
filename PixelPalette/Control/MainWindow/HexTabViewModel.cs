@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace PixelPalette.Control.MainWindow
@@ -31,52 +32,44 @@ namespace PixelPalette.Control.MainWindow
         public string Text
         {
             get => _text;
-            set => SetField(ref _text, value, TextEventArgs);
+            set => SetField(ref _text, value);
         }
 
         public string Red
         {
             get => _red;
-            set => SetField(ref _red, value, RedEventArgs);
+            set => SetField(ref _red, value);
         }
 
         public string Green
         {
             get => _green;
-            set => SetField(ref _green, value, GreenEventArgs);
+            set => SetField(ref _green, value);
         }
 
         public string Blue
         {
             get => _blue;
-            set => SetField(ref _blue, value, BlueEventArgs);
+            set => SetField(ref _blue, value);
         }
 
         public LinearGradientBrush? RedGradientFill
         {
             get => _redGradientFill;
-            private set => SetField(ref _redGradientFill, value, RedGradientFillEventArgs);
+            private set => SetField(ref _redGradientFill, value);
         }
 
         public LinearGradientBrush? GreenGradientFill
         {
             get => _greenGradientFill;
-            private set => SetField(ref _greenGradientFill, value, GreenGradientFillEventArgs);
+            private set => SetField(ref _greenGradientFill, value);
         }
 
         public LinearGradientBrush? BlueGradientFill
         {
             get => _blueGradientFill;
-            private set => SetField(ref _blueGradientFill, value, BlueGradientFillEventArgs);
+            private set => SetField(ref _blueGradientFill, value);
         }
-
-        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
-        private static readonly PropertyChangedEventArgs RedEventArgs = new(nameof(Red));
-        private static readonly PropertyChangedEventArgs GreenEventArgs = new(nameof(Green));
-        private static readonly PropertyChangedEventArgs BlueEventArgs = new(nameof(Blue));
-        private static readonly PropertyChangedEventArgs RedGradientFillEventArgs = new(nameof(RedGradientFill));
-        private static readonly PropertyChangedEventArgs GreenGradientFillEventArgs = new(nameof(GreenGradientFill));
-        private static readonly PropertyChangedEventArgs BlueGradientFillEventArgs = new(nameof(BlueGradientFill));
 
         private void RefreshValues()
         {
@@ -111,17 +104,18 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
+        private void OnPropertyChanged(string propertyName)
         {
+            var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged?.Invoke(this, eventArgs);
             if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(eventArgs);
+            OnPropertyChanged(propertyName);
         }
 
 #endregion
