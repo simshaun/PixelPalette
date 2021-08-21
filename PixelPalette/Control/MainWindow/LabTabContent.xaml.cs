@@ -52,34 +52,34 @@ namespace PixelPalette.Control.MainWindow
                 var aThrottler = new Throttler();
                 var bThrottler = new Throttler();
 
-                EventUtil.HandleSliderChange(LabLSlider, value => { lThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithL(value))); });
-                EventUtil.HandleSliderChange(LabASlider, value => { aThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithA(value))); });
-                EventUtil.HandleSliderChange(LabBSlider, value => { bThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithB(value))); });
+                EventUtil.HandleSliderChange(LSlider, value => { lThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithL(value))); });
+                EventUtil.HandleSliderChange(ASlider, value => { aThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithA(value))); });
+                EventUtil.HandleSliderChange(BSlider, value => { bThrottler.Throttle(1, _ => GlobalState.RefreshFromLab(GlobalState.Lab.WithB(value))); });
 
                 vm.PropertyChangedByUser += (_, ev) =>
                 {
                     switch (ev.PropertyName)
                     {
-                        case nameof(LabTabViewModel.LabText):
-                            var nullableLab = Lab.FromString(vm.LabText);
+                        case nameof(LabTabViewModel.Text):
+                            var nullableLab = Lab.FromString(vm.Text);
                             if (nullableLab.HasValue) GlobalState.RefreshFromLab(nullableLab.Value);
                             break;
-                        case nameof(LabTabViewModel.LabL):
-                            if (!Lab.IsValidL(vm.LabL)) return;
-                            GlobalState.RefreshFromLab(GlobalState.Lab.WithL(vm.LabL));
+                        case nameof(LabTabViewModel.L):
+                            if (!Lab.IsValidL(vm.L)) return;
+                            GlobalState.RefreshFromLab(GlobalState.Lab.WithL(vm.L));
                             break;
-                        case nameof(LabTabViewModel.LabA):
-                            if (!Lab.IsValidA(vm.LabA)) return;
-                            GlobalState.RefreshFromLab(GlobalState.Lab.WithA(vm.LabA));
+                        case nameof(LabTabViewModel.A):
+                            if (!Lab.IsValidA(vm.A)) return;
+                            GlobalState.RefreshFromLab(GlobalState.Lab.WithA(vm.A));
                             break;
-                        case nameof(LabTabViewModel.LabB):
-                            if (!Lab.IsValidB(vm.LabB)) return;
-                            GlobalState.RefreshFromLab(GlobalState.Lab.WithB(vm.LabB));
+                        case nameof(LabTabViewModel.B):
+                            if (!Lab.IsValidB(vm.B)) return;
+                            GlobalState.RefreshFromLab(GlobalState.Lab.WithB(vm.B));
                             break;
                     }
                 };
 
-                LabTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.LabText); };
+                TextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.Text); };
             };
         }
     }

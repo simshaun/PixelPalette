@@ -30,13 +30,13 @@
             Style="{StaticResource ColorOutputLabel}"
             Content="HEX" />
           <TextBox
-            x:Name="HexText"
+            x:Name="Text"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding HexText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             MaxLength="9"
             Width="65" />
           <control:ClipboardButton
-            x:Name="HexTextClipboardButton" />
+            x:Name="TextClipboardButton" />
         </StackPanel>
       </StackPanel>
     </Border>
@@ -61,21 +61,21 @@
       <control:GradientSlider
         Grid.Row="0"
         Grid.Column="0"
-        x:Name="HexRedSlider"
+        x:Name="RedSlider"
         Background="{Binding RedGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Rgb.Red, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="1"
         Grid.Column="0"
-        x:Name="HexGreenSlider"
+        x:Name="GreenSlider"
         Background="{Binding GreenGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Rgb.Green, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="2"
         Grid.Column="0"
-        x:Name="HexBlueSlider"
+        x:Name="BlueSlider"
         Background="{Binding BlueGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Rgb.Blue, Mode=OneWay}" />
@@ -94,24 +94,24 @@
       <TextBox
         Grid.Row="0"
         Grid.Column="2"
-        x:Name="HexRed"
+        x:Name="RedText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="2"
-        Text="{Binding HexRed, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Red, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="2"
-        x:Name="HexGreen"
+        x:Name="GreenText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="2"
-        Text="{Binding HexGreen, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Green, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="2"
-        x:Name="HexBlue"
+        x:Name="BlueText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="2"
-        Text="{Binding HexBlue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Blue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
     </Grid>
   </StackPanel>
 </UserControl>

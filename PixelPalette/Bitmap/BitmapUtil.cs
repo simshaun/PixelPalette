@@ -73,7 +73,8 @@ namespace PixelPalette.Bitmap
                     var sourceOffset = rowOffset + (sourceX + x) * bytesPerPixel;
                     var outputOffset = y * outputStride + x * bytesPerPixel;
 
-                    if (sourceBuffer != null && (sourceOffset < 0 || sourceOffset >= sourceBuffer.Length)) continue;
+                    if (sourceBuffer == null) continue;
+                    if (sourceOffset < 0 || sourceOffset >= sourceBuffer.Length) continue;
                     outputBuffer[outputOffset] = sourceBuffer[sourceOffset];
                     outputBuffer[outputOffset + 1] = sourceBuffer[sourceOffset + 1];
                     outputBuffer[outputOffset + 2] = sourceBuffer[sourceOffset + 2];

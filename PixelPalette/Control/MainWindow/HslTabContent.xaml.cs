@@ -30,59 +30,59 @@ namespace PixelPalette.Control.MainWindow
                 var vm = new HslTabViewModel(GlobalState);
                 DataContext = vm;
 
-                EventUtil.HandleKey(Key.Up, HslHue,
+                EventUtil.HandleKey(Key.Up, HueText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(GlobalState.Hsl.Hue + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HslSaturation,
+                EventUtil.HandleKey(Key.Up, SaturationText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(GlobalState.Hsl.Saturation + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HslLuminance,
+                EventUtil.HandleKey(Key.Up, LuminanceText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(GlobalState.Hsl.Luminance + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HslScaledHue,
+                EventUtil.HandleKey(Key.Up, ScaledHueText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledHue(GlobalState.Hsl.ScaledHue + 1)); });
-                EventUtil.HandleKey(Key.Up, HslScaledSaturation,
+                EventUtil.HandleKey(Key.Up, ScaledSaturationText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledSaturation(GlobalState.Hsl.ScaledSaturation + 1)); });
-                EventUtil.HandleKey(Key.Up, HslScaledLuminance,
+                EventUtil.HandleKey(Key.Up, ScaledLuminanceText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledLuminance(GlobalState.Hsl.ScaledLuminance + 1)); });
 
-                EventUtil.HandleKey(Key.Down, HslHue,
+                EventUtil.HandleKey(Key.Down, HueText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(GlobalState.Hsl.Hue - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HslSaturation,
+                EventUtil.HandleKey(Key.Down, SaturationText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(GlobalState.Hsl.Saturation - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HslLuminance,
+                EventUtil.HandleKey(Key.Down, LuminanceText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(GlobalState.Hsl.Luminance - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HslScaledHue,
+                EventUtil.HandleKey(Key.Down, ScaledHueText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledHue(GlobalState.Hsl.ScaledHue - 1)); });
-                EventUtil.HandleKey(Key.Down, HslScaledSaturation,
+                EventUtil.HandleKey(Key.Down, ScaledSaturationText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledSaturation(GlobalState.Hsl.ScaledSaturation - 1)); });
-                EventUtil.HandleKey(Key.Down, HslScaledLuminance,
+                EventUtil.HandleKey(Key.Down, ScaledLuminanceText,
                                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledLuminance(GlobalState.Hsl.ScaledLuminance - 1)); });
 
                 EventUtil.HandleMouseWheel(
-                    HslHue,
+                    HueText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(GlobalState.Hsl.Hue + 0.01)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(GlobalState.Hsl.Hue - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HslSaturation,
+                    SaturationText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(GlobalState.Hsl.Saturation + 0.01)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(GlobalState.Hsl.Saturation - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HslLuminance,
+                    LuminanceText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(GlobalState.Hsl.Luminance + 0.01)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(GlobalState.Hsl.Luminance - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HslScaledHue,
+                    ScaledHueText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledHue(GlobalState.Hsl.ScaledHue + 1)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledHue(GlobalState.Hsl.ScaledHue - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HslScaledSaturation,
+                    ScaledSaturationText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledSaturation(GlobalState.Hsl.ScaledSaturation + 1)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledSaturation(GlobalState.Hsl.ScaledSaturation - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HslScaledLuminance,
+                    ScaledLuminanceText,
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledLuminance(GlobalState.Hsl.ScaledLuminance + 1)); },
                     () => { GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledLuminance(GlobalState.Hsl.ScaledLuminance - 1)); }
                 );
@@ -91,9 +91,9 @@ namespace PixelPalette.Control.MainWindow
                 var sThrottler = new Throttler();
                 var lThrottler = new Throttler();
 
-                EventUtil.HandleSliderChange(HslHueSlider, value => { hThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(value))); });
-                EventUtil.HandleSliderChange(HslSaturationSlider, value => { sThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(value))); });
-                EventUtil.HandleSliderChange(HslLuminanceSlider, value => { lThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(value))); });
+                EventUtil.HandleSliderChange(HueSlider, value => { hThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(value))); });
+                EventUtil.HandleSliderChange(SaturationSlider, value => { sThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(value))); });
+                EventUtil.HandleSliderChange(LuminanceSlider, value => { lThrottler.Throttle(1, _ => GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(value))); });
 
                 vm.PropertyChangedByUser += (_, ev) =>
                 {
@@ -103,49 +103,49 @@ namespace PixelPalette.Control.MainWindow
 
                     switch (ev.PropertyName)
                     {
-                        case nameof(HslTabViewModel.HslText):
-                            nullableHsl = Hsl.FromString(vm.HslText);
+                        case nameof(HslTabViewModel.Text):
+                            nullableHsl = Hsl.FromString(vm.Text);
                             if (nullableHsl.HasValue) GlobalState.RefreshFromHsl(nullableHsl.Value);
                             break;
-                        case nameof(HslTabViewModel.HslScaledText):
-                            nullableHsl = Hsl.FromScaledString(vm.HslScaledText);
+                        case nameof(HslTabViewModel.ScaledText):
+                            nullableHsl = Hsl.FromScaledString(vm.ScaledText);
                             if (nullableHsl.HasValue) GlobalState.RefreshFromHsl(nullableHsl.Value);
                             break;
-                        case nameof(HslTabViewModel.HslHue):
-                            isDouble = double.TryParse(vm.HslHue, out doubleVal);
+                        case nameof(HslTabViewModel.Hue):
+                            isDouble = double.TryParse(vm.Hue, out doubleVal);
                             if (!isDouble || !Hsl.IsValidHue(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithHue(doubleVal));
                             break;
-                        case nameof(HslTabViewModel.HslSaturation):
-                            isDouble = double.TryParse(vm.HslSaturation, out doubleVal);
+                        case nameof(HslTabViewModel.Saturation):
+                            isDouble = double.TryParse(vm.Saturation, out doubleVal);
                             if (!isDouble || !Hsl.IsValidSaturation(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithSaturation(doubleVal));
                             break;
-                        case nameof(HslTabViewModel.HslLuminance):
-                            isDouble = double.TryParse(vm.HslLuminance, out doubleVal);
+                        case nameof(HslTabViewModel.Luminance):
+                            isDouble = double.TryParse(vm.Luminance, out doubleVal);
                             if (!isDouble || !Hsl.IsValidLuminance(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithLuminance(doubleVal));
                             break;
-                        case nameof(HslTabViewModel.HslScaledHue):
-                            isDouble = double.TryParse(vm.HslScaledHue, out doubleVal);
+                        case nameof(HslTabViewModel.ScaledHue):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsl.IsValidScaledHue(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledHue(doubleVal));
                             break;
-                        case nameof(HslTabViewModel.HslScaledSaturation):
-                            isDouble = double.TryParse(vm.HslScaledHue, out doubleVal);
+                        case nameof(HslTabViewModel.ScaledSaturation):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsl.IsValidScaledSaturation(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledSaturation(doubleVal));
                             break;
-                        case nameof(HslTabViewModel.HslScaledLuminance):
-                            isDouble = double.TryParse(vm.HslScaledHue, out doubleVal);
+                        case nameof(HslTabViewModel.ScaledLuminance):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsl.IsValidScaledLuminance(doubleVal)) return;
                             GlobalState.RefreshFromHsl(GlobalState.Hsl.WithScaledLuminance(doubleVal));
                             break;
                     }
                 };
 
-                HslScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.HslScaledText); };
-                HslTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.HslText); };
+                ScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.ScaledText); };
+                TextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.Text); };
             };
         }
     }

@@ -31,9 +31,9 @@
             Content="0-100" />
           <TextBox
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding HsvScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding ScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="HsvScaledTextClipboardButton" />
+            x:Name="ScaledTextClipboardButton" />
         </StackPanel>
         <StackPanel
           Style="{StaticResource ColorOutputRow}">
@@ -42,9 +42,9 @@
             Content="0-1" />
           <TextBox
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding HsvText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="HsvTextClipboardButton" />
+            x:Name="TextClipboardButton" />
         </StackPanel>
       </StackPanel>
     </Border>
@@ -71,22 +71,22 @@
       <control:GradientSlider
         Grid.Row="0"
         Grid.Column="0"
-        x:Name="HsvHueSlider"
+        x:Name="HueSlider"
         Background="{Binding HueGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Hsv.Hue, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="1"
         Grid.Column="0"
-        x:Name="HsvSaturationSlider"
-        Background="{Binding HsvSaturationGradientFill}"
+        x:Name="SaturationSlider"
+        Background="{Binding SaturationGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Hsv.Saturation, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="2"
         Grid.Column="0"
-        x:Name="HsvValueSlider"
-        Background="{Binding HsvValueGradientFill}"
+        x:Name="ValueSlider"
+        Background="{Binding ValueGradientFill}"
         Style="{StaticResource GradientSlider}"
         Value="{Binding GlobalState.Hsv.Value, Mode=OneWay}" />
       <Label
@@ -104,45 +104,45 @@
       <TextBox
         Grid.Row="0"
         Grid.Column="2"
-        x:Name="HsvScaledHue"
+        x:Name="ScaledHueText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding HsvScaledHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="2"
-        x:Name="HsvScaledSaturation"
+        x:Name="ScaledSaturationText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding HsvScaledSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="2"
-        x:Name="HsvScaledValue"
+        x:Name="ScaledValueText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding HsvScaledValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="0"
         Grid.Column="3"
-        x:Name="HsvHue"
+        x:Name="HueText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding HsvHue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Hue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="3"
-        x:Name="HsvSaturation"
+        x:Name="SaturationText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding HsvSaturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Saturation, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="3"
-        x:Name="HsvValue"
+        x:Name="ValueText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding HsvValue, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
     </Grid>
   </StackPanel>
 </UserControl>

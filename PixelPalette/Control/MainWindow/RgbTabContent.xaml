@@ -30,11 +30,10 @@
             Style="{StaticResource ColorOutputLabel}"
             Content="0-255" />
           <TextBox
-            x:Name="RgbScaledText"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding RgbScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding ScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="RgbScaledTextClipboardButton" />
+            x:Name="ScaledTextClipboardButton" />
         </StackPanel>
         <StackPanel
           Style="{StaticResource ColorOutputRow}">
@@ -42,11 +41,10 @@
             Style="{StaticResource ColorOutputLabel}"
             Content="0-1" />
           <TextBox
-            x:Name="RgbText"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding RgbText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="RgbTextClipboardButton" />
+            x:Name="TextClipboardButton" />
         </StackPanel>
       </StackPanel>
     </Border>
@@ -76,21 +74,21 @@
         x:Name="RgbRedSlider"
         Background="{Binding RedGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding RgbR, Mode=OneWay}" />
+        Value="{Binding R, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="1"
         Grid.Column="0"
         x:Name="RgbGreenSlider"
         Background="{Binding GreenGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding RgbG, Mode=OneWay}" />
+        Value="{Binding G, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="2"
         Grid.Column="0"
         x:Name="RgbBlueSlider"
         Background="{Binding BlueGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding RgbB, Mode=OneWay}" />
+        Value="{Binding B, Mode=OneWay}" />
       <Label
         Grid.Row="0"
         Grid.Column="1"
@@ -109,42 +107,42 @@
         x:Name="RgbScaledRed"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding RgbScaledRedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledRedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="2"
         x:Name="RgbScaledGreen"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding RgbScaledGreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledGreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="2"
         x:Name="RgbScaledBlue"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding RgbScaledBlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledBlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="0"
         Grid.Column="3"
         x:Name="RgbRed"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding RgbRedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding RedText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="3"
         x:Name="RgbGreen"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding RgbGreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding GreenText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="3"
         x:Name="RgbBlue"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding RgbBlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding BlueText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
     </Grid>
   </StackPanel>
 </UserControl>

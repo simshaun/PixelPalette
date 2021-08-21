@@ -3,6 +3,6 @@
     public sealed class DebugWindowViewModel
     {
         // ReSharper disable once MemberCanBeMadeStatic.Global
-        public string LinesText => AppDebug.LinesText;
+        public static string LinesText => AppDebug.LinesText;
     }
 }

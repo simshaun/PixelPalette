@@ -95,49 +95,49 @@ namespace PixelPalette.Control.MainWindow
 
                     switch (ev.PropertyName)
                     {
-                        case nameof(RgbTabViewModel.RgbText):
-                            nullableRgb = Rgb.FromString(vm.RgbText);
+                        case nameof(RgbTabViewModel.Text):
+                            nullableRgb = Rgb.FromString(vm.Text);
                             if (nullableRgb.HasValue) GlobalState.RefreshFromRgb(nullableRgb.Value);
                             break;
-                        case nameof(RgbTabViewModel.RgbScaledText):
-                            nullableRgb = Rgb.FromScaledString(vm.RgbScaledText);
+                        case nameof(RgbTabViewModel.ScaledText):
+                            nullableRgb = Rgb.FromScaledString(vm.ScaledText);
                             if (nullableRgb.HasValue) GlobalState.RefreshFromRgb(nullableRgb.Value);
                             break;
-                        case nameof(RgbTabViewModel.RgbScaledRedText):
-                            isInt = int.TryParse(vm.RgbScaledRedText, out intVal);
+                        case nameof(RgbTabViewModel.ScaledRedText):
+                            isInt = int.TryParse(vm.ScaledRedText, out intVal);
                             if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithRed(intVal));
                             break;
-                        case nameof(RgbTabViewModel.RgbScaledGreenText):
-                            isInt = int.TryParse(vm.RgbScaledGreenText, out intVal);
+                        case nameof(RgbTabViewModel.ScaledGreenText):
+                            isInt = int.TryParse(vm.ScaledGreenText, out intVal);
                             if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithGreen(intVal));
                             break;
-                        case nameof(RgbTabViewModel.RgbScaledBlueText):
-                            isInt = int.TryParse(vm.RgbScaledBlueText, out intVal);
+                        case nameof(RgbTabViewModel.ScaledBlueText):
+                            isInt = int.TryParse(vm.ScaledBlueText, out intVal);
                             if (!isInt || !Rgb.IsValidScaledComponent(intVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithBlue(intVal));
                             break;
-                        case nameof(RgbTabViewModel.RgbRedText):
-                            isDouble = double.TryParse(vm.RgbRedText, out doubleVal);
+                        case nameof(RgbTabViewModel.RedText):
+                            isDouble = double.TryParse(vm.RedText, out doubleVal);
                             if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithRed(doubleVal));
                             break;
-                        case nameof(RgbTabViewModel.RgbGreenText):
-                            isDouble = double.TryParse(vm.RgbGreenText, out doubleVal);
+                        case nameof(RgbTabViewModel.GreenText):
+                            isDouble = double.TryParse(vm.GreenText, out doubleVal);
                             if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithGreen(doubleVal));
                             break;
-                        case nameof(RgbTabViewModel.RgbBlueText):
-                            isDouble = double.TryParse(vm.RgbBlueText, out doubleVal);
+                        case nameof(RgbTabViewModel.BlueText):
+                            isDouble = double.TryParse(vm.BlueText, out doubleVal);
                             if (!isDouble || !Rgb.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromRgb(GlobalState.Rgb.WithBlue(doubleVal));
                             break;
                     }
                 };
 
-                RgbTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.RgbText); };
-                RgbScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.RgbScaledText); };
+                TextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.Text); };
+                ScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.ScaledText); };
             };
         }
     }

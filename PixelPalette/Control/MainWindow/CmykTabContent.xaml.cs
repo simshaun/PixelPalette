@@ -30,61 +30,61 @@ namespace PixelPalette.Control.MainWindow
                 var vm = new CmykTabViewModel(GlobalState);
                 DataContext = vm;
 
-                EventUtil.HandleKey(Key.Up, CmykCyan, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan + 0.01)); });
-                EventUtil.HandleKey(Key.Up, CmykMagenta, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta + 0.01)); });
-                EventUtil.HandleKey(Key.Up, CmykYellow, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow + 0.01)); });
-                EventUtil.HandleKey(Key.Up, CmykKey, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key + 0.01)); });
-                EventUtil.HandleKey(Key.Up, CmykScaledCyan, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan + 1)); });
-                EventUtil.HandleKey(Key.Up, CmykScaledMagenta, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta + 1)); });
-                EventUtil.HandleKey(Key.Up, CmykScaledYellow, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow + 1)); });
-                EventUtil.HandleKey(Key.Up, CmykScaledKey, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey + 1)); });
+                EventUtil.HandleKey(Key.Up, CyanText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan + 0.01)); });
+                EventUtil.HandleKey(Key.Up, MagentaText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta + 0.01)); });
+                EventUtil.HandleKey(Key.Up, YellowText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow + 0.01)); });
+                EventUtil.HandleKey(Key.Up, KeyText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key + 0.01)); });
+                EventUtil.HandleKey(Key.Up, ScaledCyanText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan + 1)); });
+                EventUtil.HandleKey(Key.Up, ScaledMagentaText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta + 1)); });
+                EventUtil.HandleKey(Key.Up, ScaledYellowText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow + 1)); });
+                EventUtil.HandleKey(Key.Up, ScaledKeyText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey + 1)); });
 
-                EventUtil.HandleKey(Key.Down, CmykCyan, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan - 0.01)); });
-                EventUtil.HandleKey(Key.Down, CmykMagenta, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta - 0.01)); });
-                EventUtil.HandleKey(Key.Down, CmykYellow, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow - 0.01)); });
-                EventUtil.HandleKey(Key.Down, CmykKey, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key - 0.01)); });
-                EventUtil.HandleKey(Key.Down, CmykScaledCyan, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan - 1)); });
-                EventUtil.HandleKey(Key.Down, CmykScaledMagenta, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta - 1)); });
-                EventUtil.HandleKey(Key.Down, CmykScaledYellow, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow - 1)); });
-                EventUtil.HandleKey(Key.Down, CmykScaledKey, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey - 1)); });
+                EventUtil.HandleKey(Key.Down, CyanText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan - 0.01)); });
+                EventUtil.HandleKey(Key.Down, MagentaText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta - 0.01)); });
+                EventUtil.HandleKey(Key.Down, YellowText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow - 0.01)); });
+                EventUtil.HandleKey(Key.Down, KeyText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key - 0.01)); });
+                EventUtil.HandleKey(Key.Down, ScaledCyanText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan - 1)); });
+                EventUtil.HandleKey(Key.Down, ScaledMagentaText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta - 1)); });
+                EventUtil.HandleKey(Key.Down, ScaledYellowText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow - 1)); });
+                EventUtil.HandleKey(Key.Down, ScaledKeyText, () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey - 1)); });
 
                 EventUtil.HandleMouseWheel(
-                    CmykCyan,
+                    CyanText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan + 0.01)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(GlobalState.Cmyk.Cyan - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykMagenta,
+                    MagentaText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta + 0.01)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(GlobalState.Cmyk.Magenta - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykYellow,
+                    YellowText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow + 0.01)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(GlobalState.Cmyk.Yellow - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykKey,
+                    KeyText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key + 0.01)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(GlobalState.Cmyk.Key - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykScaledCyan,
+                    ScaledCyanText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan + 1)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(GlobalState.Cmyk.ScaledCyan - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykScaledMagenta,
+                    ScaledMagentaText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta + 1)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(GlobalState.Cmyk.ScaledMagenta - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykScaledYellow,
+                    ScaledYellowText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow + 1)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(GlobalState.Cmyk.ScaledYellow - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    CmykScaledKey,
+                    ScaledKeyText,
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey + 1)); },
                     () => { GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(GlobalState.Cmyk.ScaledKey - 1)); }
                 );
@@ -94,10 +94,10 @@ namespace PixelPalette.Control.MainWindow
                 var yThrottler = new Throttler();
                 var kThrottler = new Throttler();
 
-                EventUtil.HandleSliderChange(CmykCyanSlider, value => { cThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(value))); });
-                EventUtil.HandleSliderChange(CmykMagentaSlider, value => { mThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(value))); });
-                EventUtil.HandleSliderChange(CmykYellowSlider, value => { yThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(value))); });
-                EventUtil.HandleSliderChange(CmykKeySlider, value => { kThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(value))); });
+                EventUtil.HandleSliderChange(CyanSlider, value => { cThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(value))); });
+                EventUtil.HandleSliderChange(MagentaSlider, value => { mThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(value))); });
+                EventUtil.HandleSliderChange(YellowSlider, value => { yThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(value))); });
+                EventUtil.HandleSliderChange(KeySlider, value => { kThrottler.Throttle(1, _ => GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(value))); });
 
                 vm.PropertyChangedByUser += (_, ev) =>
                 {
@@ -107,59 +107,59 @@ namespace PixelPalette.Control.MainWindow
 
                     switch (ev.PropertyName)
                     {
-                        case nameof(CmykTabViewModel.CmykText):
-                            nullableCmyk = Cmyk.FromString(vm.CmykText);
+                        case nameof(CmykTabViewModel.Text):
+                            nullableCmyk = Cmyk.FromString(vm.Text);
                             if (nullableCmyk.HasValue) GlobalState.RefreshFromCmyk(nullableCmyk.Value);
                             break;
-                        case nameof(CmykTabViewModel.CmykScaledText):
-                            nullableCmyk = Cmyk.FromScaledString(vm.CmykScaledText);
+                        case nameof(CmykTabViewModel.ScaledText):
+                            nullableCmyk = Cmyk.FromScaledString(vm.ScaledText);
                             if (nullableCmyk.HasValue) GlobalState.RefreshFromCmyk(nullableCmyk.Value);
                             break;
-                        case nameof(CmykTabViewModel.CmykCyan):
-                            isDouble = double.TryParse(vm.CmykCyan, out doubleVal);
+                        case nameof(CmykTabViewModel.Cyan):
+                            isDouble = double.TryParse(vm.Cyan, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithCyan(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykMagenta):
-                            isDouble = double.TryParse(vm.CmykMagenta, out doubleVal);
+                        case nameof(CmykTabViewModel.Magenta):
+                            isDouble = double.TryParse(vm.Magenta, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithMagenta(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykYellow):
-                            isDouble = double.TryParse(vm.CmykYellow, out doubleVal);
+                        case nameof(CmykTabViewModel.Yellow):
+                            isDouble = double.TryParse(vm.Yellow, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithYellow(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykKey):
-                            isDouble = double.TryParse(vm.CmykKey, out doubleVal);
+                        case nameof(CmykTabViewModel.Key):
+                            isDouble = double.TryParse(vm.Key, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithKey(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykScaledCyan):
-                            isDouble = double.TryParse(vm.CmykScaledCyan, out doubleVal);
+                        case nameof(CmykTabViewModel.ScaledCyan):
+                            isDouble = double.TryParse(vm.ScaledCyan, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledCyan(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykScaledMagenta):
-                            isDouble = double.TryParse(vm.CmykScaledMagenta, out doubleVal);
+                        case nameof(CmykTabViewModel.ScaledMagenta):
+                            isDouble = double.TryParse(vm.ScaledMagenta, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledMagenta(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykScaledYellow):
-                            isDouble = double.TryParse(vm.CmykScaledYellow, out doubleVal);
+                        case nameof(CmykTabViewModel.ScaledYellow):
+                            isDouble = double.TryParse(vm.ScaledYellow, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledYellow(doubleVal));
                             break;
-                        case nameof(CmykTabViewModel.CmykScaledKey):
-                            isDouble = double.TryParse(vm.CmykScaledKey, out doubleVal);
+                        case nameof(CmykTabViewModel.ScaledKey):
+                            isDouble = double.TryParse(vm.ScaledKey, out doubleVal);
                             if (!isDouble || !Cmyk.IsValidScaledComponent(doubleVal)) return;
                             GlobalState.RefreshFromCmyk(GlobalState.Cmyk.WithScaledKey(doubleVal));
                             break;
                     }
                 };
 
-                CmykScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.CmykScaledText); };
-                CmykTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.CmykText); };
+                ScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.ScaledText); };
+                TextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.Text); };
             };
         }
     }

@@ -21,15 +21,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 using System;
-// ReSharper disable InheritdocConsiderUsage
 
 #pragma warning disable 1591
-// ReSharper disable UnusedMember.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable IntroduceOptionalParameters.Global
-// ReSharper disable MemberCanBeProtected.Global
+#pragma warning disable 8618
 // ReSharper disable InconsistentNaming
+// ReSharper disable InheritdocConsiderUsage
+// ReSharper disable IntroduceOptionalParameters.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 namespace PixelPalette.Annotations
 {

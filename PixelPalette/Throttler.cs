@@ -1,6 +1,4 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace PixelPalette
@@ -28,7 +26,7 @@ namespace PixelPalette
             var difference = curTime.Subtract(TimerStarted).TotalMilliseconds;
 
             // if timeout is not up yet - adjust timeout to fire with potentially new Action parameters           
-            if (difference < (double) interval)
+            if (difference < interval)
             {
                 interval -= (int) difference;
             }

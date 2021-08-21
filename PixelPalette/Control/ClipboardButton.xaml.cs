@@ -13,7 +13,7 @@ namespace PixelPalette.Control
             InitializeComponent();
         }
 
-        public event EventHandler ButtonClicked;
+        public event EventHandler? ButtonClicked;
 
         private async void Button_OnClick(object sender, RoutedEventArgs e)
         {

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using PixelPalette.Bitmap;
 using PixelPalette.Color;
 

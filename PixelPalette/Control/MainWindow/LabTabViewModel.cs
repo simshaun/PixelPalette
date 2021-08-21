@@ -9,16 +9,16 @@ namespace PixelPalette.Control.MainWindow
 {
     public sealed class LabTabViewModel : INotifyPropertyChanged
     {
-        public GlobalState GlobalState { get; }
+        private GlobalState GlobalState { get; }
 
-        private string _labText = "";
-        private double _labL;
-        private double _labA;
-        private double _labB;
+        private string _text = "";
+        private double _l;
+        private double _a;
+        private double _b;
 
-        private LinearGradientBrush? _labLGradientFill;
-        private LinearGradientBrush? _labAGradientFill;
-        private LinearGradientBrush? _labBGradientFill;
+        private LinearGradientBrush? _lGradientFill;
+        private LinearGradientBrush? _aGradientFill;
+        private LinearGradientBrush? _bGradientFill;
 
         public LabTabViewModel(GlobalState globalState)
         {
@@ -30,71 +30,79 @@ namespace PixelPalette.Control.MainWindow
             RefreshValues();
         }
 
-        public string LabText
+        public string Text
         {
-            get => _labText;
-            set => SetField(ref _labText, value);
+            get => _text;
+            set => SetField(ref _text, value, TextEventArgs);
         }
 
-        public double LabL
+        public double L
         {
-            get => _labL;
-            set => SetField(ref _labL, value);
+            get => _l;
+            set => SetField(ref _l, value, LEventArgs);
         }
 
-        public double LabA
+        public double A
         {
-            get => _labA;
-            set => SetField(ref _labA, value);
+            get => _a;
+            set => SetField(ref _a, value, AEventArgs);
         }
 
-        public double LabB
+        public double B
         {
-            get => _labB;
-            set => SetField(ref _labB, value);
+            get => _b;
+            set => SetField(ref _b, value, BEventArgs);
         }
 
-        public LinearGradientBrush? LabLGradientFill
+        public LinearGradientBrush? LGradientFill
         {
-            get => _labLGradientFill;
-            private set => SetField(ref _labLGradientFill, value);
+            get => _lGradientFill;
+            private set => SetField(ref _lGradientFill, value, LGradientFillEventArgs);
         }
 
-        public LinearGradientBrush? LabAGradientFill
+        public LinearGradientBrush? AGradientFill
         {
-            get => _labAGradientFill;
-            private set => SetField(ref _labAGradientFill, value);
+            get => _aGradientFill;
+            private set => SetField(ref _aGradientFill, value, AGradientFillEventArgs);
         }
 
-        public LinearGradientBrush? LabBGradientFill
+        public LinearGradientBrush? BGradientFill
         {
-            get => _labBGradientFill;
-            private set => SetField(ref _labBGradientFill, value);
+            get => _bGradientFill;
+            private set => SetField(ref _bGradientFill, value, BGradientFillEventArgs);
         }
+
+        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
+        private static readonly PropertyChangedEventArgs LEventArgs = new(nameof(L));
+        private static readonly PropertyChangedEventArgs AEventArgs = new(nameof(A));
+        private static readonly PropertyChangedEventArgs BEventArgs = new(nameof(B));
+        private static readonly PropertyChangedEventArgs LGradientFillEventArgs = new(nameof(LGradientFill));
+        private static readonly PropertyChangedEventArgs AGradientFillEventArgs = new(nameof(AGradientFill));
+        private static readonly PropertyChangedEventArgs BGradientFillEventArgs = new(nameof(BGradientFill));
 
         private void RefreshValues()
         {
             _isUserUpdate = false;
 
-            LabText = GlobalState.Lab.ToString();
-            LabL = GlobalState.Lab.RoundedL;
-            LabA = GlobalState.Lab.RoundedA;
-            LabB = GlobalState.Lab.RoundedB;
+            Text = GlobalState.Lab.ToString();
+            L = GlobalState.Lab.RoundedL;
+            A = GlobalState.Lab.RoundedA;
+            B = GlobalState.Lab.RoundedB;
 
-            var labLGradientFill = Window.MainWindow.NewBrush();
-            var labAGradientFill = Window.MainWindow.NewBrush();
-            var labBGradientFill = Window.MainWindow.NewBrush();
+            var lGradientFill = Window.MainWindow.NewBrush();
+            var aGradientFill = Window.MainWindow.NewBrush();
+            var bGradientFill = Window.MainWindow.NewBrush();
 
-            labLGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithL(Lab.MinL).ToRgb().ToMediaColor(), 0.0));
-            labLGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithL(Lab.MaxL).ToRgb().ToMediaColor(), 1.0));
-            labAGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithA(Lab.MinA).ToRgb().ToMediaColor(), 0.0));
-            labAGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithA(Lab.MaxA).ToRgb().ToMediaColor(), 1.0));
-            labBGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithB(Lab.MinB).ToRgb().ToMediaColor(), 0.0));
-            labBGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithB(Lab.MaxB).ToRgb().ToMediaColor(), 1.0));
+            lGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithL(Lab.MinL).ToRgb().ToMediaColor(), 0.0));
+            lGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithL(Lab.MaxL).ToRgb().ToMediaColor(), 1.0));
+            aGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithA(Lab.MinA).ToRgb().ToMediaColor(), 0.0));
+            aGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithA(Lab.MaxA).ToRgb().ToMediaColor(), 1.0));
+            bGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithB(Lab.MinB).ToRgb().ToMediaColor(), 0.0));
+            bGradientFill.GradientStops.Add(new GradientStop(GlobalState.Lab.WithB(Lab.MaxB).ToRgb().ToMediaColor(), 1.0));
 
-            LabLGradientFill = labLGradientFill;
-            LabAGradientFill = labAGradientFill;
-            LabBGradientFill = labBGradientFill;
+            LGradientFill = lGradientFill;
+            AGradientFill = aGradientFill;
+            BGradientFill = bGradientFill;
 
             _isUserUpdate = true;
         }
@@ -105,17 +113,17 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, eventArgs);
+            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(propertyName);
+            OnPropertyChanged(eventArgs);
         }
 
 #endregion

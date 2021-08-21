@@ -38,11 +38,10 @@
               Content="(D65/2°)" />
           </StackPanel>
           <TextBox
-            x:Name="LabText"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding LabText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="LabTextClipboardButton" />
+            x:Name="TextClipboardButton" />
         </StackPanel>
       </StackPanel>
     </Border>
@@ -67,30 +66,30 @@
       <control:GradientSlider
         Grid.Row="0"
         Grid.Column="0"
-        x:Name="LabLSlider"
-        Background="{Binding LabLGradientFill}"
+        x:Name="LSlider"
+        Background="{Binding LGradientFill}"
         Style="{StaticResource GradientSlider}"
         Minimum="{x:Static color:Lab.MinL}"
         Maximum="{x:Static color:Lab.MaxL}"
-        Value="{Binding LabL, Mode=OneWay}" />
+        Value="{Binding L, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="1"
         Grid.Column="0"
-        x:Name="LabASlider"
-        Background="{Binding LabAGradientFill}"
+        x:Name="ASlider"
+        Background="{Binding AGradientFill}"
         Style="{StaticResource GradientSlider}"
         Minimum="{x:Static color:Lab.MinA}"
         Maximum="{x:Static color:Lab.MaxA}"
-        Value="{Binding LabA, Mode=OneWay}" />
+        Value="{Binding A, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="2"
         Grid.Column="0"
-        x:Name="LabBSlider"
-        Background="{Binding LabBGradientFill}"
+        x:Name="BSlider"
+        Background="{Binding BGradientFill}"
         Style="{StaticResource GradientSlider}"
         Minimum="{x:Static color:Lab.MinB}"
         Maximum="{x:Static color:Lab.MaxB}"
-        Value="{Binding LabB, Mode=OneWay}" />
+        Value="{Binding B, Mode=OneWay}" />
       <Label
         Grid.Row="0"
         Grid.Column="1"
@@ -109,21 +108,21 @@
         x:Name="LabL"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding LabL, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding L, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="2"
         x:Name="LabA"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding LabA, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding A, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="2"
         x:Name="LabB"
         Style="{StaticResource ColorInputBox}"
         MaxLength="6"
-        Text="{Binding LabB, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding B, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
     </Grid>
   </StackPanel>
 </UserControl>

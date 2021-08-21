@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using PixelPalette.Color;
 
@@ -12,18 +11,18 @@ namespace PixelPalette.Control.MainWindow
     {
         public GlobalState GlobalState { get; }
 
-        private string _hslText = "";
-        private string _hslScaledText = "";
-        private string _hslHue = "";
-        private string _hslSaturation = "";
-        private string _hslLuminance = "";
-        private string _hslScaledHue = "";
-        private string _hslScaledSaturation = "";
-        private string _hslScaledLuminance = "";
+        private string _text = "";
+        private string _scaledText = "";
+        private string _hue = "";
+        private string _saturation = "";
+        private string _luminance = "";
+        private string _scaledHue = "";
+        private string _scaledSaturation = "";
+        private string _scaledLuminance = "";
 
         private LinearGradientBrush? _hueGradientFill;
-        private LinearGradientBrush? _hslSaturationGradientFill;
-        private LinearGradientBrush? _hslLuminanceGradientFill;
+        private LinearGradientBrush? _saturationGradientFill;
+        private LinearGradientBrush? _luminanceGradientFill;
 
         public HslTabViewModel(GlobalState globalState)
         {
@@ -35,84 +34,96 @@ namespace PixelPalette.Control.MainWindow
             RefreshValues();
         }
 
-        public string HslText
+        public string Text
         {
-            get => _hslText;
-            set => SetField(ref _hslText, value);
+            get => _text;
+            set => SetField(ref _text, value, TextEventArgs);
         }
 
-        public string HslScaledText
+        public string ScaledText
         {
-            get => _hslScaledText;
-            set => SetField(ref _hslScaledText, value);
+            get => _scaledText;
+            set => SetField(ref _scaledText, value, ScaledTextEventArgs);
         }
 
-        public string HslHue
+        public string Hue
         {
-            get => _hslHue;
-            set => SetField(ref _hslHue, value);
+            get => _hue;
+            set => SetField(ref _hue, value, HueEventArgs);
         }
 
-        public string HslSaturation
+        public string Saturation
         {
-            get => _hslSaturation;
-            set => SetField(ref _hslSaturation, value);
+            get => _saturation;
+            set => SetField(ref _saturation, value, SaturationEventArgs);
         }
 
-        public string HslLuminance
+        public string Luminance
         {
-            get => _hslLuminance;
-            set => SetField(ref _hslLuminance, value);
+            get => _luminance;
+            set => SetField(ref _luminance, value, LuminanceEventArgs);
         }
 
-        public string HslScaledHue
+        public string ScaledHue
         {
-            get => _hslScaledHue;
-            set => SetField(ref _hslScaledHue, value);
+            get => _scaledHue;
+            set => SetField(ref _scaledHue, value, ScaledHueEventArgs);
         }
 
-        public string HslScaledSaturation
+        public string ScaledSaturation
         {
-            get => _hslScaledSaturation;
-            set => SetField(ref _hslScaledSaturation, value);
+            get => _scaledSaturation;
+            set => SetField(ref _scaledSaturation, value, ScaledSaturationEventArgs);
         }
 
-        public string HslScaledLuminance
+        public string ScaledLuminance
         {
-            get => _hslScaledLuminance;
-            set => SetField(ref _hslScaledLuminance, value);
+            get => _scaledLuminance;
+            set => SetField(ref _scaledLuminance, value, ScaledLuminanceEventArgs);
         }
 
         public LinearGradientBrush? HueGradientFill
         {
             get => _hueGradientFill;
-            private set => SetField(ref _hueGradientFill, value);
+            private set => SetField(ref _hueGradientFill, value, HueGradientFillEventArgs);
         }
 
-        public LinearGradientBrush? HslSaturationGradientFill
+        public LinearGradientBrush? SaturationGradientFill
         {
-            get => _hslSaturationGradientFill;
-            private set => SetField(ref _hslSaturationGradientFill, value);
+            get => _saturationGradientFill;
+            private set => SetField(ref _saturationGradientFill, value, SaturationGradientFillEventArgs);
         }
 
-        public LinearGradientBrush? HslLuminanceGradientFill
+        public LinearGradientBrush? LuminanceGradientFill
         {
-            get => _hslLuminanceGradientFill;
-            private set => SetField(ref _hslLuminanceGradientFill, value);
+            get => _luminanceGradientFill;
+            private set => SetField(ref _luminanceGradientFill, value, LuminanceGradientFillEventArgs);
         }
+
+        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
+        private static readonly PropertyChangedEventArgs ScaledTextEventArgs = new(nameof(ScaledText));
+        private static readonly PropertyChangedEventArgs HueEventArgs = new(nameof(Hue));
+        private static readonly PropertyChangedEventArgs SaturationEventArgs = new(nameof(Saturation));
+        private static readonly PropertyChangedEventArgs LuminanceEventArgs = new(nameof(Luminance));
+        private static readonly PropertyChangedEventArgs ScaledHueEventArgs = new(nameof(ScaledHue));
+        private static readonly PropertyChangedEventArgs ScaledSaturationEventArgs = new(nameof(ScaledSaturation));
+        private static readonly PropertyChangedEventArgs ScaledLuminanceEventArgs = new(nameof(ScaledLuminance));
+        private static readonly PropertyChangedEventArgs HueGradientFillEventArgs = new(nameof(HueGradientFill));
+        private static readonly PropertyChangedEventArgs SaturationGradientFillEventArgs = new(nameof(SaturationGradientFill));
+        private static readonly PropertyChangedEventArgs LuminanceGradientFillEventArgs = new(nameof(LuminanceGradientFill));
 
         private void RefreshValues()
         {
             _isUserUpdate = false;
 
-            HslText = GlobalState.Hsl.ToString();
-            HslScaledText = GlobalState.Hsl.ToScaledString();
-            HslHue = GlobalState.Hsl.RoundedHue.ToString(CultureInfo.InvariantCulture);
-            HslSaturation = GlobalState.Hsl.RoundedSaturation.ToString(CultureInfo.InvariantCulture);
-            HslLuminance = GlobalState.Hsl.RoundedLuminance.ToString(CultureInfo.InvariantCulture);
-            HslScaledHue = GlobalState.Hsl.RoundedScaledHue.ToString(CultureInfo.InvariantCulture);
-            HslScaledSaturation = GlobalState.Hsl.RoundedScaledSaturation.ToString(CultureInfo.InvariantCulture);
-            HslScaledLuminance = GlobalState.Hsl.RoundedScaledLuminance.ToString(CultureInfo.InvariantCulture);
+            Text = GlobalState.Hsl.ToString();
+            ScaledText = GlobalState.Hsl.ToScaledString();
+            Hue = GlobalState.Hsl.RoundedHue.ToString(CultureInfo.InvariantCulture);
+            Saturation = GlobalState.Hsl.RoundedSaturation.ToString(CultureInfo.InvariantCulture);
+            Luminance = GlobalState.Hsl.RoundedLuminance.ToString(CultureInfo.InvariantCulture);
+            ScaledHue = GlobalState.Hsl.RoundedScaledHue.ToString(CultureInfo.InvariantCulture);
+            ScaledSaturation = GlobalState.Hsl.RoundedScaledSaturation.ToString(CultureInfo.InvariantCulture);
+            ScaledLuminance = GlobalState.Hsl.RoundedScaledLuminance.ToString(CultureInfo.InvariantCulture);
 
             var hueGradientFill = Window.MainWindow.NewBrush();
             var hslSaturationGradientFill = Window.MainWindow.NewBrush();
@@ -134,8 +145,8 @@ namespace PixelPalette.Control.MainWindow
             hslLuminanceGradientFill.GradientStops.Add(new GradientStop(GlobalState.Hsl.WithLuminance(1.0).ToMediaColor(), 1.0));
 
             HueGradientFill = hueGradientFill;
-            HslSaturationGradientFill = hslSaturationGradientFill;
-            HslLuminanceGradientFill = hslLuminanceGradientFill;
+            SaturationGradientFill = hslSaturationGradientFill;
+            LuminanceGradientFill = hslLuminanceGradientFill;
 
             _isUserUpdate = true;
         }
@@ -146,17 +157,17 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, eventArgs);
+            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(propertyName);
+            OnPropertyChanged(eventArgs);
         }
 
 #endregion

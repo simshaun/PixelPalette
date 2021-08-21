@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace PixelPalette.Control.MainWindow
@@ -10,10 +9,10 @@ namespace PixelPalette.Control.MainWindow
     {
         public GlobalState GlobalState { get; }
 
-        private string _hexText = "";
-        private string _hexRed = "";
-        private string _hexGreen = "";
-        private string _hexBlue = "";
+        private string _text = "";
+        private string _red = "";
+        private string _green = "";
+        private string _blue = "";
 
         private LinearGradientBrush? _redGradientFill;
         private LinearGradientBrush? _greenGradientFill;
@@ -29,56 +28,64 @@ namespace PixelPalette.Control.MainWindow
             RefreshValues();
         }
 
-        public string HexText
+        public string Text
         {
-            get => _hexText;
-            set => SetField(ref _hexText, value);
+            get => _text;
+            set => SetField(ref _text, value, TextEventArgs);
         }
 
-        public string HexRed
+        public string Red
         {
-            get => _hexRed;
-            set => SetField(ref _hexRed, value);
+            get => _red;
+            set => SetField(ref _red, value, RedEventArgs);
         }
 
-        public string HexGreen
+        public string Green
         {
-            get => _hexGreen;
-            set => SetField(ref _hexGreen, value);
+            get => _green;
+            set => SetField(ref _green, value, GreenEventArgs);
         }
 
-        public string HexBlue
+        public string Blue
         {
-            get => _hexBlue;
-            set => SetField(ref _hexBlue, value);
+            get => _blue;
+            set => SetField(ref _blue, value, BlueEventArgs);
         }
 
         public LinearGradientBrush? RedGradientFill
         {
             get => _redGradientFill;
-            private set => SetField(ref _redGradientFill, value);
+            private set => SetField(ref _redGradientFill, value, RedGradientFillEventArgs);
         }
 
         public LinearGradientBrush? GreenGradientFill
         {
             get => _greenGradientFill;
-            private set => SetField(ref _greenGradientFill, value);
+            private set => SetField(ref _greenGradientFill, value, GreenGradientFillEventArgs);
         }
 
         public LinearGradientBrush? BlueGradientFill
         {
             get => _blueGradientFill;
-            private set => SetField(ref _blueGradientFill, value);
+            private set => SetField(ref _blueGradientFill, value, BlueGradientFillEventArgs);
         }
+
+        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
+        private static readonly PropertyChangedEventArgs RedEventArgs = new(nameof(Red));
+        private static readonly PropertyChangedEventArgs GreenEventArgs = new(nameof(Green));
+        private static readonly PropertyChangedEventArgs BlueEventArgs = new(nameof(Blue));
+        private static readonly PropertyChangedEventArgs RedGradientFillEventArgs = new(nameof(RedGradientFill));
+        private static readonly PropertyChangedEventArgs GreenGradientFillEventArgs = new(nameof(GreenGradientFill));
+        private static readonly PropertyChangedEventArgs BlueGradientFillEventArgs = new(nameof(BlueGradientFill));
 
         private void RefreshValues()
         {
             _isUserUpdate = false;
 
-            HexText = GlobalState.Hex.ToString();
-            HexRed = GlobalState.Hex.RedPart;
-            HexGreen = GlobalState.Hex.GreenPart;
-            HexBlue = GlobalState.Hex.BluePart;
+            Text = GlobalState.Hex.ToString();
+            Red = GlobalState.Hex.RedPart;
+            Green = GlobalState.Hex.GreenPart;
+            Blue = GlobalState.Hex.BluePart;
 
             var redGradientFill = Window.MainWindow.NewBrush();
             var greenGradientFill = Window.MainWindow.NewBrush();
@@ -104,17 +111,17 @@ namespace PixelPalette.Control.MainWindow
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, eventArgs);
+            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
-            OnPropertyChanged(propertyName);
+            OnPropertyChanged(eventArgs);
         }
 
 #endregion

@@ -2,27 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
 namespace PixelPalette.Control.MainWindow
 {
     public sealed class RgbTabViewModel : INotifyPropertyChanged
     {
-        public GlobalState GlobalState { get; }
+        private GlobalState GlobalState { get; }
 
-        private string _rgbText = "";
-        private string _rgbScaledText = "";
-        private string _rgbRedText = "";
-        private string _rgbGreenText = "";
-        private string _rgbBlueText = "";
-        private string _rgbScaledRedText = "";
-        private string _rgbScaledGreenText = "";
-        private string _rgbScaledBlueText = "";
+        private string _text = "";
+        private string _scaledText = "";
+        private string _redText = "";
+        private string _greenText = "";
+        private string _blueText = "";
+        private string _scaledRedText = "";
+        private string _scaledGreenText = "";
+        private string _scaledBlueText = "";
 
-        private double _rgbR;
-        private double _rgbG;
-        private double _rgbB;
+        private double _r;
+        private double _g;
+        private double _b;
 
         private LinearGradientBrush? _redGradientFill;
         private LinearGradientBrush? _greenGradientFill;
@@ -38,70 +37,70 @@ namespace PixelPalette.Control.MainWindow
             RefreshValues();
         }
 
-        public string RgbText
+        public string Text
         {
-            get => _rgbText;
-            set => SetField(ref _rgbText, value, RgbTextEventArgs);
+            get => _text;
+            set => SetField(ref _text, value, TextEventArgs);
         }
 
-        public string RgbScaledText
+        public string ScaledText
         {
-            get => _rgbScaledText;
-            set => SetField(ref _rgbScaledText, value, RgbScaledTextEventArgs);
+            get => _scaledText;
+            set => SetField(ref _scaledText, value, ScaledTextEventArgs);
         }
 
-        public string RgbRedText
+        public string RedText
         {
-            get => _rgbRedText;
-            set => SetField(ref _rgbRedText, value, RgbRedTextEventArgs);
+            get => _redText;
+            set => SetField(ref _redText, value, RedTextEventArgs);
         }
 
-        public string RgbGreenText
+        public string GreenText
         {
-            get => _rgbGreenText;
-            set => SetField(ref _rgbGreenText, value, RgbGreenTextEventArgs);
+            get => _greenText;
+            set => SetField(ref _greenText, value, GreenTextEventArgs);
         }
 
-        public string RgbBlueText
+        public string BlueText
         {
-            get => _rgbBlueText;
-            set => SetField(ref _rgbBlueText, value, RgbBlueTextEventArgs);
+            get => _blueText;
+            set => SetField(ref _blueText, value, BlueTextEventArgs);
         }
 
-        public string RgbScaledRedText
+        public string ScaledRedText
         {
-            get => _rgbScaledRedText;
-            set => SetField(ref _rgbScaledRedText, value, RgbScaledRedTextEventArgs);
+            get => _scaledRedText;
+            set => SetField(ref _scaledRedText, value, ScaledRedTextEventArgs);
         }
 
-        public string RgbScaledGreenText
+        public string ScaledGreenText
         {
-            get => _rgbScaledGreenText;
-            set => SetField(ref _rgbScaledGreenText, value, RgbScaledGreenTextEventArgs);
+            get => _scaledGreenText;
+            set => SetField(ref _scaledGreenText, value, ScaledGreenTextEventArgs);
         }
 
-        public string RgbScaledBlueText
+        public string ScaledBlueText
         {
-            get => _rgbScaledBlueText;
-            set => SetField(ref _rgbScaledBlueText, value, RgbScaledBlueTextEventArgs);
+            get => _scaledBlueText;
+            set => SetField(ref _scaledBlueText, value, ScaledBlueTextEventArgs);
         }
 
-        public double RgbR
+        public double R
         {
-            get => _rgbR;
-            set => SetField(ref _rgbR, value, RgbREventArgs);
+            get => _r;
+            set => SetField(ref _r, value, REventArgs);
         }
 
-        public double RgbG
+        public double G
         {
-            get => _rgbG;
-            set => SetField(ref _rgbG, value, RgbGEventArgs);
+            get => _g;
+            set => SetField(ref _g, value, GEventArgs);
         }
 
-        public double RgbB
+        public double B
         {
-            get => _rgbB;
-            set => SetField(ref _rgbB, value, RgbBEventArgs);
+            get => _b;
+            set => SetField(ref _b, value, BEventArgs);
         }
 
         public LinearGradientBrush? RedGradientFill
@@ -122,17 +121,17 @@ namespace PixelPalette.Control.MainWindow
             private set => SetField(ref _blueGradientFill, value, BlueGradientFillEventArgs);
         }
 
-        private static readonly PropertyChangedEventArgs RgbTextEventArgs = new(nameof(RgbText));
-        private static readonly PropertyChangedEventArgs RgbScaledTextEventArgs = new(nameof(RgbScaledText));
-        private static readonly PropertyChangedEventArgs RgbRedTextEventArgs = new(nameof(RgbRedText));
-        private static readonly PropertyChangedEventArgs RgbGreenTextEventArgs = new(nameof(RgbGreenText));
-        private static readonly PropertyChangedEventArgs RgbBlueTextEventArgs = new(nameof(RgbBlueText));
-        private static readonly PropertyChangedEventArgs RgbScaledRedTextEventArgs = new(nameof(RgbScaledRedText));
-        private static readonly PropertyChangedEventArgs RgbScaledGreenTextEventArgs = new(nameof(RgbScaledGreenText));
-        private static readonly PropertyChangedEventArgs RgbScaledBlueTextEventArgs = new(nameof(RgbScaledBlueText));
-        private static readonly PropertyChangedEventArgs RgbREventArgs = new(nameof(RgbR));
-        private static readonly PropertyChangedEventArgs RgbGEventArgs = new(nameof(RgbG));
-        private static readonly PropertyChangedEventArgs RgbBEventArgs = new(nameof(RgbB));
+        private static readonly PropertyChangedEventArgs TextEventArgs = new(nameof(Text));
+        private static readonly PropertyChangedEventArgs ScaledTextEventArgs = new(nameof(ScaledText));
+        private static readonly PropertyChangedEventArgs RedTextEventArgs = new(nameof(RedText));
+        private static readonly PropertyChangedEventArgs GreenTextEventArgs = new(nameof(GreenText));
+        private static readonly PropertyChangedEventArgs BlueTextEventArgs = new(nameof(BlueText));
+        private static readonly PropertyChangedEventArgs ScaledRedTextEventArgs = new(nameof(ScaledRedText));
+        private static readonly PropertyChangedEventArgs ScaledGreenTextEventArgs = new(nameof(ScaledGreenText));
+        private static readonly PropertyChangedEventArgs ScaledBlueTextEventArgs = new(nameof(ScaledBlueText));
+        private static readonly PropertyChangedEventArgs REventArgs = new(nameof(R));
+        private static readonly PropertyChangedEventArgs GEventArgs = new(nameof(G));
+        private static readonly PropertyChangedEventArgs BEventArgs = new(nameof(B));
         private static readonly PropertyChangedEventArgs RedGradientFillEventArgs = new(nameof(RedGradientFill));
         private static readonly PropertyChangedEventArgs GreenGradientFillEventArgs = new(nameof(GreenGradientFill));
         private static readonly PropertyChangedEventArgs BlueGradientFillEventArgs = new(nameof(BlueGradientFill));
@@ -141,17 +140,17 @@ namespace PixelPalette.Control.MainWindow
         {
             _isUserUpdate = false;
 
-            RgbText = GlobalState.Rgb.ToString();
-            RgbScaledText = GlobalState.Rgb.ToScaledString();
-            RgbRedText = GlobalState.Rgb.RoundedRed.ToString(CultureInfo.InvariantCulture);
-            RgbGreenText = GlobalState.Rgb.RoundedGreen.ToString(CultureInfo.InvariantCulture);
-            RgbBlueText = GlobalState.Rgb.RoundedBlue.ToString(CultureInfo.InvariantCulture);
-            RgbScaledRedText = GlobalState.Rgb.ScaledRed.ToString();
-            RgbScaledGreenText = GlobalState.Rgb.ScaledGreen.ToString();
-            RgbScaledBlueText = GlobalState.Rgb.ScaledBlue.ToString();
-            RgbR = GlobalState.Rgb.Red;
-            RgbG = GlobalState.Rgb.Green;
-            RgbB = GlobalState.Rgb.Blue;
+            Text = GlobalState.Rgb.ToString();
+            ScaledText = GlobalState.Rgb.ToScaledString();
+            RedText = GlobalState.Rgb.RoundedRed.ToString(CultureInfo.InvariantCulture);
+            GreenText = GlobalState.Rgb.RoundedGreen.ToString(CultureInfo.InvariantCulture);
+            BlueText = GlobalState.Rgb.RoundedBlue.ToString(CultureInfo.InvariantCulture);
+            ScaledRedText = GlobalState.Rgb.ScaledRed.ToString();
+            ScaledGreenText = GlobalState.Rgb.ScaledGreen.ToString();
+            ScaledBlueText = GlobalState.Rgb.ScaledBlue.ToString();
+            R = GlobalState.Rgb.Red;
+            G = GlobalState.Rgb.Green;
+            B = GlobalState.Rgb.Blue;
 
             var redGradientFill = Window.MainWindow.NewBrush();
             var greenGradientFill = Window.MainWindow.NewBrush();
@@ -183,24 +182,11 @@ namespace PixelPalette.Control.MainWindow
             if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
         }
 
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private void SetField<T>(ref T field, T value, PropertyChangedEventArgs eventArgs)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(eventArgs);
-        }
-
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return;
-            field = value;
-            OnPropertyChanged(propertyName);
         }
 
 #endregion

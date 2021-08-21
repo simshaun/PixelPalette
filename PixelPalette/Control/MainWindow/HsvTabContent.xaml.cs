@@ -30,59 +30,59 @@ namespace PixelPalette.Control.MainWindow
                 var vm = new HsvTabViewModel(GlobalState);
                 DataContext = vm;
 
-                EventUtil.HandleKey(Key.Up, HsvHue,
+                EventUtil.HandleKey(Key.Up, HueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(GlobalState.Hsv.Hue + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HsvSaturation,
+                EventUtil.HandleKey(Key.Up, SaturationText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(GlobalState.Hsv.Saturation + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HsvValue,
+                EventUtil.HandleKey(Key.Up, ValueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(GlobalState.Hsv.Value + 0.01)); });
-                EventUtil.HandleKey(Key.Up, HsvScaledHue,
+                EventUtil.HandleKey(Key.Up, ScaledHueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledHue(GlobalState.Hsv.ScaledHue + 1)); });
-                EventUtil.HandleKey(Key.Up, HsvScaledSaturation,
+                EventUtil.HandleKey(Key.Up, ScaledSaturationText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledSaturation(GlobalState.Hsv.ScaledSaturation + 1)); });
-                EventUtil.HandleKey(Key.Up, HsvScaledValue,
+                EventUtil.HandleKey(Key.Up, ScaledValueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledValue(GlobalState.Hsv.ScaledValue + 1)); });
 
-                EventUtil.HandleKey(Key.Down, HsvHue,
+                EventUtil.HandleKey(Key.Down, HueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(GlobalState.Hsv.Hue - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HsvSaturation,
+                EventUtil.HandleKey(Key.Down, SaturationText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(GlobalState.Hsv.Saturation - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HsvValue,
+                EventUtil.HandleKey(Key.Down, ValueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(GlobalState.Hsv.Value - 0.01)); });
-                EventUtil.HandleKey(Key.Down, HsvScaledHue,
+                EventUtil.HandleKey(Key.Down, ScaledHueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledHue(GlobalState.Hsv.ScaledHue - 1)); });
-                EventUtil.HandleKey(Key.Down, HsvScaledSaturation,
+                EventUtil.HandleKey(Key.Down, ScaledSaturationText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledSaturation(GlobalState.Hsv.ScaledSaturation - 1)); });
-                EventUtil.HandleKey(Key.Down, HsvScaledValue,
+                EventUtil.HandleKey(Key.Down, ScaledValueText,
                                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledValue(GlobalState.Hsv.ScaledValue - 1)); });
 
                 EventUtil.HandleMouseWheel(
-                    HsvHue,
+                    HueText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(GlobalState.Hsv.Hue + 0.01)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(GlobalState.Hsv.Hue - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HsvSaturation,
+                    SaturationText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(GlobalState.Hsv.Saturation + 0.01)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(GlobalState.Hsv.Saturation - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HsvValue,
+                    ValueText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(GlobalState.Hsv.Value + 0.01)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(GlobalState.Hsv.Value - 0.01)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HsvScaledHue,
+                    ScaledHueText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledHue(GlobalState.Hsv.ScaledHue + 1)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledHue(GlobalState.Hsv.ScaledHue - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HsvScaledSaturation,
+                    ScaledSaturationText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledSaturation(GlobalState.Hsv.ScaledSaturation + 1)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledSaturation(GlobalState.Hsv.ScaledSaturation - 1)); }
                 );
                 EventUtil.HandleMouseWheel(
-                    HsvScaledValue,
+                    ScaledValueText,
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledValue(GlobalState.Hsv.ScaledValue + 1)); },
                     () => { GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledValue(GlobalState.Hsv.ScaledValue - 1)); }
                 );
@@ -91,9 +91,9 @@ namespace PixelPalette.Control.MainWindow
                 var sThrottler = new Throttler();
                 var vThrottler = new Throttler();
 
-                EventUtil.HandleSliderChange(HsvHueSlider, value => { hThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(value))); });
-                EventUtil.HandleSliderChange(HsvSaturationSlider, value => { sThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(value))); });
-                EventUtil.HandleSliderChange(HsvValueSlider, value => { vThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(value))); });
+                EventUtil.HandleSliderChange(HueSlider, value => { hThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(value))); });
+                EventUtil.HandleSliderChange(SaturationSlider, value => { sThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(value))); });
+                EventUtil.HandleSliderChange(ValueSlider, value => { vThrottler.Throttle(1, _ => GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(value))); });
 
                 vm.PropertyChangedByUser += (_, ev) =>
                 {
@@ -103,49 +103,49 @@ namespace PixelPalette.Control.MainWindow
 
                     switch (ev.PropertyName)
                     {
-                        case nameof(HsvTabViewModel.HsvText):
-                            nullableHsv = Hsv.FromString(vm.HsvText);
+                        case nameof(HsvTabViewModel.Text):
+                            nullableHsv = Hsv.FromString(vm.Text);
                             if (nullableHsv.HasValue) GlobalState.RefreshFromHsv(nullableHsv.Value);
                             break;
-                        case nameof(HsvTabViewModel.HsvScaledText):
-                            nullableHsv = Hsv.FromScaledString(vm.HsvScaledText);
+                        case nameof(HsvTabViewModel.ScaledText):
+                            nullableHsv = Hsv.FromScaledString(vm.ScaledText);
                             if (nullableHsv.HasValue) GlobalState.RefreshFromHsv(nullableHsv.Value);
                             break;
-                        case nameof(HsvTabViewModel.HsvHue):
-                            isDouble = double.TryParse(vm.HsvHue, out doubleVal);
+                        case nameof(HsvTabViewModel.Hue):
+                            isDouble = double.TryParse(vm.Hue, out doubleVal);
                             if (!isDouble || !Hsv.IsValidHue(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithHue(doubleVal));
                             break;
-                        case nameof(HsvTabViewModel.HsvSaturation):
-                            isDouble = double.TryParse(vm.HsvSaturation, out doubleVal);
+                        case nameof(HsvTabViewModel.Saturation):
+                            isDouble = double.TryParse(vm.Saturation, out doubleVal);
                             if (!isDouble || !Hsv.IsValidSaturation(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithSaturation(doubleVal));
                             break;
-                        case nameof(HsvTabViewModel.HsvValue):
-                            isDouble = double.TryParse(vm.HsvValue, out doubleVal);
+                        case nameof(HsvTabViewModel.Value):
+                            isDouble = double.TryParse(vm.Value, out doubleVal);
                             if (!isDouble || !Hsv.IsValidValue(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithValue(doubleVal));
                             break;
-                        case nameof(HsvTabViewModel.HsvScaledHue):
-                            isDouble = double.TryParse(vm.HsvScaledHue, out doubleVal);
+                        case nameof(HsvTabViewModel.ScaledHue):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsv.IsValidScaledHue(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledHue(doubleVal));
                             break;
-                        case nameof(HsvTabViewModel.HsvScaledSaturation):
-                            isDouble = double.TryParse(vm.HsvScaledHue, out doubleVal);
+                        case nameof(HsvTabViewModel.ScaledSaturation):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsv.IsValidScaledSaturation(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledSaturation(doubleVal));
                             break;
-                        case nameof(HsvTabViewModel.HsvScaledValue):
-                            isDouble = double.TryParse(vm.HsvScaledHue, out doubleVal);
+                        case nameof(HsvTabViewModel.ScaledValue):
+                            isDouble = double.TryParse(vm.ScaledHue, out doubleVal);
                             if (!isDouble || !Hsv.IsValidScaledValue(doubleVal)) return;
                             GlobalState.RefreshFromHsv(GlobalState.Hsv.WithScaledValue(doubleVal));
                             break;
                     }
                 };
 
-                HsvScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.HsvScaledText); };
-                HsvTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.HsvText); };
+                ScaledTextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.ScaledText); };
+                TextClipboardButton.ButtonClicked += (_, _) => { Clipboard.Set(vm.Text); };
             };
         }
     }

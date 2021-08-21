@@ -30,11 +30,10 @@
             Style="{StaticResource ColorOutputLabel}"
             Content="0-100" />
           <TextBox
-            x:Name="CmykScaledText"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding CmykScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding ScaledText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="CmykScaledTextClipboardButton" />
+            x:Name="ScaledTextClipboardButton" />
         </StackPanel>
         <StackPanel
           Style="{StaticResource ColorOutputRow}">
@@ -42,11 +41,10 @@
             Style="{StaticResource ColorOutputLabel}"
             Content="0-1" />
           <TextBox
-            x:Name="CmykText"
             Style="{StaticResource ColorOutputBox}"
-            Text="{Binding CmykText, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
           <control:ClipboardButton
-            x:Name="CmykTextClipboardButton" />
+            x:Name="TextClipboardButton" />
         </StackPanel>
       </StackPanel>
     </Border>
@@ -75,31 +73,31 @@
       <control:GradientSlider
         Grid.Row="0"
         Grid.Column="0"
-        x:Name="CmykCyanSlider"
-        Background="{Binding CmykCyanGradientFill}"
+        x:Name="CyanSlider"
+        Background="{Binding CyanGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding CmykCyan, Mode=OneWay}" />
+        Value="{Binding Cyan, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="1"
         Grid.Column="0"
-        x:Name="CmykMagentaSlider"
-        Background="{Binding CmykMagentaGradientFill}"
+        x:Name="MagentaSlider"
+        Background="{Binding MagentaGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding CmykMagenta, Mode=OneWay}" />
+        Value="{Binding Magenta, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="2"
         Grid.Column="0"
-        x:Name="CmykYellowSlider"
-        Background="{Binding CmykYellowGradientFill}"
+        x:Name="YellowSlider"
+        Background="{Binding YellowGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding CmykYellow, Mode=OneWay}" />
+        Value="{Binding Yellow, Mode=OneWay}" />
       <control:GradientSlider
         Grid.Row="3"
         Grid.Column="0"
-        x:Name="CmykKeySlider"
-        Background="{Binding CmykKeyGradientFill}"
+        x:Name="KeySlider"
+        Background="{Binding KeyGradientFill}"
         Style="{StaticResource GradientSlider}"
-        Value="{Binding CmykKey, Mode=OneWay}" />
+        Value="{Binding Key, Mode=OneWay}" />
       <Label
         Grid.Row="0"
         Grid.Column="1"
@@ -119,59 +117,59 @@
       <TextBox
         Grid.Row="0"
         Grid.Column="2"
-        x:Name="CmykScaledCyan"
+        x:Name="ScaledCyanText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding CmykScaledCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="2"
-        x:Name="CmykScaledMagenta"
+        x:Name="ScaledMagentaText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding CmykScaledMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="2"
-        x:Name="CmykScaledYellow"
+        x:Name="ScaledYellowText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding CmykScaledYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="3"
         Grid.Column="2"
-        x:Name="CmykScaledKey"
+        x:Name="ScaledKeyText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="3"
-        Text="{Binding CmykScaledKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding ScaledKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="0"
         Grid.Column="3"
-        x:Name="CmykCyan"
+        x:Name="CyanText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding CmykCyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Cyan, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="3"
-        x:Name="CmykMagenta"
+        x:Name="MagentaText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding CmykMagenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Magenta, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="2"
         Grid.Column="3"
-        x:Name="CmykYellow"
+        x:Name="YellowText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding CmykYellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Yellow, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
       <TextBox
         Grid.Row="3"
         Grid.Column="3"
-        x:Name="CmykKey"
+        x:Name="KeyText"
         Style="{StaticResource ColorInputBox}"
         MaxLength="5"
-        Text="{Binding CmykKey, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
+        Text="{Binding Key, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" />
     </Grid>
   </StackPanel>
 </UserControl>
