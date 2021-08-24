@@ -1,6 +1,9 @@
 using System.Windows;
 using System.Windows.Input;
 using PixelPalette.Color;
+using PixelPalette.State;
+using PixelPalette.Util;
+using Clipboard = PixelPalette.Util.Clipboard;
 
 namespace PixelPalette.Control.MainWindow
 {
@@ -29,7 +32,7 @@ namespace PixelPalette.Control.MainWindow
 
                 var vm = new HexTabViewModel(GlobalState);
                 DataContext = vm;
-
+                
                 EventUtil.HandleKey(Key.Up, RedText, () => { GlobalState.RefreshFromHex(GlobalState.Hex.WithRed(GlobalState.Hex.Red + 1)); });
                 EventUtil.HandleKey(Key.Up, GreenText, () => { GlobalState.RefreshFromHex(GlobalState.Hex.WithGreen(GlobalState.Hex.Green + 1)); });
                 EventUtil.HandleKey(Key.Up, BlueText, () => { GlobalState.RefreshFromHex(GlobalState.Hex.WithBlue(GlobalState.Hex.Blue + 1)); });

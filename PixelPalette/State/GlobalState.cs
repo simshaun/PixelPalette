@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using PixelPalette.Color;
 
-namespace PixelPalette
+namespace PixelPalette.State
 {
     public class GlobalState : INotifyPropertyChanged
     {

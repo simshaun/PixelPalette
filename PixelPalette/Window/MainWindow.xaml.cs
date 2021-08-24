@@ -7,6 +7,8 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using PixelPalette.Bitmap;
 using PixelPalette.Color;
+using PixelPalette.State;
+using PixelPalette.Util;
 
 namespace PixelPalette.Window
 {

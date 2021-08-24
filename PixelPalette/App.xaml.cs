@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using PixelPalette.State;
 
 namespace PixelPalette
 {

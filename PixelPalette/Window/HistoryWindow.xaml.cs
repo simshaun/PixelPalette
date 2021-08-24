@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using PixelPalette.State;
+using PixelPalette.Util;
 
 namespace PixelPalette.Window
 {

@@ -1,6 +1,9 @@
 using System.Windows;
 using System.Windows.Input;
 using PixelPalette.Color;
+using PixelPalette.State;
+using PixelPalette.Util;
+using Clipboard = PixelPalette.Util.Clipboard;
 
 namespace PixelPalette.Control.MainWindow
 {

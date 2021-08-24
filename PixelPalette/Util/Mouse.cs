@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 
-namespace PixelPalette
+namespace PixelPalette.Util
 {
-    public static class MouseUtil
+    public static class Mouse
     {
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]

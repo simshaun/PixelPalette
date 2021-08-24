@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace PixelPalette
+namespace PixelPalette.State
 {
     public class PersistedData
     {

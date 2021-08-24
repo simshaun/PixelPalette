@@ -1,4 +1,4 @@
-namespace PixelPalette
+namespace PixelPalette.Util
 {
     public static class Clipboard
     {

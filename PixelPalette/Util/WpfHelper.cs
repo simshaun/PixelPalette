@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 
-namespace PixelPalette
+namespace PixelPalette.Util
 {
     public static class WpfHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace PixelPalette
+﻿namespace PixelPalette.State
 {
     public class EphemeralData
     {

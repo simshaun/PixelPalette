@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using PixelPalette.Bitmap;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using Mouse = PixelPalette.Util.Mouse;
 using Point = System.Drawing.Point;
 
 namespace PixelPalette.Window
@@ -96,7 +97,7 @@ namespace PixelPalette.Window
             _timer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(12) };
             _timer.Tick += (_, _) =>
             {
-                var mouse = MouseUtil.GetMousePosition();
+                var mouse = Mouse.GetMousePosition();
                 const int pxFromCursor = 30;
                 var winX = mouse.X + pxFromCursor;
                 var winY = mouse.Y;

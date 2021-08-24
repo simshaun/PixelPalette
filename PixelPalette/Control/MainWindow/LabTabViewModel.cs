@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using PixelPalette.Color;
+using PixelPalette.State;
 
 namespace PixelPalette.Control.MainWindow
 {

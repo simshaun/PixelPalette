@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using PixelPalette.Bitmap;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using Mouse = PixelPalette.Util.Mouse;
 
 namespace PixelPalette.Window
 {
@@ -28,7 +29,7 @@ namespace PixelPalette.Window
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var mouse = MouseUtil.GetMousePosition();
+            var mouse = Mouse.GetMousePosition();
             var compensatedX = mouse.X - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
             var compensatedY = mouse.Y - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor 
             if (FreezeFrame.Instance.BitmapSource != null)

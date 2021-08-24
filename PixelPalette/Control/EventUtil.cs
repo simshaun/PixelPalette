@@ -8,7 +8,7 @@ using System.Windows.Input;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-namespace PixelPalette
+namespace PixelPalette.Control
 {
     internal static class EventUtil
     {

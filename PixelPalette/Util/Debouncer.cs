@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Threading;
 
-namespace PixelPalette
+namespace PixelPalette.Util
 {
     public class Debouncer
     {
