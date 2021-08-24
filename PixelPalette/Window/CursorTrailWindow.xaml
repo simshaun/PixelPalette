@@ -21,7 +21,7 @@
       x:Key="ColorToBrushConverter" />
   </Window.Resources>
   <Border
-    BorderBrush="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}}"
+    BorderBrush="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}"
     BorderThickness="2">
     <DockPanel
       HorizontalAlignment="Stretch">
@@ -39,7 +39,7 @@
             TargetType="{x:Type Line}">
             <Setter
               Property="Stroke"
-              Value="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}}" />
+              Value="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}" />
             <Setter
               Property="StrokeThickness"
               Value="1" />
@@ -58,8 +58,8 @@
         </Grid.Resources>
         <Image
           Name="PreviewImage"
-          Width="{Binding ElementName=PreviewContainer, Path=ActualWidth}"
-          Height="{Binding ElementName=PreviewContainer, Path=ActualHeight}" />
+          Width="{Binding ElementName=PreviewContainer, Path=ActualWidth, Mode=OneWay}"
+          Height="{Binding ElementName=PreviewContainer, Path=ActualHeight, Mode=OneWay}" />
       </Grid>
 
       <Grid
@@ -67,18 +67,18 @@
         <Border
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          BorderBrush="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}}"
+          BorderBrush="{Binding GridLineColor, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}"
           BorderThickness="0,2,0,0">
           <Rectangle
             Grid.ZIndex="1"
-            Fill="{Binding Hex, Converter={StaticResource ColorToBrushConverter}}" />
+            Fill="{Binding Hex, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}" />
         </Border>
         <Label
           Grid.ZIndex="2"
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
-          Foreground="{Binding HexTextColor, Converter={StaticResource ColorToBrushConverter}}"
-          Content="{Binding Hex}" />
+          Foreground="{Binding HexTextColor, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}"
+          Content="{Binding Hex, Mode=OneWay}" />
       </Grid>
     </DockPanel>
   </Border>
