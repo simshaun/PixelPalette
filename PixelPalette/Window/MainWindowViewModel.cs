@@ -44,7 +44,7 @@ namespace PixelPalette.Window
             ActiveColorModelTabItem = colorModelTabs
                                       .Items
                                       .OfType<TabItem>()
-                                      .SingleOrDefault(t => t.Name == data.ActiveColorModelTab);
+                                      .SingleOrDefault(t => t.Name == (data.ActiveColorModelTab ?? "RgbTab"));
         }
 
         private void RefreshValues()
