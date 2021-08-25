@@ -134,8 +134,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
         public void RefreshFromHex(Hex hex)
@@ -157,8 +155,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
         public void RefreshFromHsl(Hsl hsl)
@@ -180,8 +176,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
         public void RefreshFromHsv(Hsv hsv)
@@ -203,8 +197,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
         public void RefreshFromCmyk(Cmyk cmyk)
@@ -226,8 +218,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
         public void RefreshFromLab(Lab lab)
@@ -249,8 +239,6 @@ namespace PixelPalette.State
             Hex = hex;
             Cmyk = cmyk;
             Lab = lab;
-            
-            GC.Collect();
         }
 
 #region boilerplate
