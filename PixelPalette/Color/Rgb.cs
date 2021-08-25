@@ -9,7 +9,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace PixelPalette.Color
 {
-    public readonly struct Rgb
+    public readonly struct Rgb : IEquatable<Rgb>
     {
         public static readonly Rgb Empty = new();
 
@@ -17,9 +17,9 @@ namespace PixelPalette.Color
         // Long values pulled from Bruce's color calculator JS
         private static readonly DenseMatrix RgbMatrix = DenseMatrix.OfArray(new[,]
         {
-            {0.4124564390896922, 0.357576077643909, 0.18043748326639894},
-            {0.21267285140562253, 0.715152155287818, 0.07217499330655958},
-            {0.0193338955823293, 0.11919202588130297, 0.9503040785363679}
+            { 0.4124564390896922, 0.357576077643909, 0.18043748326639894 },
+            { 0.21267285140562253, 0.715152155287818, 0.07217499330655958 },
+            { 0.0193338955823293, 0.11919202588130297, 0.9503040785363679 }
         });
 
         private const string StringPattern =
@@ -407,7 +407,7 @@ namespace PixelPalette.Color
             var linearG = InverseCompand(g1);
             var linearB = InverseCompand(b1);
 
-            var rgbMatrix = new[,] {{linearR}, {linearG}, {linearB}};
+            var rgbMatrix = new[,] { { linearR }, { linearG }, { linearB } };
             var xyz = RgbMatrix * DenseMatrix.OfArray(rgbMatrix);
 
             return new Xyz(xyz.Values[0] * 100, xyz.Values[1] * 100, xyz.Values[2] * 100);

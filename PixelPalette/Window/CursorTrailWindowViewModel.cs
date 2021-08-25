@@ -1,14 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using PixelPalette.Color;
 
 namespace PixelPalette.Window
 {
     public sealed class CursorTrailWindowViewModel : INotifyPropertyChanged
     {
+        private Rgb? _rgb;
         private string _hex = "";
         private string _hexTextColor = "";
         private string _gridLineColor = "";
+
+        public Rgb? Rgb
+        {
+            get => _rgb;
+            set => SetField(ref _rgb, value);
+        }
 
         public string Hex
         {

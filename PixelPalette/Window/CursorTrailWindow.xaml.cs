@@ -93,8 +93,18 @@ namespace PixelPalette.Window
 #region Render the color preview
 
             var winHeight = (int) Height;
+            var lastCompensatedX = -1;
+            var lastCompensatedY = -1;
 
-            _timer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(12) };
+            byte[]? outputBuffer = null;
+            if (FreezeFrame.Instance.BitmapSource != null)
+            {
+                var bytesPerPixel = FreezeFrame.Instance.BitmapSource.Format.BitsPerPixel / 8;
+                var outputStride = numColumns * bytesPerPixel;
+                outputBuffer = new byte[outputStride * numColumns];
+            }
+
+            _timer = new DispatcherTimer(DispatcherPriority.Normal) { Interval = TimeSpan.FromMilliseconds(12) };
             _timer.Tick += (_, _) =>
             {
                 var mouse = Mouse.GetMousePosition();
@@ -103,15 +113,8 @@ namespace PixelPalette.Window
                 var winY = mouse.Y;
                 var screenBounds = Screen.FromPoint(new Point(mouse.X, mouse.Y)).Bounds;
 
-                if (winX + winWidth > screenBounds.Right)
-                {
-                    winX = mouse.X - pxFromCursor - winWidth;
-                }
-
-                if (winY + winHeight > screenBounds.Bottom)
-                {
-                    winY -= winY + winHeight - screenBounds.Bottom;
-                }
+                if (winX + winWidth > screenBounds.Right) winX = mouse.X - pxFromCursor - winWidth;
+                if (winY + winHeight > screenBounds.Bottom) winY -= winY + winHeight - screenBounds.Bottom;
 
                 Left = winX;
                 Top = winY;
@@ -125,13 +128,18 @@ namespace PixelPalette.Window
                 var compensatedX = sourceX - SystemInformation.VirtualScreen.Left; // Compensate for potential negative position on multi-monitor  
                 var compensatedY = sourceY - SystemInformation.VirtualScreen.Top; // Compensate for potential negative position on multi-monitor
 
+                if (compensatedX == lastCompensatedX && compensatedY == lastCompensatedY) return;
+                lastCompensatedX = compensatedX;
+                lastCompensatedY = compensatedY;
+
                 if (FreezeFrame.Instance.BitmapSource == null) return;
 
                 var previewImageSource = BitmapUtil.CropBitmapSource(
                     FreezeFrame.Instance.BitmapSource,
                     compensatedX, compensatedY,
                     numColumns, numColumns,
-                    FreezeFrame.Instance.PixelBuffer
+                    FreezeFrame.Instance.PixelBuffer,
+                    outputBuffer
                 );
                 PreviewImage.Source = previewImageSource;
 
@@ -140,6 +148,9 @@ namespace PixelPalette.Window
                     (numColumns - 1) / 2,
                     (numColumns - 1) / 2
                 );
+
+                if (vm.Rgb != null && vm.Rgb == rgb) return;
+                vm.Rgb = rgb;
                 vm.Hex = rgb.ToHex().ToString();
                 vm.HexTextColor = rgb.ContrastingTextColor().ToHex().ToString();
 

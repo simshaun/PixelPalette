@@ -29,9 +29,9 @@ namespace PixelPalette.Color
             Green = g > 255 ? 255 : g < 0 ? 0 : g;
             Blue = b > 255 ? 255 : b < 0 ? 0 : b;
             // ReSharper disable UseFormatSpecifierInInterpolation
-            RedPart = $"{Red.ToString("x2")}".ToUpper();
-            GreenPart = $"{Green.ToString("x2")}".ToUpper();
-            BluePart = $"{Blue.ToString("x2")}".ToUpper();
+            RedPart = Red.ToString("x2").ToUpper();
+            GreenPart = Green.ToString("x2").ToUpper();
+            BluePart = Blue.ToString("x2").ToUpper();
             // ReSharper restore UseFormatSpecifierInInterpolation
         }
 
@@ -89,9 +89,9 @@ namespace PixelPalette.Color
             Green = int.Parse(result.Groups[2].Value, NumberStyles.HexNumber);
             Blue = int.Parse(result.Groups[3].Value, NumberStyles.HexNumber);
             // ReSharper disable UseFormatSpecifierInInterpolation
-            RedPart = $"{Red.ToString("x2")}".ToUpper();
-            GreenPart = $"{Green.ToString("x2")}".ToUpper();
-            BluePart = $"{Blue.ToString("x2")}".ToUpper();
+            RedPart = Red.ToString("x2").ToUpper();
+            GreenPart = Green.ToString("x2").ToUpper();
+            BluePart = Blue.ToString("x2").ToUpper();
             // ReSharper restore UseFormatSpecifierInInterpolation
         }
 
@@ -115,7 +115,7 @@ namespace PixelPalette.Color
 
         public override string ToString()
         {
-            return $"#{RedPart}{GreenPart}{BluePart}".ToUpper();
+            return "#" + (RedPart + GreenPart + BluePart).ToUpper();
         }
 
         public Rgb ToRgb()

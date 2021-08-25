@@ -30,7 +30,7 @@ namespace PixelPalette.Window
 
             _globalState = GlobalState.Instance;
             _vm = new MainWindowViewModel(_globalState);
-            
+
             _globalState.LoadFromPersistedData(PersistedState.Data());
             _vm.LoadFromPersistedData(PersistedState.Data(), ColorModelTabs);
             DataContext = _vm;
@@ -87,14 +87,13 @@ namespace PixelPalette.Window
 
         private void StartEyedropper()
         {
-            var freezeFrame = ScreenCapture.GetFullScreen();
-            FreezeFrame.Instance.BitmapSource = freezeFrame;
+            FreezeFrame.Instance.BitmapSource = ScreenCapture.GetFullScreen();
 
             // Debug - Write freeze frame to file
             // using (var fileStream = new FileStream("cap.png", FileMode.Create))
             // {
             //     BitmapEncoder encoder = new PngBitmapEncoder();
-            //     encoder.Frames.Add(BitmapFrame.Create(freezeFrame));
+            //     encoder.Frames.Add(BitmapFrame.Create(FreezeFrame.Instance.BitmapSource));
             //     encoder.Save(fileStream);
             // }
 
@@ -118,10 +117,10 @@ namespace PixelPalette.Window
                 {
                     // Already closed.
                 }
-                finally
-                {
-                    GC.Collect();
-                }
+                
+                _cursorTrailWin = null;
+                _freezeFrameWin = null;
+                FreezeFrame.Instance.Dispose();
             };
 
             _cursorTrailWin = new CursorTrailWindow();
@@ -131,15 +130,11 @@ namespace PixelPalette.Window
             {
                 try
                 {
-                    _freezeFrameWin.Close();
+                    _freezeFrameWin?.Close();
                 }
                 catch (InvalidOperationException)
                 {
                     // Already closed.
-                }
-                finally
-                {
-                    GC.Collect();
                 }
             };
         }

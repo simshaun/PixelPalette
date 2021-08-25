@@ -11,8 +11,10 @@ namespace PixelPalette.Bitmap
 {
     public static class BitmapUtil
     {
+#pragma warning disable CA1401
         [DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
+#pragma warning restore CA1401
 
         public static BitmapSource CropBitmapSource(
             BitmapSource source,
@@ -20,7 +22,8 @@ namespace PixelPalette.Bitmap
             int sourceY,
             int width,
             int height,
-            byte[]? cachedSourcePixels = null
+            byte[]? cachedSourcePixelBuffer = null,
+            byte[]? cachedOutputPixelBuffer = null
         )
         {
             // A couple things are hardcoded to expect 4 bytes per pixel.
@@ -31,8 +34,8 @@ namespace PixelPalette.Bitmap
             var sourceWidth = source.PixelWidth;
             var sourceHeight = source.PixelHeight;
             var sourceStride = sourceWidth * bytesPerPixel;
-            var sourceBuffer = cachedSourcePixels;
-            if (cachedSourcePixels == null)
+            var sourceBuffer = cachedSourcePixelBuffer;
+            if (cachedSourcePixelBuffer == null)
             {
                 sourceBuffer = new byte[sourceStride * sourceHeight];
                 source.CopyPixels(sourceBuffer, sourceStride, 0);
@@ -41,7 +44,7 @@ namespace PixelPalette.Bitmap
             var outputWidth = width;
             var outputHeight = height;
             var outputStride = outputWidth * bytesPerPixel;
-            var outputBuffer = new byte[outputStride * outputHeight];
+            var outputBuffer = cachedOutputPixelBuffer ?? new byte[outputStride * outputHeight];
 
             // Fill the crop with black
             for (var x = 0; x < outputWidth; x++)

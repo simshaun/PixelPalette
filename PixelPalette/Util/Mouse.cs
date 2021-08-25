@@ -23,7 +23,7 @@ namespace PixelPalette.Util
         }
     }
 
-    public class Position
+    public readonly struct Position
     {
         public int X { get; }
         public int Y { get; }

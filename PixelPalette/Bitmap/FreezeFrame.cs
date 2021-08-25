@@ -1,17 +1,29 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System;
+using System.Runtime;
+using System.Windows.Media.Imaging;
 
 namespace PixelPalette.Bitmap
 {
     /// <summary>
-    /// A dirty singleton. Purpose is to reduce memory allocation for some bitmap stuff.
-    ///
-    /// Not thread-safe. https://csharpindepth.com/articles/singleton
+    /// A singleton whose purpose is to reduce memory allocation for bitmap stuff.
     /// </summary>
-    public sealed class FreezeFrame
+    public sealed class FreezeFrame : IDisposable
     {
         private static FreezeFrame? _instance;
+        public byte[]? PixelBuffer { get; private set; }
 
-        public static FreezeFrame Instance => _instance ??= new FreezeFrame();
+        private static readonly object Padlock = new();
+
+        public static FreezeFrame Instance
+        {
+            get
+            {
+                lock (Padlock)
+                {
+                    return _instance ??= new FreezeFrame();
+                }
+            }
+        }
 
         private BitmapSource? _bitmapSource;
 
@@ -35,6 +47,17 @@ namespace PixelPalette.Bitmap
             }
         }
 
-        public byte[]? PixelBuffer { get; private set; }
+        public void Dispose()
+        {
+            _bitmapSource = null;
+            PixelBuffer = null;
+
+            /*
+             * The buffer array is large enough to be placed in the Large Object Heap (LOH).
+             * Force it to be collected.
+             */
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect();
+        }
     }
 }
