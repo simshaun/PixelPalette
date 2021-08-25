@@ -9,7 +9,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace PixelPalette.Color
 {
-    public readonly struct Rgb : IColor
+    public readonly struct Rgb
     {
         public static readonly Rgb Empty = new();
 

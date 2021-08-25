@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color
 {
-    public struct Hex : IColor
+    public struct Hex
     {
         public static readonly Hex Empty = new();
 

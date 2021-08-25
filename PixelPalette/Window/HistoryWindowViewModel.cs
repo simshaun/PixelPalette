@@ -8,13 +8,13 @@ namespace PixelPalette.Window
     {
         public Brush ColorBrush { get; }
         public string ColorString { get; }
-        public IColor Color { get; }
-
-        public HistoryItem(IColor color)
+        public Rgb Color { get; }
+        
+        public HistoryItem(Rgb color)
         {
             Color = color;
-            ColorString = color.ToRgb().ToHex().ToString();
-            ColorBrush = new SolidColorBrush(Color.ToRgb().ToMediaColor());
+            ColorString = color.ToHex().ToString();
+            ColorBrush = new SolidColorBrush(Color.ToMediaColor());
         }
     }
 

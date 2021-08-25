@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace PixelPalette.Color
 {
-    public readonly struct Xyz : IColor
+    public readonly struct Xyz
     {
         public static readonly Xyz Empty = new();
 
