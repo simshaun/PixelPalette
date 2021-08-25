@@ -263,7 +263,7 @@ namespace PixelPalette.Color
 
         public Hex ToHex()
         {
-            return new Hex($"#{ScaledRed:x2}{ScaledGreen:x2}{ScaledBlue:x2}".ToUpper());
+            return new Hex(ScaledRed, ScaledGreen, ScaledBlue);
         }
 
         public Hsl ToHsl()

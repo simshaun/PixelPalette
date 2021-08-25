@@ -8,44 +8,31 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color
 {
-    public struct Hex
+    public readonly struct Hex
     {
         public static readonly Hex Empty = new();
-
-        private int _red;
-        private int _green;
-        private int _blue;
 
         private static readonly Regex HexRegex = new("^#?([0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase);
         private static readonly Regex SixCharHexRegex = new("^#?([0-9A-F]{6})$", RegexOptions.IgnoreCase);
 
-        public int Red
-        {
-            get => _red;
-            set => _red = value > 255 ? 255 : value < 0 ? 0 : value;
-        }
+        public int Red { get; }
+        public int Green { get; }
+        public int Blue { get; }
 
-        public int Green
-        {
-            get => _green;
-            set => _green = value > 255 ? 255 : value < 0 ? 0 : value;
-        }
-
-        public int Blue
-        {
-            get => _blue;
-            set => _blue = value > 255 ? 255 : value < 0 ? 0 : value;
-        }
-
-        public string RedPart => $"{Red:x2}".ToUpper();
-        public string GreenPart => $"{Green:x2}".ToUpper();
-        public string BluePart => $"{Blue:x2}".ToUpper();
+        public string RedPart { get; }
+        public string GreenPart { get; }
+        public string BluePart { get; }
 
         public Hex(int r, int g, int b)
         {
-            _red = r > 255 ? 255 : r < 0 ? 0 : r;
-            _green = g > 255 ? 255 : g < 0 ? 0 : g;
-            _blue = b > 255 ? 255 : b < 0 ? 0 : b;
+            Red = r > 255 ? 255 : r < 0 ? 0 : r;
+            Green = g > 255 ? 255 : g < 0 ? 0 : g;
+            Blue = b > 255 ? 255 : b < 0 ? 0 : b;
+            // ReSharper disable UseFormatSpecifierInInterpolation
+            RedPart = $"{Red.ToString("x2")}".ToUpper();
+            GreenPart = $"{Green.ToString("x2")}".ToUpper();
+            BluePart = $"{Blue.ToString("x2")}".ToUpper();
+            // ReSharper restore UseFormatSpecifierInInterpolation
         }
 
         public Hex WithRed(int r)
@@ -98,9 +85,14 @@ namespace PixelPalette.Color
             var regex = new Regex("^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$", RegexOptions.IgnoreCase);
             var result = regex.Match(expandedHex);
 
-            _red = int.Parse(result.Groups[1].Value, NumberStyles.HexNumber);
-            _green = int.Parse(result.Groups[2].Value, NumberStyles.HexNumber);
-            _blue = int.Parse(result.Groups[3].Value, NumberStyles.HexNumber);
+            Red = int.Parse(result.Groups[1].Value, NumberStyles.HexNumber);
+            Green = int.Parse(result.Groups[2].Value, NumberStyles.HexNumber);
+            Blue = int.Parse(result.Groups[3].Value, NumberStyles.HexNumber);
+            // ReSharper disable UseFormatSpecifierInInterpolation
+            RedPart = $"{Red.ToString("x2")}".ToUpper();
+            GreenPart = $"{Green.ToString("x2")}".ToUpper();
+            BluePart = $"{Blue.ToString("x2")}".ToUpper();
+            // ReSharper restore UseFormatSpecifierInInterpolation
         }
 
         public static Hex? From6CharString(string theString)
@@ -128,7 +120,7 @@ namespace PixelPalette.Color
 
         public Rgb ToRgb()
         {
-            return Rgb.FromScaledValues(_red, _green, _blue);
+            return Rgb.FromScaledValues(Red, Green, Blue);
         }
 
         public static bool IsValidHex(string hex)
@@ -161,7 +153,7 @@ namespace PixelPalette.Color
 
         public bool Equals(Hex other)
         {
-            return _red == other._red && _green == other._green && _blue == other._blue;
+            return Red == other.Red && Green == other.Green && Blue == other.Blue;
         }
 
         public override bool Equals(object? obj)
@@ -182,7 +174,7 @@ namespace PixelPalette.Color
         [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
         public override int GetHashCode()
         {
-            return HashCode.Combine(_red, _green, _blue);
+            return HashCode.Combine(Red, Green, Blue);
         }
     }
 }
