@@ -37,6 +37,8 @@ namespace PixelPalette.Bitmap
                     BitmapSizeOptions.FromEmptyOptions()
                 );
 
+                source.Freeze();
+
                 return source;
             }
             finally
