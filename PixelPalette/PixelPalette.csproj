@@ -4,12 +4,11 @@
     <Version>1.4.4</Version>
     <Authors>Shaun</Authors>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <Company>FoxAndFly</Company>
     <LangVersion>9</LangVersion>
@@ -24,9 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathNet.Numerics" Version="4.9.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0-preview.3.22175.4" />
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
   </ItemGroup>
 
@@ -58,6 +57,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Remove="Annotations.cs" />
   </ItemGroup>
 
   <ItemGroup>
