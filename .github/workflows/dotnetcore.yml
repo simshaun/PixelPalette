@@ -50,6 +50,9 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release
 
+      - name: Publish
+        run: dotnet publish --configuration Release $env:Project_Directory\$env:Project_Filename
+
       # The installer must be built separately because it is not supported by the dotnet CLI.
       - name: Get installer deps
         run: nuget restore $env:Installer_Directory -PackagesDirectory packages

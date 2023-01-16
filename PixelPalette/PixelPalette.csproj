@@ -13,6 +13,16 @@
     <Company>FoxAndFly</Company>
     <LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
+    <!-- Single file app – https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <PublishTrimmed>false</PublishTrimmed>
+    <SelfContained>false</SelfContained>
+    <!-- Prevent dep's language files being dumped in output -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <!-- No NuGet package -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
