@@ -5,19 +5,21 @@ using System.Reflection;
 using PixelPalette.Color;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+[assembly: TestDataSourceDiscovery(TestDataSourceDiscoveryOption.DuringExecution)]
 namespace PixelPalette.Tests.Color
 {
     public class ColorData
     {
-        public string Name { get; set; }
-        public Rgb Rgb { get; set; }
-        public Hsl Hsl { get; set; }
-        public Hsv Hsv { get; set; }
-        public Cmyk Cmyk { get; set; }
-        public Xyz Xyz { get; set; }
-        public Lab Lab { get; set; }
+        public string Name { get; init; }
+        public Rgb Rgb { get; init; }
+        public Hsl Hsl { get; init; }
+        public Hsv Hsv { get; init; }
+        public Cmyk Cmyk { get; init; }
+        public Xyz Xyz { get; init; }
+        public Lab Lab { get; init; }
     }
 
+    [AttributeUsage(AttributeTargets.Method)]
     public class ColorTestDataAttribute : Attribute, ITestDataSource
     {
         // Conversion tool for reference:
