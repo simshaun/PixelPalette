@@ -2,24 +2,23 @@
 using System.Windows.Media;
 using PixelPalette.Color;
 
-namespace PixelPalette.Window
-{
-    public class HistoryItem
-    {
-        public Brush ColorBrush { get; }
-        public string ColorString { get; }
-        public Rgb Color { get; }
-        
-        public HistoryItem(Rgb color)
-        {
-            Color = color;
-            ColorString = color.ToHex().ToString();
-            ColorBrush = new SolidColorBrush(Color.ToMediaColor());
-        }
-    }
+namespace PixelPalette.Window;
 
-    public sealed class HistoryWindowViewModel
+public class HistoryItem
+{
+    public Brush ColorBrush { get; }
+    public string ColorString { get; }
+    public Rgb Color { get; }
+        
+    public HistoryItem(Rgb color)
     {
-        public ObservableCollection<HistoryItem> States { get; } = new();
+        Color = color;
+        ColorString = color.ToHex().ToString();
+        ColorBrush = new SolidColorBrush(Color.ToMediaColor());
     }
+}
+
+public sealed class HistoryWindowViewModel
+{
+    public ObservableCollection<HistoryItem> States { get; } = new();
 }

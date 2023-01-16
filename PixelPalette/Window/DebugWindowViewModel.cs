@@ -1,8 +1,7 @@
-﻿namespace PixelPalette.Window
+﻿namespace PixelPalette.Window;
+
+public sealed class DebugWindowViewModel
 {
-    public sealed class DebugWindowViewModel
-    {
-        // ReSharper disable once MemberCanBeMadeStatic.Global
-        public static string LinesText => AppDebug.LinesText;
-    }
+    // ReSharper disable once MemberCanBeMadeStatic.Global
+    public static string LinesText => AppDebug.LinesText;
 }

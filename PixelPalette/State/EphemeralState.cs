@@ -1,17 +1,16 @@
-﻿namespace PixelPalette.State
+﻿namespace PixelPalette.State;
+
+public class EphemeralData
 {
-    public class EphemeralData
-    {
-        public bool DebugMode { get; set; }
-    }
+    public bool DebugMode { get; set; }
+}
 
-    public static class EphemeralState
-    {
-        public static readonly EphemeralData Data;
+public static class EphemeralState
+{
+    public static readonly EphemeralData Data;
 
-        static EphemeralState()
-        {
-            Data = new EphemeralData();
-        }
+    static EphemeralState()
+    {
+        Data = new EphemeralData();
     }
 }

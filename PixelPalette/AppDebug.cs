@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace PixelPalette
+namespace PixelPalette;
+
+public static class AppDebug
 {
-    public static class AppDebug
+    private static List<string> Lines { get; } = new();
+
+    public static string LinesText => string.Join("\n", Lines);
+
+    public static void WriteLine(string text)
     {
-        private static List<string> Lines { get; } = new();
-
-        public static string LinesText => string.Join("\n", Lines);
-
-        public static void WriteLine(string text)
-        {
-            Lines.Add(text);
-        }
+        Lines.Add(text);
     }
 }

@@ -25,7 +25,7 @@ jobs:
       - name: Add dotnet to PATH
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: '7.0.x'
 
       # The installer utilizes WiX 3.x, which is not compatible with the dotnet CLI.
       # It uses the older NuGet packages.config file and is built directly with MSBuild.

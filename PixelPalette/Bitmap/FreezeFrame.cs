@@ -2,62 +2,61 @@
 using System.Runtime;
 using System.Windows.Media.Imaging;
 
-namespace PixelPalette.Bitmap
+namespace PixelPalette.Bitmap;
+
+/// <summary>
+/// A singleton whose purpose is to reduce memory allocation for bitmap stuff.
+/// </summary>
+public sealed class FreezeFrame : IDisposable
 {
-    /// <summary>
-    /// A singleton whose purpose is to reduce memory allocation for bitmap stuff.
-    /// </summary>
-    public sealed class FreezeFrame : IDisposable
+    private static FreezeFrame? _instance;
+    public byte[]? PixelBuffer { get; private set; }
+
+    private static readonly object Padlock = new();
+
+    public static FreezeFrame Instance
     {
-        private static FreezeFrame? _instance;
-        public byte[]? PixelBuffer { get; private set; }
-
-        private static readonly object Padlock = new();
-
-        public static FreezeFrame Instance
+        get
         {
-            get
+            lock (Padlock)
             {
-                lock (Padlock)
-                {
-                    return _instance ??= new FreezeFrame();
-                }
+                return _instance ??= new FreezeFrame();
             }
         }
+    }
 
-        private BitmapSource? _bitmapSource;
+    private BitmapSource? _bitmapSource;
 
-        public BitmapSource? BitmapSource
+    public BitmapSource? BitmapSource
+    {
+        get => _bitmapSource;
+        set
         {
-            get => _bitmapSource;
-            set
+            if (value != null)
             {
-                if (value != null)
-                {
-                    var bytesPerPixel = value.Format.BitsPerPixel / 8;
-                    var width = value.PixelWidth;
-                    var height = value.PixelHeight;
-                    var stride = width * bytesPerPixel;
-                    var buffer = new byte[stride * height];
-                    value.CopyPixels(buffer, stride, 0);
-                    PixelBuffer = buffer;
-                }
-
-                _bitmapSource = value;
+                var bytesPerPixel = value.Format.BitsPerPixel / 8;
+                var width = value.PixelWidth;
+                var height = value.PixelHeight;
+                var stride = width * bytesPerPixel;
+                var buffer = new byte[stride * height];
+                value.CopyPixels(buffer, stride, 0);
+                PixelBuffer = buffer;
             }
-        }
 
-        public void Dispose()
-        {
-            _bitmapSource = null;
-            PixelBuffer = null;
-
-            /*
-             * The buffer array is large enough to be placed in the Large Object Heap (LOH).
-             * Force it to be collected.
-             */
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            GC.Collect();
+            _bitmapSource = value;
         }
+    }
+
+    public void Dispose()
+    {
+        _bitmapSource = null;
+        PixelBuffer = null;
+
+        /*
+         * The buffer array is large enough to be placed in the Large Object Heap (LOH).
+         * Force it to be collected.
+         */
+        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+        GC.Collect();
     }
 }
