@@ -62,7 +62,7 @@ jobs:
 
       # Archive the App build
       - name: Create App archive
-        run: Compress-Archive -Path $env:Project_Directory\bin\Release\* -DestinationPath $env:Project_Directory\bin\$env:Portable_Archive
+        run: Compress-Archive -Path $env:Project_Directory\bin\Release\publish\* -DestinationPath $env:Project_Directory\bin\$env:Portable_Archive
 
       # Get the name of the tag that was pushed
       - name: Get the version
