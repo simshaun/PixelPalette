@@ -61,7 +61,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <ReleasePath>..\PixelPalette\bin\Release</ReleasePath>
+    <ReleasePath>..\PixelPalette\bin\Release\win-x64\publish</ReleasePath>
     <DefineConstants>HarvestPath=$(ReleasePath)</DefineConstants>
   </PropertyGroup>
   <Target Name="BeforeBuild">
