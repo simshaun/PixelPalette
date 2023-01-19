@@ -1,25 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PixelPalette.Color;
 using PixelPalette.State;
 
 namespace PixelPalette.Control.MainWindow;
 
-public sealed class LabTabViewModel : INotifyPropertyChanged
+public sealed partial class LabTabViewModel : ObservableObject
 {
     private GlobalState GlobalState { get; }
 
-    private string _text = "";
-    private double _l;
-    private double _a;
-    private double _b;
+    [ObservableProperty] private string _text = "";
+    [ObservableProperty] private double _l;
+    [ObservableProperty] private double _a;
+    [ObservableProperty] private double _b;
 
-    private LinearGradientBrush? _lGradientFill;
-    private LinearGradientBrush? _aGradientFill;
-    private LinearGradientBrush? _bGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _lGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _aGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _bGradientFill;
 
     public LabTabViewModel(GlobalState globalState)
     {
@@ -29,48 +28,6 @@ public sealed class LabTabViewModel : INotifyPropertyChanged
             if (ev.PropertyName == "Lab") RefreshValues();
         };
         RefreshValues();
-    }
-
-    public string Text
-    {
-        get => _text;
-        set => SetField(ref _text, value);
-    }
-
-    public double L
-    {
-        get => _l;
-        set => SetField(ref _l, value);
-    }
-
-    public double A
-    {
-        get => _a;
-        set => SetField(ref _a, value);
-    }
-
-    public double B
-    {
-        get => _b;
-        set => SetField(ref _b, value);
-    }
-
-    public LinearGradientBrush? LGradientFill
-    {
-        get => _lGradientFill;
-        private set => SetField(ref _lGradientFill, value);
-    }
-
-    public LinearGradientBrush? AGradientFill
-    {
-        get => _aGradientFill;
-        private set => SetField(ref _aGradientFill, value);
-    }
-
-    public LinearGradientBrush? BGradientFill
-    {
-        get => _bGradientFill;
-        private set => SetField(ref _bGradientFill, value);
     }
 
     private void RefreshValues()
@@ -103,21 +60,12 @@ public sealed class LabTabViewModel : INotifyPropertyChanged
 #region boilerplate
 
     private bool _isUserUpdate = true;
-    public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-    private void OnPropertyChanged(string propertyName)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        var eventArgs = new PropertyChangedEventArgs(propertyName);
-        PropertyChanged?.Invoke(this, eventArgs);
-        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return;
-        field = value;
-        OnPropertyChanged(propertyName);
+        base.OnPropertyChanged(e);
+        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, e);
     }
 
 #endregion

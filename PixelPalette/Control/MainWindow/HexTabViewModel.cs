@@ -1,24 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PixelPalette.State;
 
 namespace PixelPalette.Control.MainWindow;
 
-public sealed class HexTabViewModel : INotifyPropertyChanged
+public sealed partial class HexTabViewModel : ObservableObject
 {
     public GlobalState GlobalState { get; }
 
-    private string _text = "";
-    private string _red = "";
-    private string _green = "";
-    private string _blue = "";
+    [ObservableProperty] private string _text = "";
+    [ObservableProperty] private string _red = "";
+    [ObservableProperty] private string _green = "";
+    [ObservableProperty] private string _blue = "";
 
-    private LinearGradientBrush? _redGradientFill;
-    private LinearGradientBrush? _greenGradientFill;
-    private LinearGradientBrush? _blueGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _redGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _greenGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _blueGradientFill;
 
     public HexTabViewModel(GlobalState globalState)
     {
@@ -28,48 +27,6 @@ public sealed class HexTabViewModel : INotifyPropertyChanged
             if (ev.PropertyName == "Hex") RefreshValues();
         };
         RefreshValues();
-    }
-
-    public string Text
-    {
-        get => _text;
-        set => SetField(ref _text, value);
-    }
-
-    public string Red
-    {
-        get => _red;
-        set => SetField(ref _red, value);
-    }
-
-    public string Green
-    {
-        get => _green;
-        set => SetField(ref _green, value);
-    }
-
-    public string Blue
-    {
-        get => _blue;
-        set => SetField(ref _blue, value);
-    }
-
-    public LinearGradientBrush? RedGradientFill
-    {
-        get => _redGradientFill;
-        private set => SetField(ref _redGradientFill, value);
-    }
-
-    public LinearGradientBrush? GreenGradientFill
-    {
-        get => _greenGradientFill;
-        private set => SetField(ref _greenGradientFill, value);
-    }
-
-    public LinearGradientBrush? BlueGradientFill
-    {
-        get => _blueGradientFill;
-        private set => SetField(ref _blueGradientFill, value);
     }
 
     private void RefreshValues()
@@ -102,21 +59,12 @@ public sealed class HexTabViewModel : INotifyPropertyChanged
 #region boilerplate
 
     private bool _isUserUpdate = true;
-    public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-    private void OnPropertyChanged(string propertyName)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        var eventArgs = new PropertyChangedEventArgs(propertyName);
-        PropertyChanged?.Invoke(this, eventArgs);
-        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return;
-        field = value;
-        OnPropertyChanged(propertyName);
+        base.OnPropertyChanged(e);
+        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, e);
     }
 
 #endregion

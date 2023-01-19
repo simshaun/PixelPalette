@@ -1,33 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PixelPalette.State;
 
 namespace PixelPalette.Control.MainWindow;
 
-public sealed class RgbTabViewModel : INotifyPropertyChanged
+public sealed partial class RgbTabViewModel : ObservableObject
 {
     private GlobalState GlobalState { get; }
 
-    private string _text = "";
-    private string _scaledText = "";
-    private string _redText = "";
-    private string _greenText = "";
-    private string _blueText = "";
-    private string _scaledRedText = "";
-    private string _scaledGreenText = "";
-    private string _scaledBlueText = "";
+    [ObservableProperty] private string _text = "";
+    [ObservableProperty] private string _scaledText = "";
+    [ObservableProperty] private string _redText = "";
+    [ObservableProperty] private string _greenText = "";
+    [ObservableProperty] private string _blueText = "";
+    [ObservableProperty] private string _scaledRedText = "";
+    [ObservableProperty] private string _scaledGreenText = "";
+    [ObservableProperty] private string _scaledBlueText = "";
 
-    private double _r;
-    private double _g;
-    private double _b;
+    [ObservableProperty] private double _r;
+    [ObservableProperty] private double _g;
+    [ObservableProperty] private double _b;
 
-    private LinearGradientBrush? _redGradientFill;
-    private LinearGradientBrush? _greenGradientFill;
-    private LinearGradientBrush? _blueGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _redGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _greenGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _blueGradientFill;
 
     public RgbTabViewModel(GlobalState globalState)
     {
@@ -37,90 +36,6 @@ public sealed class RgbTabViewModel : INotifyPropertyChanged
             if (ev.PropertyName == "Rgb") RefreshValues();
         };
         RefreshValues();
-    }
-
-    public string Text
-    {
-        get => _text;
-        set => SetField(ref _text, value);
-    }
-
-    public string ScaledText
-    {
-        get => _scaledText;
-        set => SetField(ref _scaledText, value);
-    }
-
-    public string RedText
-    {
-        get => _redText;
-        set => SetField(ref _redText, value);
-    }
-
-    public string GreenText
-    {
-        get => _greenText;
-        set => SetField(ref _greenText, value);
-    }
-
-    public string BlueText
-    {
-        get => _blueText;
-        set => SetField(ref _blueText, value);
-    }
-
-    public string ScaledRedText
-    {
-        get => _scaledRedText;
-        set => SetField(ref _scaledRedText, value);
-    }
-
-    public string ScaledGreenText
-    {
-        get => _scaledGreenText;
-        set => SetField(ref _scaledGreenText, value);
-    }
-
-    public string ScaledBlueText
-    {
-        get => _scaledBlueText;
-        set => SetField(ref _scaledBlueText, value);
-    }
-
-    public double R
-    {
-        get => _r;
-        set => SetField(ref _r, value);
-    }
-
-    public double G
-    {
-        get => _g;
-        set => SetField(ref _g, value);
-    }
-
-    public double B
-    {
-        get => _b;
-        set => SetField(ref _b, value);
-    }
-
-    public LinearGradientBrush? RedGradientFill
-    {
-        get => _redGradientFill;
-        private set => SetField(ref _redGradientFill, value);
-    }
-
-    public LinearGradientBrush? GreenGradientFill
-    {
-        get => _greenGradientFill;
-        private set => SetField(ref _greenGradientFill, value);
-    }
-
-    public LinearGradientBrush? BlueGradientFill
-    {
-        get => _blueGradientFill;
-        private set => SetField(ref _blueGradientFill, value);
     }
 
     private void RefreshValues()
@@ -160,21 +75,12 @@ public sealed class RgbTabViewModel : INotifyPropertyChanged
 #region boilerplate
 
     private bool _isUserUpdate = true;
-    public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-    private void OnPropertyChanged(string propertyName)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        var eventArgs = new PropertyChangedEventArgs(propertyName);
-        PropertyChanged?.Invoke(this, eventArgs);
-        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return;
-        field = value;
-        OnPropertyChanged(propertyName);
+        base.OnPropertyChanged(e);
+        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, e);
     }
 
 #endregion

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PixelPalette.State;
 
 namespace PixelPalette.Window;
 
-public sealed class MainWindowViewModel : INotifyPropertyChanged
+public sealed partial class MainWindowViewModel : ObservableObject
 {
     public GlobalState GlobalState { get; }
 
@@ -24,20 +25,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         };
     }
 
-    private TabItem? _activeColorModelTabItem;
-    private Brush? _colorPreviewBrush;
-
-    public TabItem? ActiveColorModelTabItem
-    {
-        get => _activeColorModelTabItem;
-        set => SetField(ref _activeColorModelTabItem, value);
-    }
-
-    public Brush? ColorPreviewBrush
-    {
-        get => _colorPreviewBrush;
-        private set => SetField(ref _colorPreviewBrush, value);
-    }
+    [ObservableProperty] private TabItem? _activeColorModelTabItem;
+    [ObservableProperty] private Brush? _colorPreviewBrush;
 
     public void LoadFromPersistedData(PersistedData data, TabControl colorModelTabs)
     {
@@ -51,19 +40,4 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         ColorPreviewBrush = new SolidColorBrush(GlobalState.Rgb.ToMediaColor());
     }
-
-#region boilerplate
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return;
-        field = value;
-        OnPropertyChanged(propertyName);
-    }
-
-#endregion
 }

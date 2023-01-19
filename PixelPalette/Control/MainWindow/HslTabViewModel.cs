@@ -1,30 +1,29 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PixelPalette.Color;
 using PixelPalette.State;
 
 namespace PixelPalette.Control.MainWindow;
 
-public sealed class HslTabViewModel : INotifyPropertyChanged
+public sealed partial class HslTabViewModel : ObservableObject
 {
     public GlobalState GlobalState { get; }
 
-    private string _text = "";
-    private string _scaledText = "";
-    private string _hue = "";
-    private string _saturation = "";
-    private string _luminance = "";
-    private string _scaledHue = "";
-    private string _scaledSaturation = "";
-    private string _scaledLuminance = "";
+    [ObservableProperty] private string _text = "";
+    [ObservableProperty] private string _scaledText = "";
+    [ObservableProperty] private string _hue = "";
+    [ObservableProperty] private string _saturation = "";
+    [ObservableProperty] private string _luminance = "";
+    [ObservableProperty] private string _scaledHue = "";
+    [ObservableProperty] private string _scaledSaturation = "";
+    [ObservableProperty] private string _scaledLuminance = "";
 
-    private LinearGradientBrush? _hueGradientFill;
-    private LinearGradientBrush? _saturationGradientFill;
-    private LinearGradientBrush? _luminanceGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _hueGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _saturationGradientFill;
+    [ObservableProperty] private LinearGradientBrush? _luminanceGradientFill;
 
     public HslTabViewModel(GlobalState globalState)
     {
@@ -34,72 +33,6 @@ public sealed class HslTabViewModel : INotifyPropertyChanged
             if (ev.PropertyName == "Hsl") RefreshValues();
         };
         RefreshValues();
-    }
-
-    public string Text
-    {
-        get => _text;
-        set => SetField(ref _text, value);
-    }
-
-    public string ScaledText
-    {
-        get => _scaledText;
-        set => SetField(ref _scaledText, value);
-    }
-
-    public string Hue
-    {
-        get => _hue;
-        set => SetField(ref _hue, value);
-    }
-
-    public string Saturation
-    {
-        get => _saturation;
-        set => SetField(ref _saturation, value);
-    }
-
-    public string Luminance
-    {
-        get => _luminance;
-        set => SetField(ref _luminance, value);
-    }
-
-    public string ScaledHue
-    {
-        get => _scaledHue;
-        set => SetField(ref _scaledHue, value);
-    }
-
-    public string ScaledSaturation
-    {
-        get => _scaledSaturation;
-        set => SetField(ref _scaledSaturation, value);
-    }
-
-    public string ScaledLuminance
-    {
-        get => _scaledLuminance;
-        set => SetField(ref _scaledLuminance, value);
-    }
-
-    public LinearGradientBrush? HueGradientFill
-    {
-        get => _hueGradientFill;
-        private set => SetField(ref _hueGradientFill, value);
-    }
-
-    public LinearGradientBrush? SaturationGradientFill
-    {
-        get => _saturationGradientFill;
-        private set => SetField(ref _saturationGradientFill, value);
-    }
-
-    public LinearGradientBrush? LuminanceGradientFill
-    {
-        get => _luminanceGradientFill;
-        private set => SetField(ref _luminanceGradientFill, value);
     }
 
     private void RefreshValues()
@@ -144,21 +77,12 @@ public sealed class HslTabViewModel : INotifyPropertyChanged
 #region boilerplate
 
     private bool _isUserUpdate = true;
-    public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<PropertyChangedEventArgs>? PropertyChangedByUser;
 
-    private void OnPropertyChanged(string propertyName)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        var eventArgs = new PropertyChangedEventArgs(propertyName);
-        PropertyChanged?.Invoke(this, eventArgs);
-        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, eventArgs);
-    }
-
-    private void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return;
-        field = value;
-        OnPropertyChanged(propertyName);
+        base.OnPropertyChanged(e);
+        if (_isUserUpdate) PropertyChangedByUser?.Invoke(this, e);
     }
 
 #endregion
