@@ -29,7 +29,7 @@ public partial class GlobalState : ObservableObject
                 var hex = Color.Hex.FromString(data.ActiveColorValue ?? string.Empty);
                 if (hex.HasValue) RefreshFromHex(hex.Value);
                 break;
-            case "Cmy":
+            case "Cmyk":
                 var cmyk = Color.Cmyk.FromString(data.ActiveColorValue ?? string.Empty);
                 if (cmyk.HasValue) RefreshFromCmyk(cmyk.Value);
                 break;
