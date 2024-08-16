@@ -10,10 +10,10 @@ PixelPalette is a Windows application that makes it easy to grab a color from yo
 
 ## Portable variant
 
-1. Download the `.zip` file from the [latest](https://github.com/FoxAndFly/PixelPalette/releases/latest) release.
+1. Download the `.zip` file from the [latest](https://github.com/simshaun/PixelPalette/releases/latest) release.
 2. Extract the zip file to a directory of your choosing.
 
 ## Installation
 
-1. Download the `.msi` file from the [latest](https://github.com/FoxAndFly/PixelPalette/releases/latest) release.
+1. Download the `.msi` file from the [latest](https://github.com/simshaun/PixelPalette/releases/latest) release.
 2. Run the downloaded file and complete the installation.

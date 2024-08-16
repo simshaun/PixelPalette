@@ -10,7 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishReadyToRun>true</PublishReadyToRun>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
-    <Company>FoxAndFly</Company>
+    <Company>simshaun</Company>
     <LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
     <!-- Single file app – https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file -->
