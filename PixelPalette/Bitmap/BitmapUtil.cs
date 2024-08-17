@@ -11,33 +11,22 @@ namespace PixelPalette.Bitmap;
 
 public static class BitmapUtil
 {
-    [DllImport("gdi32.dll")]
-    public static extern bool DeleteObject(nint hObject);
-
     public static BitmapSource CropBitmapSource(
-        BitmapSource source,
+        WriteableBitmap source,
         int sourceX,
         int sourceY,
         int width,
         int height,
-        byte[]? cachedSourcePixelBuffer = null,
         byte[]? cachedOutputPixelBuffer = null
     )
     {
         // A couple things are hardcoded to expect 4 bytes per pixel.
         if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
-
-        var bytesPerPixel = source.Format.BitsPerPixel / 8;
+        const int bytesPerPixel = 4;
 
         var sourceWidth = source.PixelWidth;
         var sourceHeight = source.PixelHeight;
         var sourceStride = sourceWidth * bytesPerPixel;
-        var sourceBuffer = cachedSourcePixelBuffer;
-        if (cachedSourcePixelBuffer == null)
-        {
-            sourceBuffer = new byte[sourceStride * sourceHeight];
-            source.CopyPixels(sourceBuffer, sourceStride, 0);
-        }
 
         var outputWidth = width;
         var outputHeight = height;
@@ -64,7 +53,6 @@ public static class BitmapUtil
             if (sourceY + y < 0 || sourceY + y > sourceHeight - 1) continue;
 
             var rowOffset = (sourceY + y) * sourceStride;
-            if (sourceBuffer != null && (rowOffset < 0 || rowOffset >= sourceBuffer.Length)) continue;
 
             for (var x = 0; x < width; x++)
             {
@@ -74,12 +62,15 @@ public static class BitmapUtil
                 var sourceOffset = rowOffset + (sourceX + x) * bytesPerPixel;
                 var outputOffset = y * outputStride + x * bytesPerPixel;
 
-                if (sourceBuffer == null) continue;
-                if (sourceOffset < 0 || sourceOffset >= sourceBuffer.Length) continue;
-                outputBuffer[outputOffset] = sourceBuffer[sourceOffset];
-                outputBuffer[outputOffset + 1] = sourceBuffer[sourceOffset + 1];
-                outputBuffer[outputOffset + 2] = sourceBuffer[sourceOffset + 2];
-                outputBuffer[outputOffset + 3] = 255;
+                unsafe
+                {
+                    // Get the pixel data directly from the source bitmap.
+                    var sourcePointer = (byte*)source.BackBuffer.ToPointer() + sourceOffset;
+                    outputBuffer[outputOffset] = sourcePointer[0]; // B
+                    outputBuffer[outputOffset + 1] = sourcePointer[1]; // G
+                    outputBuffer[outputOffset + 2] = sourcePointer[2]; // R
+                    outputBuffer[outputOffset + 3] = 255; // A
+                }
             }
         }
 
@@ -95,40 +86,50 @@ public static class BitmapUtil
         );
     }
 
+    private static readonly byte[] PixelToRgbBuffer = new byte[4]; // Bgra32 pixel buffer
+
     public static Rgb PixelToRgb(BitmapSource source, int x, int y)
     {
         if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
 
-        var bytesPerPixel = source.Format.BitsPerPixel / 8;
-        var bytes = new byte[bytesPerPixel];
-        var rect = new Int32Rect(x, y, 1, 1);
-        source.CopyPixels(rect, bytes, bytesPerPixel, 0);
+        const int bytesPerPixel = 4; // Bgra32 has 4 bytes per pixel
+        var stride = source.PixelWidth * bytesPerPixel;
 
-        return Rgb.FromScaledValues(bytes[2], bytes[1], bytes[0]);
+        source.CopyPixels(new Int32Rect(x, y, 1, 1), PixelToRgbBuffer, stride, 0);
+
+        return Rgb.FromScaledValues(PixelToRgbBuffer[2], PixelToRgbBuffer[1], PixelToRgbBuffer[0]);
     }
 
     public static Rgb AverageColor(BitmapSource source)
     {
         if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
 
+        const int bytesPerPixel = 4; // Bgra32 format has 4 bytes per pixel
         var width = source.PixelWidth;
         var height = source.PixelHeight;
         var numPixels = width * height;
-        var bytesPerPixel = source.Format.BitsPerPixel / 8;
-        var pixelBuffer = new byte[numPixels * bytesPerPixel];
-        source.CopyPixels(pixelBuffer, width * bytesPerPixel, 0);
 
         long blue = 0;
         long green = 0;
         long red = 0;
 
-        for (var i = 0; i < pixelBuffer.Length; i += bytesPerPixel)
-        {
-            blue += pixelBuffer[i];
-            green += pixelBuffer[i + 1];
-            red += pixelBuffer[i + 2];
-        }
+        // Create a buffer to hold pixel data
+        var stride = width * bytesPerPixel;
+        var buffer = new byte[height * stride];
+        source.CopyPixels(buffer, stride, 0);
 
-        return Rgb.FromScaledValues((byte) (red / numPixels), (byte) (green / numPixels), (byte) (blue / numPixels));
+        for (var i = 0; i < numPixels; i++)
+        {
+            var offset = i * bytesPerPixel;
+            blue += buffer[offset];
+            green += buffer[offset + 1];
+            red += buffer[offset + 2];
+        }
+        
+        return Rgb.FromScaledValues(
+            (byte) (red / numPixels),
+            (byte) (green / numPixels),
+            (byte) (blue / numPixels)
+        );
     }
 }

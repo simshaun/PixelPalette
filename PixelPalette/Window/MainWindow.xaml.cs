@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using PixelPalette.Bitmap;
 using PixelPalette.Color;
 using PixelPalette.State;
@@ -87,7 +88,7 @@ public partial class MainWindow
 
     private void StartEyedropper()
     {
-        FreezeFrame.Instance.BitmapSource = ScreenCapture.GetFullScreen();
+        FreezeFrame.Instance.BitmapSource = new WriteableBitmap(ScreenCapture.GetFullScreen());
 
         // Debug - Write freeze frame to file
         // using (var fileStream = new FileStream("cap.png", FileMode.Create))
@@ -124,8 +125,6 @@ public partial class MainWindow
         };
 
         _cursorTrailWin = new CursorTrailWindow();
-        _cursorTrailWin.Show();
-        _cursorTrailWin.Focus();
         _cursorTrailWin.Closed += (_, _) =>
         {
             try

@@ -10,7 +10,6 @@ namespace PixelPalette.Bitmap;
 public sealed class FreezeFrame : IDisposable
 {
     private static FreezeFrame? _instance;
-    public byte[]? PixelBuffer { get; private set; }
 
     private static readonly object Padlock = new();
 
@@ -25,9 +24,9 @@ public sealed class FreezeFrame : IDisposable
         }
     }
 
-    private BitmapSource? _bitmapSource;
+    private WriteableBitmap? _bitmapSource;
 
-    public BitmapSource? BitmapSource
+    public WriteableBitmap? BitmapSource
     {
         get => _bitmapSource;
         set
@@ -40,7 +39,6 @@ public sealed class FreezeFrame : IDisposable
                 var stride = width * bytesPerPixel;
                 var buffer = new byte[stride * height];
                 value.CopyPixels(buffer, stride, 0);
-                PixelBuffer = buffer;
             }
 
             _bitmapSource = value;
@@ -50,7 +48,6 @@ public sealed class FreezeFrame : IDisposable
     public void Dispose()
     {
         _bitmapSource = null;
-        PixelBuffer = null;
 
         /*
          * The buffer array is large enough to be placed in the Large Object Heap (LOH).
