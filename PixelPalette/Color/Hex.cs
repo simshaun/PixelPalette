@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -25,11 +26,20 @@ public readonly partial struct Hex
         Red = r > 255 ? 255 : r < 0 ? 0 : r;
         Green = g > 255 ? 255 : g < 0 ? 0 : g;
         Blue = b > 255 ? 255 : b < 0 ? 0 : b;
-        // ReSharper disable UseFormatSpecifierInInterpolation
-        RedPart = Red.ToString("x2").ToUpper();
-        GreenPart = Green.ToString("x2").ToUpper();
-        BluePart = Blue.ToString("x2").ToUpper();
-        // ReSharper restore UseFormatSpecifierInInterpolation
+        
+        // Use StringBuilder to avoid multiple allocations
+        var sb = new StringBuilder(6); // 2 chars for each color component, plus 1 for potential leading zeros
+
+        sb.Append($"{Red:X2}");
+        RedPart = sb.ToString();
+        sb.Clear();
+
+        sb.Append($"{Green:X2}");
+        GreenPart = sb.ToString();
+        sb.Clear();
+
+        sb.Append($"{Blue:X2}");
+        BluePart = sb.ToString();
     }
 
     public Hex WithRed(int r)

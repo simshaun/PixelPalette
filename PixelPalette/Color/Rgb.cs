@@ -22,6 +22,9 @@ public readonly partial struct Rgb : IEquatable<Rgb>
         { 0.0193338955823293, 0.11919202588130297, 0.9503040785363679 }
     });
 
+    private static readonly Rgb RgbWhite = new Rgb(1.0, 1.0, 1.0);
+    private static readonly Rgb RgbBlack = new Rgb(0.0, 0.0, 0.0);
+
     /// <summary>
     /// Red on a scale of 0-1
     /// </summary>
@@ -82,7 +85,7 @@ public readonly partial struct Rgb : IEquatable<Rgb>
     /// </summary>
     public Rgb ContrastingTextColor()
     {
-        return Brightness < 130 ? new Rgb(1.0, 1.0, 1.0) : new Rgb(0.0, 0.0, 0.0);
+        return Brightness < 130 ? RgbWhite : RgbBlack;
     }
 
     /// <param name="r">0-1</param>
