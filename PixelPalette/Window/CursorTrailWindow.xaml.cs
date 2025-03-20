@@ -66,7 +66,7 @@ public partial class CursorTrailWindow
                 X1 = x * ColumnWidth + x,
                 X2 = x * ColumnWidth + x,
                 Y1 = 0,
-                Y2 = GridWidth
+                Y2 = GridWidth,
             });
 
             // horizontal line
@@ -76,7 +76,7 @@ public partial class CursorTrailWindow
                 X1 = 0,
                 X2 = GridWidth,
                 Y1 = x * ColumnWidth + x,
-                Y2 = x * ColumnWidth + x
+                Y2 = x * ColumnWidth + x,
             });
         }
     }
@@ -93,7 +93,7 @@ public partial class CursorTrailWindow
             X1 = pxCenter,
             X2 = pxCenter,
             Y1 = pxCenter - SegmentWidth + 2,
-            Y2 = pxCenter + SegmentWidth - 2
+            Y2 = pxCenter + SegmentWidth - 2,
         });
 
         // horizontal line crosshair
@@ -103,7 +103,7 @@ public partial class CursorTrailWindow
             X1 = pxCenter - SegmentWidth + 2,
             X2 = pxCenter + SegmentWidth - 2,
             Y1 = pxCenter,
-            Y2 = pxCenter
+            Y2 = pxCenter,
         });
     }
 

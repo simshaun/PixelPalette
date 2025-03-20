@@ -27,7 +27,7 @@ internal static class EventUtil
 
     public static void HandleClick(IInputElement control, Action action)
     {
-        HandleClick(new[] { control }, action);
+        HandleClick([control], action);
     }
 
     public static void HandleClick(IEnumerable<IInputElement> controls, RoutedEventHandler handler)
@@ -40,7 +40,7 @@ internal static class EventUtil
 
     public static void HandleClick(IInputElement control, RoutedEventHandler handler)
     {
-        HandleClick(new[] { control }, handler);
+        HandleClick([control], handler);
     }
 
     public static void HandleKey(Key? key, IEnumerable<IInputElement> controls, Action action)
@@ -57,7 +57,7 @@ internal static class EventUtil
 
     public static void HandleKey(Key? key, IInputElement control, Action action)
     {
-        HandleKey(key, new[] { control }, action);
+        HandleKey(key, [control], action);
     }
 
     public static void HandleMouseWheel(IEnumerable<IInputElement> controls, Action? upAction, Action? downAction)
@@ -80,7 +80,7 @@ internal static class EventUtil
 
     public static void HandleMouseWheel(IInputElement control, Action? upAction, Action? downAction)
     {
-        HandleMouseWheel(new[] { control }, upAction, downAction);
+        HandleMouseWheel([control], upAction, downAction);
     }
 
     public static void HandleInputEnterOrFocusLost(IEnumerable<TextBox> controls, Action<string> action)
@@ -105,7 +105,7 @@ internal static class EventUtil
 
     public static void HandleInputEnterOrFocusLost(TextBox control, Action<string> action)
     {
-        HandleInputEnterOrFocusLost(new[] { control }, action);
+        HandleInputEnterOrFocusLost([control], action);
     }
 
     public static void HandleSliderChange(Slider control, Action<double> action)

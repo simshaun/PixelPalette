@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color;
 
-public readonly partial struct Hex
+public readonly partial struct Hex : IEquatable<Hex>
 {
     public static readonly Hex Empty = new();
 

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color;
 
-public readonly partial struct Cmyk
+public readonly partial struct Cmyk : IEquatable<Cmyk>
 {
     public static readonly Cmyk Empty = new();
 

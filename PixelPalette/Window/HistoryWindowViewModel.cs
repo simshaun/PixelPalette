@@ -20,5 +20,5 @@ public class HistoryItem
 
 public sealed class HistoryWindowViewModel
 {
-    public ObservableCollection<HistoryItem> States { get; } = new();
+    public ObservableCollection<HistoryItem> States { get; } = [];
 }

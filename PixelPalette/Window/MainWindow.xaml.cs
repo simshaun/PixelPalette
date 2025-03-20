@@ -207,6 +207,6 @@ public partial class MainWindow
         new()
         {
             StartPoint = new Point(0, .5),
-            EndPoint = new Point(1, .5)
+            EndPoint = new Point(1, .5),
         };
 }

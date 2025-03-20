@@ -19,11 +19,11 @@ public readonly partial struct Rgb : IEquatable<Rgb>
     {
         { 0.4124564390896922, 0.357576077643909, 0.18043748326639894 },
         { 0.21267285140562253, 0.715152155287818, 0.07217499330655958 },
-        { 0.0193338955823293, 0.11919202588130297, 0.9503040785363679 }
+        { 0.0193338955823293, 0.11919202588130297, 0.9503040785363679 },
     });
 
-    private static readonly Rgb RgbWhite = new Rgb(1.0, 1.0, 1.0);
-    private static readonly Rgb RgbBlack = new Rgb(0.0, 0.0, 0.0);
+    private static readonly Rgb RgbWhite = new(1.0, 1.0, 1.0);
+    private static readonly Rgb RgbBlack = new(0.0, 0.0, 0.0);
 
     /// <summary>
     /// Red on a scale of 0-1

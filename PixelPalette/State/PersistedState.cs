@@ -56,7 +56,7 @@ public static class PersistedState
         var sw = new StringWriter();
         var xw = new XmlTextWriter(sw)
         {
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
         };
         Serializer.Serialize(xw, Data());
         try

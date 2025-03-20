@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -20,7 +19,7 @@ public static class BitmapUtil
         byte[]? cachedOutputPixelBuffer = null
     )
     {
-        // A couple things are hardcoded to expect 4 bytes per pixel.
+        // A couple of things are hardcoded to expect 4 bytes per pixel.
         if (source.Format != PixelFormats.Bgra32) throw new Exception("Unexpected Bitmap format.");
         const int bytesPerPixel = 4;
 

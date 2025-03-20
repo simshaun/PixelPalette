@@ -22,27 +22,27 @@ public partial class GlobalState : ObservableObject
         switch (data.ActiveColorModel)
         {
             case "Rgb":
-                var rgb = Color.Rgb.FromString(data.ActiveColorValue ?? string.Empty);
+                var rgb = ColorModel.Rgb.FromString(data.ActiveColorValue ?? string.Empty);
                 if (rgb.HasValue) RefreshFromRgb(rgb.Value);
                 break;
             case "Hex":
-                var hex = Color.Hex.FromString(data.ActiveColorValue ?? string.Empty);
+                var hex = ColorModel.Hex.FromString(data.ActiveColorValue ?? string.Empty);
                 if (hex.HasValue) RefreshFromHex(hex.Value);
                 break;
             case "Cmyk":
-                var cmyk = Color.Cmyk.FromString(data.ActiveColorValue ?? string.Empty);
+                var cmyk = ColorModel.Cmyk.FromString(data.ActiveColorValue ?? string.Empty);
                 if (cmyk.HasValue) RefreshFromCmyk(cmyk.Value);
                 break;
             case "Hsl":
-                var hsl = Color.Hsl.FromString(data.ActiveColorValue ?? string.Empty);
+                var hsl = ColorModel.Hsl.FromString(data.ActiveColorValue ?? string.Empty);
                 if (hsl.HasValue) RefreshFromHsl(hsl.Value);
                 break;
             case "Hsv":
-                var hsv = Color.Hsv.FromString(data.ActiveColorValue ?? string.Empty);
+                var hsv = ColorModel.Hsv.FromString(data.ActiveColorValue ?? string.Empty);
                 if (hsv.HasValue) RefreshFromHsv(hsv.Value);
                 break;
             case "Lab":
-                var lab = Color.Lab.FromString(data.ActiveColorValue ?? string.Empty);
+                var lab = ColorModel.Lab.FromString(data.ActiveColorValue ?? string.Empty);
                 if (lab.HasValue) RefreshFromLab(lab.Value);
                 break;
         }
@@ -59,13 +59,13 @@ public partial class GlobalState : ObservableObject
             "Hsl" => Hsl.ToString(),
             "Hsv" => Hsv.ToString(),
             "Lab" => Lab.ToString(),
-            _ => data.ActiveColorValue
+            _ => data.ActiveColorValue,
         };
     }
 
-    public void RefreshFromRgb(Color.Rgb rgb)
+    public void RefreshFromRgb(ColorModel.Rgb rgb)
     {
-        if (Rgb != Color.Rgb.Empty && rgb == Rgb) return;
+        if (Rgb != ColorModel.Rgb.Empty && rgb == Rgb) return;
 
         PersistedState.Data().ActiveColorModel = "Rgb";
         PersistedState.Data().ActiveColorValue = rgb.ToString();
@@ -84,9 +84,9 @@ public partial class GlobalState : ObservableObject
         Lab = lab;
     }
 
-    public void RefreshFromHex(Color.Hex hex)
+    public void RefreshFromHex(ColorModel.Hex hex)
     {
-        if (Hex != Color.Hex.Empty && hex == Hex) return;
+        if (Hex != ColorModel.Hex.Empty && hex == Hex) return;
 
         PersistedState.Data().ActiveColorModel = "Hex";
         PersistedState.Data().ActiveColorValue = hex.ToString();
@@ -105,9 +105,9 @@ public partial class GlobalState : ObservableObject
         Lab = lab;
     }
 
-    public void RefreshFromHsl(Color.Hsl hsl)
+    public void RefreshFromHsl(ColorModel.Hsl hsl)
     {
-        if (Hsl != Color.Hsl.Empty && hsl == Hsl) return;
+        if (Hsl != ColorModel.Hsl.Empty && hsl == Hsl) return;
 
         PersistedState.Data().ActiveColorModel = "Hsl";
         PersistedState.Data().ActiveColorValue = hsl.ToString();
@@ -126,9 +126,9 @@ public partial class GlobalState : ObservableObject
         Lab = lab;
     }
 
-    public void RefreshFromHsv(Color.Hsv hsv)
+    public void RefreshFromHsv(ColorModel.Hsv hsv)
     {
-        if (Hsv != Color.Hsv.Empty && hsv == Hsv) return;
+        if (Hsv != ColorModel.Hsv.Empty && hsv == Hsv) return;
 
         PersistedState.Data().ActiveColorModel = "Hsv";
         PersistedState.Data().ActiveColorValue = hsv.ToString();
@@ -147,9 +147,9 @@ public partial class GlobalState : ObservableObject
         Lab = lab;
     }
 
-    public void RefreshFromCmyk(Color.Cmyk cmyk)
+    public void RefreshFromCmyk(ColorModel.Cmyk cmyk)
     {
-        if (Cmyk != Color.Cmyk.Empty && cmyk == Cmyk) return;
+        if (Cmyk != ColorModel.Cmyk.Empty && cmyk == Cmyk) return;
 
         PersistedState.Data().ActiveColorModel = "Cmyk";
         PersistedState.Data().ActiveColorValue = cmyk.ToString();
@@ -168,9 +168,9 @@ public partial class GlobalState : ObservableObject
         Lab = lab;
     }
 
-    public void RefreshFromLab(Color.Lab lab)
+    public void RefreshFromLab(ColorModel.Lab lab)
     {
-        if (Lab != Color.Lab.Empty && lab == Lab) return;
+        if (Lab != ColorModel.Lab.Empty && lab == Lab) return;
 
         PersistedState.Data().ActiveColorModel = "Lab";
         PersistedState.Data().ActiveColorValue = lab.ToString();

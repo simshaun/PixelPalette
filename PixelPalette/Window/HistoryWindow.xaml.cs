@@ -61,12 +61,7 @@ public partial class HistoryWindow
     }
 }
 
-public class HistoryItemSelectedEventArgs : EventArgs
+public class HistoryItemSelectedEventArgs(HistoryItem historyItem) : EventArgs
 {
-    public HistoryItemSelectedEventArgs(HistoryItem historyItem)
-    {
-        HistoryItem = historyItem;
-    }
-
-    public HistoryItem HistoryItem { get; }
+    public HistoryItem HistoryItem { get; } = historyItem;
 }

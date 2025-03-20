@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime;
+using System.Threading;
 using System.Windows.Media.Imaging;
 
 namespace PixelPalette.Bitmap;
@@ -11,7 +12,7 @@ public sealed class FreezeFrame : IDisposable
 {
     private static FreezeFrame? _instance;
 
-    private static readonly object Padlock = new();
+    private static readonly Lock Padlock = new();
 
     public static FreezeFrame Instance
     {

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace PixelPalette.Color;
 
-public readonly partial struct Lab
+public readonly partial struct Lab(double l, double a, double b) : IEquatable<Lab>
 {
     public static readonly Lab Empty = new();
 
@@ -18,11 +18,11 @@ public readonly partial struct Lab
     public const double MinB = -128;
     public const double MaxB = 127;
 
-    public double L { get; }
+    public double L { get; } = ClampedL(l);
 
-    public double A { get; }
+    public double A { get; } = ClampedA(a);
 
-    public double B { get; }
+    public double B { get; } = ClampedB(b);
 
     /// <summary>
     /// L* rounded to 2 decimal places
@@ -38,13 +38,6 @@ public readonly partial struct Lab
     /// b* rounded to 2 decimal places
     /// </summary>
     public double RoundedB => Round(B);
-
-    public Lab(double l, double a, double b)
-    {
-        L = ClampedL(l);
-        A = ClampedA(a);
-        B = ClampedB(b);
-    }
 
     public static bool IsValidL(double value)
     {
