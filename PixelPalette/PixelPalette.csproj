@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.4.12</Version>
+    <Version>1.5.0</Version>
     <Authors>Shaun</Authors>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishReadyToRun>true</PublishReadyToRun>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <Company>simshaun</Company>
-    <LangVersion>11</LangVersion>
+    <LangVersion>13</LangVersion>
     <Nullable>enable</Nullable>
     <!-- Single file app – https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file -->
     <PublishSingleFile>true</PublishSingleFile>
