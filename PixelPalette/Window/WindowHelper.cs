@@ -2,13 +2,13 @@ using System.Runtime.InteropServices;
 
 namespace PixelPalette.Window;
 
-public static class WindowHelper
+public static partial class WindowHelper
 {
-    [DllImport("user32.dll")]
-    private static extern int GetWindowLong(nint hWnd, int nIndex);
+    [LibraryImport("user32.dll")]
+    private static partial int GetWindowLong(nint hWnd, int nIndex);
 
-    [DllImport("user32.dll")]
-    private static extern int SetWindowLong(nint hWnd, int nIndex, int dwNewLong);
+    [LibraryImport("user32.dll")]
+    private static partial int SetWindowLong(nint hWnd, int nIndex, int dwNewLong);
 
     // ReSharper disable once InconsistentNaming
     private const int GWL_STYLE = -16;

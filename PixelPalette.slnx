@@ -1,0 +1,21 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="PixelPalette.Installer\PixelPalette.Installer.wixproj">
+    <Configuration Solution="Debug|Any CPU" Project="Debug|x86|NoBuild" />
+    <Configuration Solution="Release|Any CPU" Project="Release|x86|NoBuild" />
+  </Project>
+  <Project Path="PixelPalette.Tests\PixelPalette.Tests.csproj">
+    <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+    <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+  </Project>
+  <Project Path="PixelPalette\PixelPalette.csproj">
+    <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+    <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+  </Project>
+</Solution>

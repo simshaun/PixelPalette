@@ -2,11 +2,11 @@ using System.Runtime.InteropServices;
 
 namespace PixelPalette.Util;
 
-public static class Mouse
+public static partial class Mouse
 {
-    [DllImport("user32.dll")]
+    [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetCursorPos(ref Win32Point pt);
+    private static partial bool GetCursorPos(ref Win32Point pt);
 
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct Win32Point

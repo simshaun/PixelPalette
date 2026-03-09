@@ -10,8 +10,6 @@ namespace PixelPalette.Bitmap;
 /// </summary>
 public sealed class FreezeFrame : IDisposable
 {
-    private static FreezeFrame? _instance;
-
     private static readonly Lock Padlock = new();
 
     public static FreezeFrame Instance
@@ -20,7 +18,7 @@ public sealed class FreezeFrame : IDisposable
         {
             lock (Padlock)
             {
-                return _instance ??= new FreezeFrame();
+                return field ??= new FreezeFrame();
             }
         }
     }
