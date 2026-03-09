@@ -16,7 +16,10 @@ jobs:
     env:
       Portable_Archive: PixelPalette_Portable.zip
       Project_Directory: PixelPalette
+      Project_File: PixelPalette\PixelPalette.csproj
+      Test_Project_File: PixelPalette.Tests\PixelPalette.Tests.csproj
       Installer_Directory: PixelPalette.Installer
+      Installer_Project_File: PixelPalette.Installer\PixelPalette.Installer.wixproj
       Installer_Filename: PixelPalette.Installer.msi
 
     steps:
@@ -27,38 +30,24 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      # The installer utilizes WiX 3.x, which is not compatible with the dotnet CLI.
-      # It uses the older NuGet packages.config file and is built directly with MSBuild.
-      # Therefore, we need both MSBuild and NuGet.
+      - name: Restore app deps
+        run: dotnet restore $env:Test_Project_File
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1
-
-      - name: Add nuget to PATH
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-
-      # Fetch deps
-      - name: Restore deps
-        run: dotnet restore
+      - name: Restore installer deps
+        run: dotnet restore $env:Installer_Project_File
 
       # Builds the main App & Test projects.
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build $env:Test_Project_File --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test --configuration Release
+        run: dotnet test $env:Test_Project_File --no-build --no-restore --configuration Release
 
       - name: Publish
-        run: dotnet publish --configuration Release $env:Project_Directory\$env:Project_Filename
-
-      # The installer must be built separately because it is not supported by the dotnet CLI.
-      - name: Get installer deps
-        run: nuget restore $env:Installer_Directory -PackagesDirectory packages
+        run: dotnet publish $env:Project_File --no-restore --configuration Release
 
       - name: Build installer
-        run: MSBuild $env:Installer_Directory -p:Configuration=Release
+        run: dotnet build $env:Installer_Project_File --no-restore --configuration Release
 
       # Archive the App build
       - name: Create App archive

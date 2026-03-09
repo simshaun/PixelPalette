@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
-  <String Id="Language">1033</String>
+<WixLocalization Culture="en-us" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="Language" Value="1033" />
 
-  <String Id="ApplicationName">PixelPalette</String>
-  <String Id="ManufacturerName">simshaun</String>
-  <String Id="ManufacturerFullName">simshaun</String>
-  <String Id="ProductDescription">Color picker</String>
-  <String Id="Comments">Installs PixelPalette</String>
+  <String Id="ApplicationName" Value="PixelPalette" />
+  <String Id="ManufacturerName" Value="simshaun" />
+  <String Id="ManufacturerFullName" Value="simshaun" />
+  <String Id="ProductDescription" Value="Color picker" />
+  <String Id="Comments" Value="Installs PixelPalette" />
 
-  <String Id="NewerInstalled">The same or a newer version of this product is already installed.</String>
+  <String Id="NewerInstalled" Value="The same or a newer version of this product is already installed." />
 </WixLocalization>
