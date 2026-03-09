@@ -4,10 +4,10 @@ namespace PixelPalette.Window;
 
 public static partial class WindowHelper
 {
-    [LibraryImport("user32.dll")]
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongW")]
     private static partial int GetWindowLong(nint hWnd, int nIndex);
 
-    [LibraryImport("user32.dll")]
+    [LibraryImport("user32.dll", EntryPoint = "SetWindowLongW")]
     private static partial int SetWindowLong(nint hWnd, int nIndex, int dwNewLong);
 
     // ReSharper disable once InconsistentNaming
